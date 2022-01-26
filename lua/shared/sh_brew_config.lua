@@ -1,1 +1,8 @@
-print("brew_config.lua loaded")
+CONFIG = {
+
+    DEBUG = true,
+
+
+
+
+}
