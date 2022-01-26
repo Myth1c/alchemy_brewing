@@ -1,0 +1,1 @@
+print("status_effect.lua loaded")
