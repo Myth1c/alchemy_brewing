@@ -21,6 +21,17 @@ end
 function ENT:Use( ent, ply )
 
 	DebugPrint("Use pressed.")
+	self:SendNetworkMessage("brewUI", ply)
+
+
+end
+
+function ENT:SendNetworkMessage(type, player)
+
+	net.Start("open_brewUI")
+		net.WriteString(type)
+	net.Send(player)
+
 
 end
 
