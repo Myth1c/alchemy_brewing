@@ -39,5 +39,5 @@ local function IncludeDir( directory )
 end
 
 IncludeDir( "shared")
-IncludeDir( "client")
 IncludeDir( "debug")
+IncludeDir( "client")
