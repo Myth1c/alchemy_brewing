@@ -1,7 +1,7 @@
-local debug = CONFIG.DEBUG or true
+BREWING_DEBUG = Brew_Config.BREWING_DEBUG or { Enabled = 1 }
 
 function DebugPrint(message)
-    if not debug then return end
+    if BREWING_DEBUG.Enabled ~= 1 then return end
     
     print(message)
 
