@@ -1,1 +1,0 @@
-print("table_inventory.lua loaded")
