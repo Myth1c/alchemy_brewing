@@ -1,6 +1,6 @@
-CONFIG = {
+Brew_Config = {
 
-    DEBUG = true,
+    BREWING_DEBUG = { Enabled = 1},
 
     Max_Ingredients = 3,
     Item_Max = 10,
