@@ -25,13 +25,3 @@ function ENT:Use( ent, ply )
 
 
 end
-
-function ENT:SendNetworkMessage(type, player)
-
-	net.Start("open_brewUI")
-		net.WriteString(type)
-	net.Send(player)
-
-
-end
-
