@@ -18,7 +18,7 @@ local BrewSlotBackground = Brew_Config.GUI_BrewSlot_Background or Color(60,60,60
 
 function DrawBrewing()
 
-    --DrawStorage()
+    DrawStorage()
     
     brewFrame = vgui.Create("DFrame")
     brewFrame:SetPos(ScrW() * 660/1920, ScrH() * 75/1080)
