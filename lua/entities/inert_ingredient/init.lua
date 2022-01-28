@@ -5,7 +5,7 @@ AddCSLuaFile("sh_init.lua")
 include("sh_init.lua")
 
 function ENT:Initialize()
-	self:SetModel("models/props_junk/garbage_plasticbottle001a.mdl")
+	self:SetModel("models/Gibs/HGIBS.mdl")
 	self:PhysicsInit(SOLID_VPHYSICS)
 	self:SetMoveType(MOVETYPE_VPHYSICS)
 	self:SetSolid(SOLID_VPHYSICS)
@@ -18,5 +18,10 @@ end
 function ENT:Use( activator, caller )
 	
 	DebugPrint("Use Pressed")
+
+	self:IngredNetworkMessage("brew_store_ent", caller, self)
+
+	self:Remove()
+
 	
 end
