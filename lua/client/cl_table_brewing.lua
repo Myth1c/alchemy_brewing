@@ -5,6 +5,7 @@ local brew_gui = {
     ingredientCount = 0,
 
 }
+local brew_ents = {}
 
 --[[
     This chunk of code initializes settings and in case the config file doesn't load, it will set to defaults seen after the "or" statements
@@ -43,6 +44,8 @@ function DrawBrewing()
         draw.RoundedBox(FrameCurve, 2, 2, w-4, h-4, FramePrimaryColour)
     end
     brewFrame.OnClose = function() 
+        StoreIngredients()
+
         if IsValid(storageFrame) then storageFrame:Close() end
     end
 
@@ -155,15 +158,46 @@ end
     This was a temporary function to get things setup and will be repurposed later. 
     For now it just draws a fake ingredient over the supplied button.
 ]]--
-function GrabIngredient(button)
+function GrabIngredient(ent)
 
+    if brew_gui.ingredientCount == Brew_Config.Max_Ingredients then return false end
     brew_gui.ingredientCount = brew_gui.ingredientCount + 1
 
-    local ingredModel = vgui.Create("DModelPanel")
+    print("Ingredient should be added: ", ent)
+
+    for k, v in ipairs(brew_gui.ingredientSlots) do
+        local childCount = 0
+        local didDraw = false
+        
+        for h, j in ipairs(v:GetChildren()) do
+            childCount = childCount + 1
+            
+            if j:GetClassName() == "Label" then break
+            elseif j:GetClassName() == "Panel" and childCount == #v:GetChildren() then
+
+                Brew_CreateIngredient(ent, v)
+                didDraw = true
+                table.insert(brew_ents, ent)
+                break
+
+            end
+        end
+
+        if didDraw == true then break end
+    end
+    
+    return true
+
+
+
+end
+
+function Brew_CreateIngredient(ent, button)
+
+    local ingredModel = vgui.Create("DModelPanel", button)
     ingredModel:SetPos(0, 0)
-    ingredModel:SetSize(100, 100)
-    ingredModel:SetModel("models/Gibs/HGIBS.mdl")
-    ingredModel:SetParent(button)
+    ingredModel:SetSize(button:GetSize())
+    ingredModel:SetModel(ent:GetModel())
 
     local mn, mx = ingredModel.Entity:GetRenderBounds()
     local size = 0
@@ -179,15 +213,9 @@ function GrabIngredient(button)
 
         ingredModel:Remove()
         
-        brew_gui.ingredientCount = brew_gui.ingredientCount - 1
+        Brew_RemoveEnt(ent)
 
     end
-
-    
-
-
-
-
 end
 
 --[[
@@ -202,9 +230,9 @@ function CreateIngredientSlot(current, max)
     ingredSlot:SetText("")
     ingredSlot:SetImage(BrewSlotImage)
 
-    ingredSlot.DoClick = function ()
-        GrabIngredient(ingredSlot)
-    end
+    -- ingredSlot.DoClick = function ()
+    --     GrabIngredient(ingredSlot)
+    -- end
 
     ingredSlot.Paint = function(s, w, h)
         draw.RoundedBox(FrameCurve, 0, 0, w, h, FrameBorderColour)
@@ -274,5 +302,35 @@ function ClearIngredients()
     end
 
     brew_gui.ingredientCount = 0
+
+end
+
+
+function StoreIngredients()
+
+    if brew_gui.ingredientCount > 0 then
+
+        print("Ingredients to store")
+
+        for _, v in ipairs(brew_ents) do
+            AddToStorage(v)
+        end
+
+
+    end
+    brew_ents = {}
+    brew_gui.ingredientCount = 0
+end
+
+function Brew_RemoveEnt(ent)
+
+    AddToStorage(ent)
+
+    DrawIngredient(ent)
+
+    table.RemoveByValue(brew_ents, ent)
+
+    brew_gui.ingredientCount = brew_gui.ingredientCount - 1
+
 
 end

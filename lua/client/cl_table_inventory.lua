@@ -202,31 +202,37 @@ function CreateEntForStorage(class, model, abilities )
 
 end
 
+function DrawIngredient(ent)
+
+    for k, v in ipairs(table_gui.inventorySlots) do
+        local childCount = 0
+        local didDraw = false
+        local hasChild = false
+        
+        for h, j in ipairs(v:GetChildren()) do
+            childCount = childCount + 1
+            
+            if j:GetClassName() == "Label" then break
+            elseif j:GetClassName() == "Panel" and childCount == #v:GetChildren() then
+
+                CreateIngredient(v, ent)
+                didDraw = true
+                break
+
+            end
+        end
+
+        if didDraw == true then break end
+    end
+end
+
 function DrawIngredients()
 
     if table.IsEmpty(stored_ents) then return end
 
     for i = 1, #stored_ents do
         
-        for k, v in ipairs(table_gui.inventorySlots) do
-            local childCount = 0
-            local didDraw = false
-            
-            for h, j in ipairs(v:GetChildren()) do
-                childCount = childCount + 1
-                
-                if j:GetClassName() == "Label" then break
-                elseif j:GetClassName() == "Panel" and childCount == #v:GetChildren() then
-
-                    CreateIngredient(v, stored_ents[i])
-                    didDraw = true
-                    break
-
-                end
-            end
-
-            if didDraw == true then break end
-        end
+        DrawIngredient(stored_ents[i])
 
     end
 end
@@ -250,17 +256,23 @@ function CreateIngredient(slot, ent)
 
     ingredModel.OnMousePressed = function(mcode)
 
-        Brew_RemoveEnt(ent)
+        if Inv_RemoveEnt(ent) then
         
-        ingredModel:Remove()
+            ingredModel:Remove()
+        end
 
     end
 
 
 end
 
-function Brew_RemoveEnt(ent)
+function Inv_RemoveEnt(ent)
 
-    local idx = table.RemoveByValue(stored_ents, ent)
+    if GrabIngredient(ent) then 
+        table.RemoveByValue(stored_ents, ent)
+        return true
+    end
+
+    return false
 
 end
