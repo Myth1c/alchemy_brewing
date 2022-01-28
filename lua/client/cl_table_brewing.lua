@@ -10,11 +10,12 @@ local brew_gui = {
 local FontType = Brew_Config.GUI_Font or "DermaLarge"
 local FontColour = Brew_Config.GUI_Font_mainColour or Color(255, 255, 255, 255)
 local FontColourShadow = Brew_Config.GUI_Font_shadowColour or Color(119, 135, 137, 255)
-local FramePrimaryColour = Brew_Config.GUI_Frame_Foreground or Color(120,120,120, 0)
-local FrameBorderColour = Brew_Config.GUI_Frame_Background or Color(0,0,0, 0)
 local FrameCurve = Brew_Config.FrameCurve or 10
 
 local BrewSlotBackground = Brew_Config.GUI_BrewSlot_Background or Color(60,60,60, 180)
+local FramePrimaryColour = Brew_Config.GUI_Brew_Foreground or Color(120,120,120, 0)
+local FrameBorderColour = Brew_Config.GUI_Brew_Background or Color(0,0,0, 0)
+local BrewSlotImage = Brew_Config.GUI_BrewSlot_Image or "decals/light"
 
 function DrawBrewing()
 
@@ -119,7 +120,7 @@ function DrawBrewing()
     local outputBoxImage = vgui.Create("DImage", brewFrame)
     outputBoxImage:SetPos(238, 263)
     outputBoxImage:SetSize(125, 125)
-    outputBoxImage:SetImage("decals/light")
+    outputBoxImage:SetImage(BrewSlotImage)
 
 end
 
@@ -178,7 +179,7 @@ function CreateIngredientSlot(current, max)
     ingredSlot:SetPos(GetNextPos(125, current, max ) , 50)
     ingredSlot:SetSize(100, 100)
     ingredSlot:SetText("")
-    ingredSlot:SetImage("decals/light")
+    ingredSlot:SetImage(BrewSlotImage)
 
     ingredSlot.DoClick = function ()
         GrabIngredient(ingredSlot)
