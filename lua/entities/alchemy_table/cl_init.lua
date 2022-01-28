@@ -20,7 +20,7 @@ net.Receive("open_brewUI", function(ply, len)
 
 	if net.ReadString() ~= "brewUI" then return end
 
-	if not IsValid(brewFrame) then DrawBrewing(ent)
+	if not IsValid(brewFrame) then DrawBrewing()
 	elseif IsValid(brewFrame) then brewFrame:Close() end
 
 end)
