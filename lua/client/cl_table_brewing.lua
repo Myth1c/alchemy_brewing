@@ -6,7 +6,9 @@ local brew_gui = {
 
 }
 
-
+--[[
+    This chunk of code initializes settings and in case the config file doesn't load, it will set to defaults seen after the "or" statements
+]]--
 local FontType = Brew_Config.GUI_Font or "DermaLarge"
 local FontColour = Brew_Config.GUI_Font_mainColour or Color(255, 255, 255, 255)
 local FontColourShadow = Brew_Config.GUI_Font_shadowColour or Color(119, 135, 137, 255)
@@ -17,6 +19,13 @@ local FramePrimaryColour = Brew_Config.GUI_Brew_Foreground or Color(120,120,120,
 local FrameBorderColour = Brew_Config.GUI_Brew_Background or Color(0,0,0, 0)
 local BrewSlotImage = Brew_Config.GUI_BrewSlot_Image or "decals/light"
 
+--[[
+    Main function that makes the brewing UI work.
+    Calls and opens the inventory UI at the same time since both should always be opened when interacting with a table, but allows for me to open
+    the inventory separately if needed. 
+    Not much variability inside this as it was not designed to be infinitely expandable like the Inventory UI. 
+
+]]--
 function DrawBrewing()
 
     DrawStorage()
@@ -38,6 +47,7 @@ function DrawBrewing()
     end
 
     local max = Brew_Config.Max_Ingredients or 3
+    if max > 5 then max = 5 end
     
     for i = 1, max do
         brew_gui.ingredientSlots[i] = CreateIngredientSlot(i, max)
@@ -124,7 +134,10 @@ function DrawBrewing()
 
 end
 
-
+--[[
+    The function in charge of handling where the input slots should draw on the x axis. The y axis is always the same.
+    Its setup to always center the boxes. Odd number of boxes = middle one centered, even = centered between the "middle" boxes
+]]--
 function GetNextPos(spacing, current, max)
 
     local offset = spacing / 2
@@ -138,6 +151,10 @@ function GetNextPos(spacing, current, max)
     return (spacing * current - offset)
 end
 
+--[[
+    This was a temporary function to get things setup and will be repurposed later. 
+    For now it just draws a fake ingredient over the supplied button.
+]]--
 function GrabIngredient(button)
 
     brew_gui.ingredientCount = brew_gui.ingredientCount + 1
@@ -173,6 +190,10 @@ function GrabIngredient(button)
 
 end
 
+--[[
+    This function creates the ingredient slots with some variability so they always fit on the brewing UI.
+    It'll return each slot created so it can be stored inside a table for access later.
+]]--
 function CreateIngredientSlot(current, max)
 
     local ingredSlot = vgui.Create("DImageButton", brewFrame)
@@ -194,6 +215,10 @@ function CreateIngredientSlot(current, max)
 
 end
 
+--[[
+    Another temporary function to get things setup. This will also be repurposed/rewritten later.
+    For now it just draws a fake potion that can be removed by clicking on it.
+]]--
 function StartBrewing()
 
     if brew_gui.ingredientCount > 0 then
@@ -231,6 +256,11 @@ function StartBrewing()
 
 end
 
+
+--[[
+    Function for clearing all ingredients from slots. Purpose is to be ran when brewing a potion so the ingredients are "used up" and cannot be rused.
+    Another function that will be rewritten when actual logic is introduced. :(
+]]--
 function ClearIngredients()
 
     for k, v in ipairs(brew_gui.ingredientSlots) do

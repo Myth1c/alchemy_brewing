@@ -8,6 +8,9 @@ local stored_ents = {
 
 }
 
+--[[
+    This chunk of code initializes settings and in case the config file doesn't load, it will set to defaults seen after the "or" statements
+]]--
 local FontType = Brew_Config.GUI_Font or "DermaLarge"
 local FontColour = Brew_Config.GUI_Font_mainColour or Color(255, 255, 255, 255)
 local FontColourShadow = Brew_Config.GUI_Font_shadowColour or Color(119, 135, 137, 255)
@@ -19,7 +22,12 @@ local PrimaryColour = Brew_Config.GUI_Inventory_Foreground or Color(120,120,120,
 local BorderColour = Brew_Config.GUI_Inventory_Background or Color(0,0,0, 0)
 local HeaderColor = Brew_Config.GUI_Inventory_Header or Color(255, 255, 255, 255)
 
+--[[
 
+    The main function for the storage UI. This draws the main window and all it's children windows(such as the inventory slots)
+    It will variably set the window size based on options set in the config file.
+
+]]--
 
 function DrawStorage()
 
@@ -68,6 +76,13 @@ function DrawStorage()
 
 end
 
+--[[
+
+    The main function for creating inventory slots. Not designed to place singular slots but place an array of slots.
+    Creates the background for the inventory slot as well as the ImageButton used for simplicity.
+
+]]--
+
 function CreateInventorySlot(sizeX, sizeY, posX, posY, max, current, padding, columns)
 
     local pos = Vector(GetNext(padding, current, max, posX, posY, sizeX, sizeY, columns))
@@ -104,6 +119,12 @@ function CreateInventorySlot(sizeX, sizeY, posX, posY, max, current, padding, co
 
 end
 
+--[[
+
+    The main engine for the array feature of the inventory slots. Without this, the slots would have to be placed manually.
+
+]]--
+
 function GetNext(padding, current, max, posX, posY, sizeX, sizeY, maxColumns)
 
         
@@ -125,6 +146,12 @@ function GetNext(padding, current, max, posX, posY, sizeX, sizeY, maxColumns)
     return Vector(X, Y)
 end
 
+--[[
+
+    Used to get the largest factors of whatever number the amount of inventory spaces is set to in the config.
+    ie: 25 = 5*5, 30 = 6*5, 100 = 10*10
+
+]]--
 
 function GetBiggestFactor(val)
     val=math.floor(val)
