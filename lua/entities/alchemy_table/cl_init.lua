@@ -16,7 +16,7 @@ function ENT:Draw()
 end
 
 
-net.Receive("open_brewUI", function(ply, len)   
+net.Receive("brew_draw_brewUI", function(ply, len)   
 
 	if net.ReadString() ~= "brewUI" then return end
 

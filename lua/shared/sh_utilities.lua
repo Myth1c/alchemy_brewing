@@ -1,6 +1,6 @@
 
 if SERVER then
-    util.AddNetworkString("open_brewUI")
-    util.AddNetworkString("open_storageUI")
-    util.AddNetworkString("draw_StatusUI")
+    util.AddNetworkString("brew_draw_brewUI")
+    util.AddNetworkString("brew_store_Entity")
+    util.AddNetworkString("brew_draw_StatusUI")
 end
