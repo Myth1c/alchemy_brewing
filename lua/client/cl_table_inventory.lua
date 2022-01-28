@@ -73,6 +73,8 @@ function DrawStorage()
 
     end
 
+    DrawIngredients()
+
 
 end
 
@@ -177,4 +179,88 @@ function GetBiggestFactor(val)
 
 
     return factor
+end
+
+function AddToStorage(ent)
+
+    for i = 1, #stored_ents + 1 do
+        if stored_ents[i] == nil then
+            stored_ents[i] = ent
+            break
+        end
+    end
+
+end
+
+function CreateEntForStorage(class, model, abilities )
+
+    local ent = ents.CreateClientside(class)
+    ent:SetModel(model)
+
+    AddToStorage(ent)
+
+
+end
+
+function DrawIngredients()
+
+    if table.IsEmpty(stored_ents) then return end
+
+    for i = 1, #stored_ents do
+        
+        for k, v in ipairs(table_gui.inventorySlots) do
+            local childCount = 0
+            local didDraw = false
+            
+            for h, j in ipairs(v:GetChildren()) do
+                childCount = childCount + 1
+                
+                if j:GetClassName() == "Label" then break
+                elseif j:GetClassName() == "Panel" and childCount == #v:GetChildren() then
+
+                    CreateIngredient(v, stored_ents[i])
+                    didDraw = true
+                    break
+
+                end
+            end
+
+            if didDraw == true then break end
+        end
+
+    end
+end
+
+function CreateIngredient(slot, ent) 
+
+    local ingredModel = vgui.Create("DModelPanel", slot)
+    ingredModel:SetPos(0, 0)
+    ingredModel:SetSize(slot:GetSize())
+    ingredModel:SetModel("models/Gibs/HGIBS.mdl")
+
+    local mn, mx = ingredModel.Entity:GetRenderBounds()
+    local size = 0
+    size = math.max( size, math.abs(mn.x) + math.abs(mx.x) )
+    size = math.max( size, math.abs(mn.y) + math.abs(mx.y) )
+    size = math.max( size, math.abs(mn.z) + math.abs(mx.z) )
+
+    ingredModel:SetFOV( 45 )
+    ingredModel:SetCamPos( Vector( size, size, size ) )
+    ingredModel:SetLookAt( (mn + mx) * 0.5 )
+
+    ingredModel.OnMousePressed = function(mcode)
+
+        Brew_RemoveEnt(ent)
+        
+        ingredModel:Remove()
+
+    end
+
+
+end
+
+function Brew_RemoveEnt(ent)
+
+    local idx = table.RemoveByValue(stored_ents, ent)
+
 end
