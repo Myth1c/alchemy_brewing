@@ -16,7 +16,9 @@ local FrameCurve = Brew_Config.FrameCurve or 10
 
 local BrewSlotBackground = Brew_Config.GUI_BrewSlot_Background or Color(60,60,60, 180)
 
-function DrawBrewing(ent)
+function DrawBrewing()
+
+    --DrawStorage()
     
     brewFrame = vgui.Create("DFrame")
     brewFrame:SetPos(ScrW() * 660/1920, ScrH() * 75/1080)
@@ -29,6 +31,9 @@ function DrawBrewing(ent)
     brewFrame.Paint = function(s, w, h)
         draw.RoundedBox(FrameCurve, 0, 0, w, h, FrameBorderColour)
         draw.RoundedBox(FrameCurve, 2, 2, w-4, h-4, FramePrimaryColour)
+    end
+    brewFrame.OnClose = function() 
+        if IsValid(storageFrame) then storageFrame:Close() end
     end
 
     local max = Brew_Config.Max_Ingredients or 3
@@ -119,7 +124,7 @@ function DrawBrewing(ent)
 end
 
 
-local function GetNextPos(spacing, current, max)
+function GetNextPos(spacing, current, max)
 
     local offset = spacing / 2
 
@@ -132,7 +137,7 @@ local function GetNextPos(spacing, current, max)
     return (spacing * current - offset)
 end
 
-local function GrabIngredient(button)
+function GrabIngredient(button)
 
     brew_gui.ingredientCount = brew_gui.ingredientCount + 1
 
@@ -167,7 +172,7 @@ local function GrabIngredient(button)
 
 end
 
-local function CreateIngredientSlot(current, max)
+function CreateIngredientSlot(current, max)
 
     local ingredSlot = vgui.Create("DImageButton", brewFrame)
     ingredSlot:SetPos(GetNextPos(125, current, max ) , 50)
@@ -188,7 +193,7 @@ local function CreateIngredientSlot(current, max)
 
 end
 
-local function StartBrewing()
+function StartBrewing()
 
     if brew_gui.ingredientCount > 0 then
         
@@ -225,7 +230,7 @@ local function StartBrewing()
 
 end
 
-local function ClearIngredients()
+function ClearIngredients()
 
     for k, v in ipairs(brew_gui.ingredientSlots) do
 
