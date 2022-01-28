@@ -12,10 +12,9 @@ local FontColour = Brew_Config.GUI_Font_mainColour or Color(255, 255, 255, 255)
 local FontColourShadow = Brew_Config.GUI_Font_shadowColour or Color(119, 135, 137, 255)
 local FramePrimaryColour = Brew_Config.GUI_Frame_Foreground or Color(120,120,120, 0)
 local FrameBorderColour = Brew_Config.GUI_Frame_Background or Color(0,0,0, 0)
-local ProgressEmptyColour = Brew_Config.GUI_ProgressBar_Background or Color(60,60,60, 180)
-local ProgressBorderColour = Brew_Config.GUI_ProgressBar_Border or Color(0,0,0, 180)
-local ProgressBarColour = Brew_Config.GUI_ProgressBar_BarColor or Color(255,255,255, 180)
 local FrameCurve = Brew_Config.FrameCurve or 10
+
+local BrewSlotBackground = Brew_Config.GUI_BrewSlot_Background or Color(60,60,60, 180)
 
 function DrawBrewing(ent)
     
@@ -83,7 +82,7 @@ function DrawBrewing(ent)
 
     startBrew.Paint = function(s, w, h)
         draw.RoundedBox(FrameCurve, 0, 0, w, h, FrameBorderColour)
-        draw.RoundedBox(FrameCurve, 2, 2, w-4, h-4, ProgressEmptyColour)
+        draw.RoundedBox(FrameCurve, 2, 2, w-4, h-4, BrewSlotBackground)
     end
 
     local closeButton = vgui.Create( "DButton", brewFrame )
@@ -94,7 +93,7 @@ function DrawBrewing(ent)
     closeButton.Paint = function(s, w, h)
 
 		draw.RoundedBox(FrameCurve-4,0,0,w,h,FrameBorderColour)
-		draw.RoundedBox(FrameCurve-4,2,2,w-4,h-4,ProgressEmptyColour)
+		draw.RoundedBox(FrameCurve-4,2,2,w-4,h-4,BrewSlotBackground)
 
 	end
 	closeButton.DoClick = function()
@@ -109,7 +108,7 @@ function DrawBrewing(ent)
     outputBoxFrame:SetTitle("")
     outputBoxFrame.Paint = function(s, w, h)
         draw.RoundedBox(FrameCurve, 0, 0, w, h, FrameBorderColour)
-        draw.RoundedBox(FrameCurve, 2, 2, w-4, h-4, ProgressEmptyColour)
+        draw.RoundedBox(FrameCurve, 2, 2, w-4, h-4, BrewSlotBackground)
     end
 
     local outputBoxImage = vgui.Create("DImage", brewFrame)
@@ -182,7 +181,7 @@ function CreateIngredientSlot(current, max)
 
     ingredSlot.Paint = function(s, w, h)
         draw.RoundedBox(FrameCurve, 0, 0, w, h, FrameBorderColour)
-        draw.RoundedBox(FrameCurve, 2, 2, w-4, h-4, ProgressEmptyColour)
+        draw.RoundedBox(FrameCurve, 2, 2, w-4, h-4, BrewSlotBackground)
     end
 
     return ingredSlot
