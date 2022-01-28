@@ -72,13 +72,15 @@ function CreateInventorySlot(sizeX, sizeY, posX, posY, max, current, padding, co
 
     local pos = Vector(GetNext(padding, current, max, posX, posY, sizeX, sizeY, columns))
 
+    local borderPadding = padding + (padding/5)
+
     local slotPad = vgui.Create("DFrame", storageFrame)
     slotPad:SetVisible(true)
     slotPad:SetTitle("")
     slotPad:ShowCloseButton(false)
     slotPad:SetDraggable(false)
-    slotPad:SetSize(sizeX + 6, sizeY + 6)
-    slotPad:SetPos(pos.x - 3, (pos.y - 3) + 25)
+    slotPad:SetSize(sizeX +borderPadding, sizeY + borderPadding)
+    slotPad:SetPos(pos.x - (borderPadding/2), (pos.y - (borderPadding/2)) + 25)
 
     slotPad.Paint = function(s, w, h)
 
