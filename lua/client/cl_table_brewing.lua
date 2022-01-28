@@ -119,7 +119,7 @@ function DrawBrewing(ent)
 end
 
 
-function GetNextPos(spacing, current, max)
+local function GetNextPos(spacing, current, max)
 
     local offset = spacing / 2
 
@@ -132,7 +132,7 @@ function GetNextPos(spacing, current, max)
     return (spacing * current - offset)
 end
 
-function GrabIngredient(button)
+local function GrabIngredient(button)
 
     brew_gui.ingredientCount = brew_gui.ingredientCount + 1
 
@@ -167,7 +167,7 @@ function GrabIngredient(button)
 
 end
 
-function CreateIngredientSlot(current, max)
+local function CreateIngredientSlot(current, max)
 
     local ingredSlot = vgui.Create("DImageButton", brewFrame)
     ingredSlot:SetPos(GetNextPos(125, current, max ) , 50)
@@ -188,7 +188,7 @@ function CreateIngredientSlot(current, max)
 
 end
 
-function StartBrewing()
+local function StartBrewing()
 
     if brew_gui.ingredientCount > 0 then
         
@@ -225,7 +225,7 @@ function StartBrewing()
 
 end
 
-function ClearIngredients()
+local function ClearIngredients()
 
     for k, v in ipairs(brew_gui.ingredientSlots) do
 
