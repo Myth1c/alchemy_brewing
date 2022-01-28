@@ -19,8 +19,8 @@ local BrewSlotBackground = Brew_Config.GUI_BrewSlot_Background or Color(60,60,60
 function DrawBrewing(ent)
     
     brewFrame = vgui.Create("DFrame")
-    brewFrame:SetPos(ScrW() * 660/1920, ScrH() * 300/1080)
-    brewFrame:SetSize( ScrW() * 600/1920, ScrH() * 600/1080 )
+    brewFrame:SetPos(ScrW() * 660/1920, ScrH() * 75/1080)
+    brewFrame:SetSize( ScrW() * 600/1920, ScrH() * 500/1080 )
     brewFrame:SetVisible(true)
     brewFrame:SetTitle("")
     brewFrame:ShowCloseButton(false)
@@ -40,11 +40,11 @@ function DrawBrewing(ent)
 
     local brewArrow = vgui.Create("DSprite")
     brewArrow:SetMaterial(Material("gui/arrow"))
-    brewArrow:SetSize(128, 128)
+    brewArrow:SetSize(96, 96)
     brewArrow:SetParent(brewFrame)
-    brewArrow:SetPos(300, 300)
+    brewArrow:SetPos(300, 210)
     brewArrow:SetRotation(180)
-    brewArrow:SetColor(Color(70, 70, 70, 255))
+    brewArrow:SetColor(BrewSlotBackground)
 
     brew_gui.brewArrow = brewArrow
     
@@ -72,7 +72,7 @@ function DrawBrewing(ent)
     end
 
     local startBrew = vgui.Create("DButton")
-    startBrew:SetPos(100 , 500)
+    startBrew:SetPos(100 , 400)
     startBrew:SetSize(400, 50)
     startBrew:SetText("Start Brewing")
     startBrew:SetParent(brewFrame)
@@ -101,7 +101,7 @@ function DrawBrewing(ent)
 	end
 
     local outputBoxFrame = vgui.Create("DFrame", brewFrame)
-    outputBoxFrame:SetPos(238, 363)
+    outputBoxFrame:SetPos(238, 263)
     outputBoxFrame:SetSize(125, 125)
     outputBoxFrame:SetDraggable(false)
     outputBoxFrame:ShowCloseButton(false)
@@ -112,7 +112,7 @@ function DrawBrewing(ent)
     end
 
     local outputBoxImage = vgui.Create("DImage", brewFrame)
-    outputBoxImage:SetPos(238, 363)
+    outputBoxImage:SetPos(238, 263)
     outputBoxImage:SetSize(125, 125)
     outputBoxImage:SetImage("decals/light")
 
@@ -170,7 +170,7 @@ end
 function CreateIngredientSlot(current, max)
 
     local ingredSlot = vgui.Create("DImageButton", brewFrame)
-    ingredSlot:SetPos(GetNextPos(125, current, max ) , 125)
+    ingredSlot:SetPos(GetNextPos(125, current, max ) , 50)
     ingredSlot:SetSize(100, 100)
     ingredSlot:SetText("")
     ingredSlot:SetImage("decals/light")
@@ -193,7 +193,7 @@ function StartBrewing()
     if brew_gui.ingredientCount > 0 then
         
         local potion = vgui.Create("DModelPanel")
-        potion:SetPos(225, 350)
+        potion:SetPos(225, 250)
         potion:SetSize(150, 150)
         potion:SetModel("models/props_junk/garbage_plasticbottle001a.mdl")
         potion:SetParent(brewFrame)
@@ -213,6 +213,8 @@ function StartBrewing()
             potion:Remove()
             
             brew_gui.ingredientCount = brew_gui.ingredientCount - 1
+
+            brew_gui.brewArrow:SetColor(BrewSlotBackground)
 
         end
 
