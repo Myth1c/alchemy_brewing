@@ -334,8 +334,6 @@ function Brew_TransferEnt(ent)
 
     if not AddToStorage(ent) then return false end
 
-    DrawIngredient(ent)
-
     table.RemoveByValue(brew_ents, ent)
 
     brew_gui.ingredientCount = brew_gui.ingredientCount - 1
