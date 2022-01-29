@@ -181,6 +181,9 @@ function GetBiggestFactor(val)
     return factor
 end
 
+--[[
+    Function that adds entities to the inventory. It will draw any new entities it gets while the inventory is open, mainly to work with transfering
+]]--
 function AddToStorage(ent)
 
     if #stored_ents >= Brew_Config.Inventory_Size then return false end
@@ -195,6 +198,10 @@ function AddToStorage(ent)
     return true
 end
 
+--[[
+    This just take a class, model, and table abilities (not used for now) and will create a clientside entity with it
+    It will automatically place it in the inventory after created
+]]--
 function CreateEntForStorage(class, model, abilities )
 
     local ent = ents.CreateClientside(class)
@@ -205,6 +212,10 @@ function CreateEntForStorage(class, model, abilities )
 
 end
 
+--[[
+    This function is responsible for going through every inventory slot and checking for the first open slot to place items in.
+    Once it finds one, it calls CreateIngredient with the entity we're trying to draw and the slot it should draw in
+]]--
 function DrawIngredient(ent)
 
     for k, v in ipairs(table_gui.inventorySlots) do
@@ -229,6 +240,11 @@ function DrawIngredient(ent)
     end
 end
 
+--[[
+    This essentially just goes through all our stored ingredients and makes sure they all get drawn.
+    It's done this way so I don't need to place a for loop for drawing every ingredient in the main function, although it can be done that way.
+    I just think it looks cleaner this way.
+]]--
 function DrawIngredients()
 
     if table.IsEmpty(stored_ents) then return end
@@ -240,6 +256,10 @@ function DrawIngredients()
     end
 end
 
+--[[
+    This handles creating the images for items stored inside the inventory.
+    It creates a DModelPanel at the supplied position of the given ent and makes sure it has left/right click functionality as well
+]]--
 function CreateIngredient(slot, ent) 
 
     local ingredModel = vgui.Create("DModelPanel", slot)
@@ -274,6 +294,9 @@ function CreateIngredient(slot, ent)
 
 end
 
+--[[
+    Transfer Function for the inventory. Mainly handles transfering between the brewing UI and the inventory.
+]]--
 function Inv_TransferEnt(ent)
 
     if GrabIngredient(ent) then 
@@ -285,12 +308,20 @@ function Inv_TransferEnt(ent)
 
 end
 
+--[[
+    Destroy function for the inventory. Just removes the ent from its storage table
+]]--
 function Inv_DestroyItem(ent)
 
     table.RemoveByValue(stored_ents, ent)
 
 end
 
+--[[
+    Drop function for the inventory. 
+    This is the function that handles dropping entities from the brewing menu so that you can use the context menu inside the brewing UI.
+    Tells the server to create a serverside entity with the given class and model
+]]
 function Inv_DropItem(ent)
 
     net.Start("brew_drop_item")

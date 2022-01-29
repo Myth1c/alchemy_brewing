@@ -11,6 +11,13 @@ local ButtonPrimaryColour = Brew_Config.GUI_Context_Button_Foreground or Color(1
 local ButtonBorderColour = Brew_Config.GUI_Context_Button_Border or Color(255,255,255, 255)
 local MainBorderColour = Brew_Config.GUI_Context_Main_Border or Color(255,255,255, 255)
 
+
+--[[
+    Creates a simple context menu, designed to be used for the Brewing/Inventory UI.
+    Takes in the transfer, destroy, and dropfunctions of the UIs that are calling it as to populate the context menu.
+    Currently closes itself after any button on it has been pressed after calling its associated function.
+
+]]--
 function Brew_DrawContextMenu(ent, icon, transferFunc, destroyFunc, dropFunc)
 
 

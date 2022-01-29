@@ -320,12 +320,15 @@ function ClearIngredients()
 
 end
 
+--[[
+    Called when the UI is closed so ingredients inside of it aren't destroyed or dropped physically.
+    If theres anything to store, it will go through the brewing UIs stored entities and send them to the inventory instead.
 
+    TODO: Update this function to use the transfer function, and anything that won't fit will be dropped on the ground.
+]]--
 function StoreIngredients()
 
     if brew_gui.ingredientCount > 0 then
-
-        print("Ingredients to store")
 
         for _, v in ipairs(brew_ents) do
             AddToStorage(v)
@@ -337,6 +340,10 @@ function StoreIngredients()
     brew_gui.ingredientCount = 0
 end
 
+--[[
+    This is the function that handles sending ingredients between the brewing UI and the player inventory.
+    It checks if the inventory is full first before sending anything and will return true or false depending on if it could send anything.
+]]--
 function Brew_TransferEnt(ent)
 
     if not AddToStorage(ent) then return false end
@@ -349,12 +356,19 @@ function Brew_TransferEnt(ent)
 
 end
 
+--[[
+    This function only handles destroying entities generally done through the context menu.
+]]--
 function Brew_DestroyItem(ent)
     table.RemoveByValue(brew_ents, ent)
     brew_gui.ingredientCount = brew_gui.ingredientCount - 1
 
 end
 
+--[[
+    This is the function that handles dropping entities from the brewing menu so that you can use the context menu inside the brewing UI
+    Tells the server to create a serverside entity with the given class and model
+]]--
 function Brew_DropItem(ent)
 
     net.Start("brew_drop_item")
