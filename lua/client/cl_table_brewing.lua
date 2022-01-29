@@ -351,7 +351,11 @@ end
 
 function Brew_DropItem(ent)
 
-    print("Drop ", ent)
+    net.Start("brew_drop_item")
+        net.WriteString(ent:GetClass())
+        net.WriteString(ent:GetModel())
+    net.SendToServer()
+
     Brew_DestroyItem(ent)
 
 end

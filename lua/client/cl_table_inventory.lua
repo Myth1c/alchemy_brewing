@@ -188,6 +188,7 @@ function AddToStorage(ent)
     for i = 1, #stored_ents + 1 do
         if stored_ents[i] == nil then
             stored_ents[i] = ent
+            if IsValid(storageFrame) then DrawIngredient(ent) end
             break
         end
     end
@@ -291,6 +292,11 @@ function Inv_DestroyItem(ent)
 end
 
 function Inv_DropItem(ent)
-    print("Drop ", ent)
+
+    net.Start("brew_drop_item")
+        net.WriteString(ent:GetClass())
+        net.WriteString(ent:GetModel())
+    net.SendToServer()
+
     Inv_DestroyItem(ent)
 end
