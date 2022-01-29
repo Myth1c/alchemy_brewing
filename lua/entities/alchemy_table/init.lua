@@ -20,7 +20,7 @@ end
 
 function ENT:Use( ent, ply )
 
-	DebugPrint("Use pressed on table.")
+	
 	self:TableNetworkMessage("brewUI", ply)
 
 

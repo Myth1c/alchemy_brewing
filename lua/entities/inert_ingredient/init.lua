@@ -17,7 +17,6 @@ end
 
 function ENT:Use( activator, caller )
 	
-	DebugPrint("Use Pressed")
 
 	self:IngredNetworkMessage("brew_store_ent", caller, self)
 
