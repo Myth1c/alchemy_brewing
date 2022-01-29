@@ -7,8 +7,9 @@ local FontColour = Brew_Config.GUI_Font_mainColour or Color(255, 255, 255, 255)
 local FontColourShadow = Brew_Config.GUI_Font_shadowColour or Color(119, 135, 137, 255)
 local FrameCurve = Brew_Config.FrameCurve or 10
 
-local PrimaryColour = Brew_Config.GUI_Inventory_Foreground or Color(120,120,120, 0)
-local BorderColour = Brew_Config.GUI_Inventory_Background or Color(0,0,0, 0)
+local ButtonPrimaryColour = Brew_Config.GUI_Context_Button_Foreground or Color(120,120,120, 255)
+local ButtonBorderColour = Brew_Config.GUI_Context_Button_Border or Color(255,255,255, 255)
+local MainBorderColour = Brew_Config.GUI_Context_Main_Border or Color(255,255,255, 255)
 
 function Brew_DrawContextMenu(ent, icon, transferFunc, destroyFunc, dropFunc)
 
@@ -19,15 +20,15 @@ function Brew_DrawContextMenu(ent, icon, transferFunc, destroyFunc, dropFunc)
     contextFrame:ShowCloseButton(false)
     contextFrame:SetDraggable(false)
     contextFrame:SetVisible(true)
-    contextFrame:SetSize(125, 62)
+    contextFrame:SetSize(125, 83)
     contextFrame:MakePopup(true)
     contextFrame:DoModal()
     contextFrame:SetKeyboardInputEnabled(false)
     contextFrame:SetPos(gui.MouseX(), gui.MouseY())
     contextFrame.Paint = function(s, w, h)
 
-        draw.RoundedBox(FrameCurve - 5, 0, 0, w, h, BorderColour)
-        draw.RoundedBox(FrameCurve - 5, 2, 2, w-4, h-4, PrimaryColour)
+        draw.RoundedBox(FrameCurve - 5, 0, 0, w, h, MainBorderColour)
+        draw.RoundedBox(FrameCurve - 5, 2, 2, w-4, h-4, ButtonPrimaryColour)
 
     end
 
@@ -38,8 +39,8 @@ function Brew_DrawContextMenu(ent, icon, transferFunc, destroyFunc, dropFunc)
     transferButton:SetTextColor(Color(255, 255, 255, 255))
     transferButton.Paint = function(s, w, h)
 
-        draw.RoundedBox(0, 0, 0, w, h, BorderColour)
-        draw.RoundedBox(0, 2, 2, w-4, h-4, PrimaryColour)
+        draw.RoundedBox(0, 0, 0, w, h, ButtonBorderColour)
+        draw.RoundedBox(0, 2, 2, w-4, h-4, ButtonPrimaryColour)
 
     end
     transferButton.DoClick = function() 
@@ -56,8 +57,8 @@ function Brew_DrawContextMenu(ent, icon, transferFunc, destroyFunc, dropFunc)
     destroyButton:SetTextColor(Color(255, 255, 255, 255))
     destroyButton.Paint = function(s, w, h)
 
-        draw.RoundedBox(0, 0, 0, w, h, BorderColour)
-        draw.RoundedBox(0, 2, 2, w-4, h-4, PrimaryColour)
+        draw.RoundedBox(0, 0, 0, w, h, ButtonBorderColour)
+        draw.RoundedBox(0, 2, 2, w-4, h-4, ButtonPrimaryColour)
 
     end
     destroyButton.DoClick = function() 
@@ -74,15 +75,31 @@ function Brew_DrawContextMenu(ent, icon, transferFunc, destroyFunc, dropFunc)
     dropButton:SetTextColor(Color(255, 255, 255, 255))
     dropButton.Paint = function(s, w, h)
 
-        draw.RoundedBox(0, 0, 0, w, h, BorderColour)
-        draw.RoundedBox(0, 2, 2, w-4, h-4, PrimaryColour)
+        draw.RoundedBox(0, 0, 0, w, h, ButtonBorderColour)
+        draw.RoundedBox(0, 2, 2, w-4, h-4, ButtonPrimaryColour)
 
     end
     dropButton.DoClick = function() 
-        
+
         contextFrame:Close()
         dropFunc(ent)
         icon:Remove()
+    end
+
+    local cancelButton = vgui.Create("DButton", contextFrame)
+    cancelButton:SetText("Cancel")
+    cancelButton:SetPos(1, 61)
+    cancelButton:SetSize(123, 20)
+    cancelButton:SetTextColor(Color(255, 255, 255, 255))
+    cancelButton.Paint = function(s, w, h)
+
+        draw.RoundedBox(0, 0, 0, w, h, ButtonBorderColour)
+        draw.RoundedBox(0, 2, 2, w-4, h-4, ButtonPrimaryColour)
+
+    end
+    cancelButton.DoClick = function() 
+
+        contextFrame:Close()
     end
 
 

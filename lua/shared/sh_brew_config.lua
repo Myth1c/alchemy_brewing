@@ -25,6 +25,7 @@ Brew_Config = {
         Brewing UI Section
         The options under here are explicitly for the Brewing UI
     ]]--
+
     -- Set the amount of ingredients that can be added to a potion. Max = 5
     -- Default: 3
     Max_Ingredients = 3,
@@ -45,6 +46,7 @@ Brew_Config = {
         Table Inventory UI Section
         The options here only apply to the inventory UI that is accessed upon interacting with a table
     ]]--
+
     -- Set how many inventory slots should appear in the inventory UI. Not recommended to go above 75 as the UI will fall off the screen.
     -- Default: 25
     Inventory_Size = 25,
@@ -62,7 +64,23 @@ Brew_Config = {
     GUI_Inventory_Background = Color(0, 0, 0, 255),
     -- Set the header color of the main frame for the inventory UI
     -- Default: Color(150, 150, 150, 255)
-    GUI_Inventory_Header = Color(150, 150, 150, 255)
+    GUI_Inventory_Header = Color(150, 150, 150, 255),
+
+
+    --[[
+        Context Menu Section
+        The options here are for the context menu that shows when right-clicking an item in the brewing or inventory UIs
+    ]]--
+
+    -- Set the Button's Foreground Colors
+    -- Default: Color(120,120,120, 0)
+    GUI_Context_Button_Foreground = Color(120,120,120, 255),
+    -- Set the Button's border color
+    -- Default: Color(0, 0, 0, 0)
+    GUI_Context_Button_Border = Color(0,0,0, 255),
+    -- Set the Main Frame's border color
+    -- Default: Color(0, 0, 0, 0)
+    GUI_Context_Main_Border = Color(0,0,0, 255),
 
 
 
