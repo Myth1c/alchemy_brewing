@@ -258,12 +258,16 @@ end
 function StartBrewing()
 
     if brew_gui.ingredientCount > 0 then
+
+        local pot = ents.CreateClientside("inert_ingredient")
+        pot:SetModel("models/props_junk/garbage_plasticbottle001a.mdl")
+
+        table.insert(brew_ents, pot)
         
-        local potion = vgui.Create("DModelPanel")
+        local potion = vgui.Create("DModelPanel", brewFrame)
         potion:SetPos(225, 250)
         potion:SetSize(150, 150)
-        potion:SetModel("models/props_junk/garbage_plasticbottle001a.mdl")
-        potion:SetParent(brewFrame)
+        potion:SetModel(pot:GetModel())
 
         local mn, mx = potion.Entity:GetRenderBounds()
         local size = 0
@@ -275,13 +279,16 @@ function StartBrewing()
         potion:SetCamPos( Vector( size, size, size ) )
         potion:SetLookAt( (mn + mx) * 0.5 )
 
-        potion.OnMousePressed = function(mcode)
+        potion.OnMousePressed = function(obj, mcode)
 
-            potion:Remove()
-            
-            brew_gui.ingredientCount = brew_gui.ingredientCount - 1
+            if mcode == 107 and Brew_TransferEnt(pot) then
 
-            brew_gui.brewArrow:SetColor(BrewSlotBackground)
+                brew_gui.brewArrow:SetColor(BrewSlotBackground)
+                potion:Remove()
+            elseif mcode == 108 then 
+                Brew_DrawContextMenu(pot, potion, Brew_TransferEnt, Brew_DestroyItem, Brew_DropItem)
+            end
+
 
         end
 
@@ -344,6 +351,7 @@ end
 
 function Brew_DestroyItem(ent)
     table.RemoveByValue(brew_ents, ent)
+    brew_gui.ingredientCount = brew_gui.ingredientCount - 1
 
 end
 
