@@ -2,7 +2,6 @@ Brew_Config = {
 
     -- Enable DEBUGING mode. This will cause messages to print to console at various points in the code.
     BREWING_DEBUG = { Enabled = 1},
-
     --[[
         General UI Settings
         The settings here apply to every VGUI element that gets displayed.
@@ -82,6 +81,21 @@ Brew_Config = {
     -- Default: Color(0, 0, 0, 0)
     GUI_Context_Main_Border = Color(0,0,0, 255),
 
+    --[[
+        Status Indicator Settings
+        The options below this are only for the status indicators that show when drinking potions
+    ]]--
 
-
+    -- Set the Status Indicator's Foreground Color
+    -- Default: Color(120,120,120, 125)
+    GUI_Status_Foreground = Color(120,120,120, 125),
+    -- Set the Status Indicator's Border Color
+    -- Default: Color(0,0,0, 125)
+    GUI_Status_Border = Color(0,0,0, 125),
+    -- Set the amount the indicator rounds
+    -- Default: 2
+    GUI_Status_Curve = 2,
+    -- Set the font the status Indicator uses
+    -- Default: "Brew_Status_Font"
+    GUI_Status_Font = "Brew_StatusFont",
 }
