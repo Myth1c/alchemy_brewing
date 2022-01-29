@@ -24,12 +24,15 @@ if SERVER then
 		local class = net.ReadString()
 		local model = net.ReadString()
 
+		print(model)
+
 		local newEnt = ents.Create(class)
-		newEnt:SetModel(model)
 		newEnt:SetPos(pos)
 
 
 		newEnt:Spawn()
+		newEnt:SetModel(model)
+		newEnt:PhysicsInit(SOLID_VPHYSICS)
 
 	end)
 end

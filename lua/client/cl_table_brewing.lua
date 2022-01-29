@@ -259,7 +259,7 @@ function StartBrewing()
 
     if brew_gui.ingredientCount > 0 then
 
-        local pot = ents.CreateClientside("inert_ingredient")
+        local pot = ents.CreateClientside("inert_potion")
         pot:SetModel("models/props_junk/garbage_plasticbottle001a.mdl")
 
         table.insert(brew_ents, pot)
