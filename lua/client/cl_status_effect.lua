@@ -2,13 +2,13 @@ local status_gui = {}
 local status_active_effects = {
 }
 
-local FontType = "Brew_StatusFont"
-local FontColour = Color(255, 255, 255, 255)
-local FontColourShadow = Color(0, 0, 0, 255)
-local FrameCurve = 2
+local FontType = Brew_Config.GUI_Status_Font or "Brew_StatusFont"
+local FontColour = Brew_Config.GUI_Font_mainColour or Color(255, 255, 255, 255)
+local FontColourShadow = Brew_Config.GUI_Font_shadowColour or Color(0, 0, 0, 255)
+local FrameCurve = Brew_Config.GUI_Status_Curve or 2
 
-local PrimaryColour = Color(120,120,120, 125)
-local BorderColour = Color(0,0,0, 125)
+local PrimaryColour = Brew_Config.GUI_Status_Foreground or Color(120,120,120, 125)
+local BorderColour = Brew_Config.GUI_Status_Border or Color(0,0,0, 125)
 
 timer.Create("Brew_UpdateStatuses", 1, 0, function()
     if #status_active_effects < 1 then return end
@@ -44,7 +44,7 @@ function Brew_DrawStatus(effect, tier, timelimit)
     timeLabel.Paint = function(s, w, h)
         
         struc = {}
-        struc["pos"] = {0, -5}
+        struc["pos"] = {0, 0}
         struc["color"] = FontColourShadow
         struc["text"] = timeLabel:GetText()
         struc["font"] = FontType
@@ -65,7 +65,7 @@ function Brew_DrawStatus(effect, tier, timelimit)
     effectLabel.Paint = function(s, w, h)
         
         struc = {}
-        struc["pos"] = {0, -5}
+        struc["pos"] = {0, 0}
         struc["color"] = FontColourShadow
         struc["text"] = effectLabel:GetText()
         struc["font"] = FontType
