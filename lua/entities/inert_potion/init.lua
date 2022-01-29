@@ -17,9 +17,9 @@ end
 
 function ENT:Use( activator, caller )
 	
-	DebugPrint("Temporarily Storing Potions into inventory instead of drinking.")
 
-	self:PotionNetworkMessage("brew_store_ent", caller, self)
+
+	self:PotionNetworkMessage(caller, "speed", 1, 10)
 
 	self:Remove()
 

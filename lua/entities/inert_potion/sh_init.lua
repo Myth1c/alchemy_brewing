@@ -7,11 +7,12 @@ ENT.AdminSpawnable = false
 ENT.Category = "Alchemy Lab"
 
 
-function ENT:PotionNetworkMessage(type, player, ent)
+function ENT:PotionNetworkMessage(player, effect, tier, timeLimit)
 
-	net.Start("brew_store_Entity")
-		net.WriteString(type)
-        net.WriteEntity(ent)
+	net.Start("brew_draw_StatusUI")
+		net.WriteString(effect)
+        net.WriteInt(tier, 32)
+		net.WriteInt(timeLimit, 32)
 	net.Send(player)
 
 
