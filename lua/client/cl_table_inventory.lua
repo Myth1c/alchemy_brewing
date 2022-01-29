@@ -245,7 +245,7 @@ function CreateIngredient(slot, ent)
     local ingredModel = vgui.Create("DModelPanel", slot)
     ingredModel:SetPos(0, 0)
     ingredModel:SetSize(slot:GetSize())
-    ingredModel:SetModel("models/Gibs/HGIBS.mdl")
+    ingredModel:SetModel(ent:GetModel())
 
     local mn, mx = ingredModel.Entity:GetRenderBounds()
     local size = 0
