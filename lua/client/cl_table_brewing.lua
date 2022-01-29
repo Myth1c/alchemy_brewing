@@ -47,6 +47,7 @@ function DrawBrewing()
         StoreIngredients()
 
         if IsValid(storageFrame) then storageFrame:Close() end
+        if IsValid(contextFrame) then contextFrame:Close() end
     end
 
     local max = Brew_Config.Max_Ingredients or 3
@@ -209,11 +210,18 @@ function Brew_CreateIngredient(ent, button)
     ingredModel:SetCamPos( Vector( size, size, size ) )
     ingredModel:SetLookAt( (mn + mx) * 0.5 )
 
-    ingredModel.OnMousePressed = function(mcode)
+    ingredModel.OnMousePressed = function(obj, mcode)
 
-        ingredModel:Remove()
+        if mcode == 107 and Brew_TransferEnt(ent) then
+
+            ingredModel:Remove()
+
+        elseif mcode == 108 then 
+
+            if IsValid(contextFrame) then contextFrame:Close() end
+            Brew_DrawContextMenu(ent, ingredModel, Brew_TransferEnt, Brew_DestroyItem, Brew_DropItem)
+        end
         
-        Brew_RemoveEnt(ent)
 
     end
 end
@@ -322,9 +330,9 @@ function StoreIngredients()
     brew_gui.ingredientCount = 0
 end
 
-function Brew_RemoveEnt(ent)
+function Brew_TransferEnt(ent)
 
-    AddToStorage(ent)
+    if not AddToStorage(ent) then return false end
 
     DrawIngredient(ent)
 
@@ -332,5 +340,18 @@ function Brew_RemoveEnt(ent)
 
     brew_gui.ingredientCount = brew_gui.ingredientCount - 1
 
+    return true
+
+end
+
+function Brew_DestroyItem(ent)
+    table.RemoveByValue(brew_ents, ent)
+
+end
+
+function Brew_DropItem(ent)
+
+    print("Drop ", ent)
+    Brew_DestroyItem(ent)
 
 end

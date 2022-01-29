@@ -183,13 +183,15 @@ end
 
 function AddToStorage(ent)
 
+    if #stored_ents >= Brew_Config.Inventory_Size then return false end
+
     for i = 1, #stored_ents + 1 do
         if stored_ents[i] == nil then
             stored_ents[i] = ent
             break
         end
     end
-
+    return true
 end
 
 function CreateEntForStorage(class, model, abilities )
@@ -254,11 +256,16 @@ function CreateIngredient(slot, ent)
     ingredModel:SetCamPos( Vector( size, size, size ) )
     ingredModel:SetLookAt( (mn + mx) * 0.5 )
 
-    ingredModel.OnMousePressed = function(mcode)
+    ingredModel.OnMousePressed = function(obj, mcode)
 
-        if Inv_RemoveEnt(ent) then
+        if mcode == 107 and Inv_TransferEnt(ent) then
         
             ingredModel:Remove()
+
+        elseif mcode == 108 then 
+
+            if IsValid(contextFrame) then contextFrame:Close() end
+            Brew_DrawContextMenu(ent, ingredModel, Inv_TransferEnt, Inv_DestroyItem, Inv_DropItem)
         end
 
     end
@@ -266,7 +273,7 @@ function CreateIngredient(slot, ent)
 
 end
 
-function Inv_RemoveEnt(ent)
+function Inv_TransferEnt(ent)
 
     if GrabIngredient(ent) then 
         table.RemoveByValue(stored_ents, ent)
@@ -275,4 +282,15 @@ function Inv_RemoveEnt(ent)
 
     return false
 
+end
+
+function Inv_DestroyItem(ent)
+
+    table.RemoveByValue(stored_ents, ent)
+
+end
+
+function Inv_DropItem(ent)
+    print("Drop ", ent)
+    Inv_DestroyItem(ent)
 end
