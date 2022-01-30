@@ -11,13 +11,15 @@ local PrimaryColour = Brew_Config.GUI_Status_Foreground or Color(120,120,120, 12
 local BorderColour = Brew_Config.GUI_Status_Border or Color(0,0,0, 125)
 
 timer.Create("Brew_UpdateStatuses", 1, 0, function()
-    if #status_active_effects < 1 then return end
+    if #status_active_effects < 1 then timer.Pause("Brew_UpdateStatuses") return end
     UpdateTimers()
 end)
 
 function Brew_DrawStatus(effect, tier, timelimit)
 
     local height = 80 * (#status_active_effects + 1)
+
+    if timer.TimeLeft("Brew_UpdateStatuses") < 0 then timer.Start("Brew_UpdateStatuses") end
 
     local statusFrame = vgui.Create("DFrame")
     statusFrame:SetDraggable(false)
@@ -33,6 +35,8 @@ function Brew_DrawStatus(effect, tier, timelimit)
 
     statusFrame.OnClose = function () 
         print("Status expired!")
+
+        if #status_active_effects < 1 then timer.Pause("Brew_UpdateStatuses") end
     end
 
     local timeLabel = vgui.Create("DLabel", statusFrame)
