@@ -7,6 +7,7 @@ include("sh_init.lua")
 ENT.EffectFunction = 
 {
 	Effects_Speed,
+	Effects_Leaping,
 }
 
 
