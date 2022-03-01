@@ -14,7 +14,7 @@ if SERVER then
 
         ply:SetRunSpeed(ply:GetRunSpeed() * 1.5)
 
-        Timer.Simple(time, function() ply:SetRunSpeed(ply:GetRunSpeed() * 1.5) end)
+        Timer.Simple(time, function() ply:SetRunSpeed(ply:GetRunSpeed() / 1.5) end)
 
     end
 
