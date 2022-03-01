@@ -124,4 +124,26 @@ Brew_Config = {
     -- Changes the multiplier for the boost of a speed potion.
     -- Default: 0.25
     Effect_Speed_SpeedBoost_Multiplier = 0.25,
+    
+    --[[
+        Leaping Effect Settings
+        The options below apply to the speed effect when given to a player
+    ]]--
+    -- Set this to your default jump power on your server.
+    Effect_DefaultJumpPower = 280,
+
+    -- Leaping potion time calculation is: base time + (time multiplier * tier)
+    -- Changes the base time for a leaping potion. 
+    -- Default: 10
+    Effect_Leaping_TimeLimit_Base = 10,
+    -- Changes the multiplier for the time of a leaping potion.
+    -- Default: 1
+    Effect_Leaping_TimeLimit_Multiplier = 1,
+
+    -- Leaping potion boost calculation is: base boost + (boost multiplier * tier)
+    -- Default: 1
+    Effect_Leaping_JumpBoost_Base = 1,
+    -- Changes the multiplier for the boost of a Leaping potion.
+    -- Default: 0.25
+    Effect_Leaping_JumpBoost_Multiplier = 0.25,
 }
