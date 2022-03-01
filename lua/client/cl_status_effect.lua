@@ -101,7 +101,7 @@ function UpdatePositions()
     for k, v in pairs(status_active_effects) do
 
         if k ~= "active" then
-            print(k, " ", v)
+            
             local height = 80 * (status_active_effects["active"] + 1)
             v:SetPos(ScrW() * 1740/1920, ScrH() * height/1080) 
         end
@@ -144,7 +144,7 @@ function Brew_RemoveStatus(key)
     status_active_effects[key] = nil
 
     status_active_effects["active"] = status_active_effects["active"] - 1
-    
+
     UpdatePositions()
 
 
