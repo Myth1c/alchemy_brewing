@@ -6,6 +6,8 @@ if SERVER then
 
     util.AddNetworkString("brew_drop_item")
 
+	util.AddNetworkString("brew_effect_cleared")
+
 
 else
 
