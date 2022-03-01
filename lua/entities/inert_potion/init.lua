@@ -4,6 +4,12 @@ AddCSLuaFile("cl_init.lua")
 AddCSLuaFile("sh_init.lua")
 include("sh_init.lua")
 
+ENT.EffectFunction = 
+{
+	Effects_Speed,
+}
+
+
 function ENT:Initialize()
 	self:SetModel("models/props_junk/garbage_plasticbottle001a.mdl")
 	self:PhysicsInit(SOLID_VPHYSICS)
@@ -17,11 +23,21 @@ end
 
 function ENT:Use( activator, caller )
 	
-
-
-	self:PotionNetworkMessage(caller, "speed", 1, 10)
+	self:RunEffect(caller)
 
 	self:Remove()
 
 	
+end
+
+function ENT:RunEffect(ply)
+
+	for i=1, #self.EffectFunction, 1 do
+
+		local effect = self.EffectFunction[i]
+
+		if effect ~= nil then effect(ply, self) end
+
+	end
+
 end
