@@ -34,9 +34,9 @@ if SERVER then
     ]]--
     function Effects_Leaping(ply, pot, tier)
 
-        local time = 15 * tier
+        local time = Brew_Config.Effect_Leaping_TimeLimit_Base * (Brew_Config.Effect_Leaping_TimeLimit_Multiplier * tier)
 
-        local boost = 1 + (0.25 * tier)
+        local boost = Brew_Config.Effect_Leaping_JumpBoost_Base + (Brew_Config.Effect_Leaping_JumpBoost_Multiplier * tier)
 
         DebugPrint("Applying leaping to: " .. tostring(ply) .. "\nTier: " .. tier .. "\nTime Limit: " .. time .. "\nJump Multiplier: " .. boost)
         
