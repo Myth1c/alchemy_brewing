@@ -98,4 +98,30 @@ Brew_Config = {
     -- Set the font the status Indicator uses
     -- Default: "Brew_Status_Font"
     GUI_Status_Font = "Brew_StatusFont",
+
+    --[[
+        Speed Effect Settings
+        The options below apply to the speed effect when given to a player
+    ]]--
+    -- Set this to your default run speed on your server. If you don't know how to find that out, open console type cl_showpos 1 then look at "vel: "
+    -- copy the number next to that while holding the w key
+    Effect_DefaultRunSpeed = 400,
+
+    -- Speed potion time calculation is: base time + (time multiplier * tier)
+    -- A tier 1 speed potion would be: 10 * (1 * 1) meaning you get a 10 second speed potion. Tier 2 would be 20 seconds.
+    -- Changes the base time for a speed potion. 
+    -- Default: 10
+    Effect_Speed_TimeLimit_Base = 10,
+    -- Changes the multiplier for the time of a speed potion.
+    -- Default: 1
+    Effect_Speed_TimeLimit_Multiplier = 1,
+
+    -- Speed potion boost calculation is: base boost + (boost multiplier * tier). 
+    -- A tier 1 speed potion would be: 1 + (0.25 * 1) meaning you get a 1.25x run boost, increasing from 400 units to 500. Tier 2 would be 600 units.
+    -- Changes the base speed increase. 
+    -- Default: 1
+    Effect_Speed_SpeedBoost_Base = 1,
+    -- Changes the multiplier for the boost of a speed potion.
+    -- Default: 0.25
+    Effect_Speed_SpeedBoost_Multiplier = 0.25,
 }

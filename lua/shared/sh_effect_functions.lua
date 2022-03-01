@@ -6,11 +6,11 @@ if SERVER then
 
     end
     
-    function Effects_Speed(ply, pot, tier, time)
+    function Effects_Speed(ply, pot, tier)
 
-        time = time * tier
+        local time = Brew_Config.Effect_Speed_TimeLimit_Base * (Brew_Config.Effect_Speed_TimeLimit_Multiplier * tier)
 
-        local boost = 1 + (0.25 * tier)
+        local boost = Brew_Config.Effect_Speed_SpeedBoost_Base + (Brew_Config.Effect_Speed_SpeedBoost_Multiplier * tier)
 
         DebugPrint("Applying speed to: " .. tostring(ply) .. "\nTier: " .. tier .. "\nTime Limit: " .. time .. "\nSpeed Multiplier: " .. boost)
         
@@ -34,7 +34,7 @@ if SERVER then
         local effect = net.ReadString()
 
         if effect == "speed" then
-            ply:SetRunSpeed(400)
+            ply:SetRunSpeed(Brew_Config.Effect_DefaultRunSpeed)
         end
     
     end)
@@ -46,7 +46,7 @@ if SERVER then
 
     function ClearEffects(player)
 
-        ply:SetRunSpeed(ply:GetRunSpeed() / 1.5)
+        ply:SetRunSpeed(Brew_Config.Effect_DefaultRunSpeed)
 
     end
 

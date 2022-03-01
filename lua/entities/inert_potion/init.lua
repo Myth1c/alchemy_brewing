@@ -36,7 +36,7 @@ function ENT:RunEffect(ply)
 
 		local effect = self.EffectFunction[i]
 
-		if effect ~= nil then effect(ply, self, 1, 10) end
+		if effect ~= nil then effect(ply, self, 1) end
 
 	end
 
