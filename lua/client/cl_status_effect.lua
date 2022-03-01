@@ -123,9 +123,14 @@ end
 
 function Brew_RemoveStatus(frame)
 
+    net.Start("brew_clear_single_effect")
+        net.WriteString("speed")
+    net.SendToServer()
+
     table.RemoveByValue(status_active_effects, frame)
     frame:Close()
     UpdatePositions()
+
 
 end
 
