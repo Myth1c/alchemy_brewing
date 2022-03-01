@@ -1,5 +1,6 @@
 local status_gui = {}
 local status_active_effects = {
+    ["active"] = 0,
 }
 
 local FontType = Brew_Config.GUI_Status_Font or "Brew_StatusFont"
@@ -11,13 +12,15 @@ local PrimaryColour = Brew_Config.GUI_Status_Foreground or Color(120,120,120, 12
 local BorderColour = Brew_Config.GUI_Status_Border or Color(0,0,0, 125)
 
 timer.Create("Brew_UpdateStatuses", 1, 0, function()
-    if #status_active_effects < 1 then timer.Pause("Brew_UpdateStatuses") return end
+    if status_active_effects["active"] < 1 then timer.Pause("Brew_UpdateStatuses") return end
     UpdateTimers()
 end)
 
 function Brew_DrawStatus(effect, tier, timelimit)
 
-    local height = 80 * (#status_active_effects + 1)
+    status_active_effects["active"] = status_active_effects["active"] + 1
+    local height = 80 * (status_active_effects["active"] + 1)
+
 
     if timer.TimeLeft("Brew_UpdateStatuses") < 0 then timer.Start("Brew_UpdateStatuses") end
 
@@ -30,14 +33,18 @@ function Brew_DrawStatus(effect, tier, timelimit)
     statusFrame.Paint = function(s, w, h)
         draw.RoundedBox(FrameCurve, 0, 0, w, h, BorderColour)
         draw.RoundedBox(FrameCurve, 2, 2, w-4, h-4, PrimaryColour)
-    end
-    table.insert(status_active_effects, statusFrame)
+    end   
 
     statusFrame.OnClose = function () 
-        print("Status expired!")
+        DebugPrint("Status expired!")
 
-        if #status_active_effects < 1 then timer.Pause("Brew_UpdateStatuses") end
+        if status_active_effects["active"] < 1 then timer.Pause("Brew_UpdateStatuses") end
+        
+        
     end
+    
+    if status_active_effects[effect] == nil or !status_active_effects[effect] then status_active_effects[effect] = statusFrame
+    else DebugPrint("Attempting to duplicate status effects") statusFrame:Close() return end
 
     local timeLabel = vgui.Create("DLabel", statusFrame)
     timeLabel:SetFont(FontType)
@@ -91,11 +98,13 @@ end
 
 function UpdatePositions()
 
-    for k, v in ipairs(status_active_effects) do
+    for k, v in pairs(status_active_effects) do
 
-        local height = 80 * k
-        
-        v:SetPos(ScrW() * 1740/1920, ScrH() * height/1080)
+        if k ~= "active" then
+            print(k, " ", v)
+            local height = 80 * (status_active_effects["active"] + 1)
+            v:SetPos(ScrW() * 1740/1920, ScrH() * height/1080) 
+        end
 
     end
 
@@ -104,15 +113,17 @@ end
 
 function UpdateTimers()
 
-    for _, v in ipairs(status_active_effects) do
+    for k, v in pairs(status_active_effects) do
         
-        for __, k in ipairs(v:GetChildren()) do
+        if k ~= "active" then
+            for __, h in ipairs(v:GetChildren()) do
 
-            if k:GetName() == "DLabel" and tonumber(k:GetText(), "10") then
-                if tonumber(k:GetText(), "10") == 0 then Brew_RemoveStatus(v) return end
-                k:SetText(tonumber(k:GetText(), "10") - 1)
+                if h:GetName() == "DLabel" and tonumber(h:GetText(), "10") then
+                    if tonumber(h:GetText(), "10") == 0 then Brew_RemoveStatus(k) return end
+                    h:SetText(tonumber(h:GetText(), "10") - 1)
+                end
+
             end
-
         end
 
 
@@ -121,14 +132,19 @@ function UpdateTimers()
 
 end
 
-function Brew_RemoveStatus(frame)
+function Brew_RemoveStatus(key)
 
     net.Start("brew_clear_single_effect")
-        net.WriteString("speed")
+        net.WriteString(key)
     net.SendToServer()
 
-    table.RemoveByValue(status_active_effects, frame)
+    local frame = status_active_effects[key]
     frame:Close()
+
+    status_active_effects[key] = nil
+
+    status_active_effects["active"] = status_active_effects["active"] - 1
+    
     UpdatePositions()
 
 
