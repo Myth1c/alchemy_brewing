@@ -55,7 +55,7 @@ if SERVER then
 
         local time = 0
 
-        local boost = 25
+        local boost = Brew_Config.Effect_Healing_Amount * tier
 
         DebugPrint("Applying healing to: " .. tostring(ply) .. "\nTier: " .. tier .. "\nTime Limit: " .. time .. "\nHealth Given: " .. boost)
 
@@ -64,10 +64,10 @@ if SERVER then
 
             local plyHP = ply:Health()
 
-            ply:SetHealth( math.Clamp(plyHP + boost, 1, 150))
+            ply:SetHealth( math.Clamp(plyHP + boost, 1, Brew_Config.Effect_Overheal_DecayMaxHP))
 
-            if ply:Health() > 100 then
-                time = (ply:Health() - 100) * 3
+            if ply:Health() > Brew_Config.Effect_Overheal_DecayStart then
+                time = (ply:Health() - Brew_Config.Effect_Overheal_DecayStart) * Brew_Config.Effect_Overheal_DecayRate
                 if !table.HasValue(Players_Overhealed, ply) then table.insert(Players_Overhealed, ply) end
                 if timer.TimeLeft("Decay_Overheal") < 0 then timer.Start("Decay_Overheal") end
 
@@ -75,7 +75,7 @@ if SERVER then
             end
         else
             
-            ply:SetHealth( math.Clamp(plyHP + boost, 1, 100))
+            ply:SetHealth( math.Clamp(plyHP + boost, 1, Brew_Config.Effect_Healing_MaxHP))
         end
 
         
@@ -141,7 +141,7 @@ if SERVER then
 
     end)
 
-    timer.Create("Decay_Overheal", 3, 0, function() 
+    timer.Create("Decay_Overheal", Brew_Config.Effect_Overheal_DecayRate, 0, function() 
         if #Players_Overhealed < 1 then timer.Pause("Decay_Overheal") end
         
         for _, v in ipairs(Players_Overhealed) do

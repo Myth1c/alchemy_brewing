@@ -104,7 +104,7 @@ function UpdatePositions()
 
         if k ~= "active" and v ~= nil then
             count = count + 1
-            
+
             local height = 80 * count
 
             v:SetPos(ScrW() * 1740/1920, ScrH() * height/1080) 
@@ -127,10 +127,10 @@ function UpdateTimers()
                     if k == "overheal" then
                         local hp = LocalPlayer():Health()
 
-                        if tonumber(h:GetText(), "10") < ((hp - 100) * 3) - 10 or tonumber(h:GetText(), "10") > ((hp - 100) * 3) + 10 then
+                        if tonumber(h:GetText(), "10") < ((hp - 100) * Brew_Config.Effect_Overheal_DecayRate) - 10 or tonumber(h:GetText(), "10") > ((hp - 100) * Brew_Config.Effect_Overheal_DecayRate) + 10 then
                             
                             DebugPrint("Update Overheal timer!")
-                            h:SetText(tonumber((hp - 100) * 3) - 3)
+                            h:SetText(tonumber((hp - 100) * Brew_Config.Effect_Overheal_DecayRate) - Brew_Config.Effect_Overheal_DecayRate)
                         else h:SetText(tonumber(h:GetText(), "10") - 1) end
                         
                     else h:SetText(tonumber(h:GetText(), "10") - 1) end
