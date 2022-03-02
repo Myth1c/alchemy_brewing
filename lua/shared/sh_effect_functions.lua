@@ -65,8 +65,12 @@ if SERVER then
         
     end
 
+    --[[
+        Heals the player and if enabled will apply/decay overheal.
+    ]]--
     function Effects_Healing(ply, pot, tier)
 
+        local shouldDecay = Brew_Config.Effect_Overheal_Decay or true
         local boostBase = Brew_Config.Effect_Healing_Amount or 25
         local decayMax = Brew_Config.Effect_Overheal_DecayMaxHP or 200
         local decayRate = Brew_Config.Effect_Overheal_DecayRate or 3
@@ -81,8 +85,8 @@ if SERVER then
 
         DebugPrint("Applying healing to: " .. tostring(ply) .. "\nTier: " .. tier .. "\nTime Limit: " .. time .. "\nHealth Given: " .. boost)
 
-        -- Whether to allow overheal will go here.
-        if true then
+        
+        if shouldDecay then
 
             local plyHP = ply:Health()
 
