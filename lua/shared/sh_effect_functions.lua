@@ -21,7 +21,7 @@ if SERVER then
         local timeBase = Brew_Config.Effect_Speed_TimeLimit_Base or 10
         local timeMult = Brew_Config.Effect_Speed_TimeLimit_Multiplier or 1
         local boostBase = Brew_Config.Effect_Speed_SpeedBoost_Base or 1
-        local boostMult = Brew_Config.Effect_Speed_SpeedBoost_Base or 0.25
+        local boostMult = Brew_Config.Effect_Speed_SpeedBoost_Multiplier or 0.25
 
 
 
