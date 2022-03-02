@@ -181,7 +181,7 @@ function NumberToNumeral(input)
     if not input or input ~= input then error"Unable to convert to number" end
     if input == math.huge then error"Unable to convert infinity" end
     input = math.floor(input)
-    if input <= 0 then return input end
+    if input <= 0 then return " " end
 	local ret = ""
         for i = #numbers, 1, -1 do
         local num = numbers[i]
