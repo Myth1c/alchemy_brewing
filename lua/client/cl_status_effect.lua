@@ -19,7 +19,7 @@ end)
 function Brew_DrawStatus(effect, tier, timelimit)
 
     status_active_effects["active"] = status_active_effects["active"] + 1
-    local height = 80 * (status_active_effects["active"] + 1)
+    local height = 80 * (status_active_effects["active"])
 
 
     if timer.TimeLeft("Brew_UpdateStatuses") < 0 then timer.Start("Brew_UpdateStatuses") end
@@ -44,7 +44,7 @@ function Brew_DrawStatus(effect, tier, timelimit)
     end
     
     if status_active_effects[effect] == nil or !status_active_effects[effect] then status_active_effects[effect] = statusFrame
-    else DebugPrint("Attempting to duplicate status effects") statusFrame:Close() return end
+    else DebugPrint("Attempting to duplicate status effects") statusFrame:Close() status_active_effects["active"] = status_active_effects["active"] - 1 return end
 
     local timeLabel = vgui.Create("DLabel", statusFrame)
     timeLabel:SetFont(FontType)
@@ -98,11 +98,15 @@ end
 
 function UpdatePositions()
 
+    local count = 0
+
     for k, v in pairs(status_active_effects) do
 
-        if k ~= "active" then
+        if k ~= "active" and v ~= nil then
+            count = count + 1
             
-            local height = 80 * (status_active_effects["active"])
+            local height = 80 * count
+
             v:SetPos(ScrW() * 1740/1920, ScrH() * height/1080) 
         end
 
