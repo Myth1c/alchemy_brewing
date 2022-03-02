@@ -119,15 +119,14 @@ function UpdateTimers()
             for __, h in ipairs(v:GetChildren()) do
 
                 if h:GetName() == "DLabel" and tonumber(h:GetText(), "10") then
-                    if tonumber(h:GetText(), "10") == 0 then Brew_RemoveStatus(k) return end
+                    if tonumber(h:GetText(), "10") <= 0 then Brew_RemoveStatus(k) return end
                     if k == "overheal" then
                         local hp = LocalPlayer():Health()
 
-                        DebugPrint(hp .. " " .. (hp - 100) * 3)
-                        if hp % 3 == 0 then
+                        if tonumber(h:GetText(), "10") < ((hp - 100) * 3) - 10 or tonumber(h:GetText(), "10") > ((hp - 100) * 3) + 10 then
                             
                             DebugPrint("Update Overheal timer!")
-                            h:SetText(tonumber((hp - 100) * 3))
+                            h:SetText(tonumber((hp - 100) * 3) - 3)
                         else h:SetText(tonumber(h:GetText(), "10") - 1) end
                         
                     else h:SetText(tonumber(h:GetText(), "10") - 1) end
