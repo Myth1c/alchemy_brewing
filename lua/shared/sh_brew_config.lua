@@ -146,4 +146,36 @@ Brew_Config = {
     -- Changes the multiplier for the boost of a Leaping potion.
     -- Default: 0.25
     Effect_Leaping_JumpBoost_Multiplier = 0.25,
+
+    --[[
+        Healing Potion Settings
+        These options are to customize how healing potions work
+    ]]--
+    -- The amount a standard potion will heal. It is multiplied by it's tier for amount to heal.
+    -- Default: 25
+    Effect_Healing_Amount = 25,
+
+    --[[
+        If Overheal decay is turned on, these settings will effect healing potions
+    ]]--
+    -- Set to false to turn overheal decay off.
+    -- Default: true
+    Effect_Overheal_Decay = true,
+    -- Changes the max amount of hp you can get to while Overheal decay is turned on. The values are separate so you can set this higher if you wish.
+    -- Default: 200
+    Effect_Overheal_DecayMaxHP = 200,
+    -- Changes how quickly overheal will decay. The target loses 1 hp every 3 seconds by default
+    -- Default: 3
+    Effect_Overheal_DecayRate = 3,
+    -- Changes at what health value overheal decay will start at. Whenever a player is above this health value, they will return to it over time
+    -- Default: 100
+    Effect_Overheal_DecayStart = 100,
+
+    --[[
+        If Overheal decay is turned off, these settings will effect healing potions
+    ]]--
+    -- Changes the max HP a player can have. 
+    -- Default: 125
+    Effect_Healing_MaxHP = 125,
+
 }
