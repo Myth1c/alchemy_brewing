@@ -2,6 +2,8 @@ if SERVER then
     
     local Players_NoFallDmg = {}
 
+    local Players_Overhealed = {}
+
     --[[
         Default function for when a potion gives no effects. This is meant for failed brews.
     ]]--
@@ -44,9 +46,40 @@ if SERVER then
 
         ply:SetJumpPower(ply:GetJumpPower() * boost)
 
-        table.insert(Players_NoFallDmg, ply)
+        if !table.HasValue(Players_NoFallDmg, ply) then table.insert(Players_NoFallDmg, ply) end
 
         
+    end
+
+    function Effects_Healing(ply, pot, tier)
+
+        local time = 0
+
+        local boost = 25
+
+        DebugPrint("Applying healing to: " .. tostring(ply) .. "\nTier: " .. tier .. "\nTime Limit: " .. time .. "\nHealth Given: " .. boost)
+
+        -- Whether to allow overheal will go here.
+        if true then
+
+            local plyHP = ply:Health()
+
+            ply:SetHealth( math.Clamp(plyHP + boost, 1, 150))
+
+            if ply:Health() > 100 then
+                time = (ply:Health() - 100) * 3
+                if !table.HasValue(Players_Overhealed, ply) then table.insert(Players_Overhealed, ply) end
+                if timer.TimeLeft("Decay_Overheal") < 0 then timer.Start("Decay_Overheal") end
+
+                pot:PotionNetworkMessage(ply, "overheal", 0, time)
+            end
+        else
+            
+            ply:SetHealth( math.Clamp(plyHP + boost, 1, 100))
+        end
+
+        
+
     end
 
     --[[
@@ -106,6 +139,21 @@ if SERVER then
             end
         end
 
+    end)
+
+    timer.Create("Decay_Overheal", 3, 0, function() 
+        if #Players_Overhealed < 1 then timer.Pause("Decay_Overheal") end
+        
+        for _, v in ipairs(Players_Overhealed) do
+
+            if v:Health() > 100 then
+                v:SetHealth(v:Health() - 1)
+            else
+                table.RemoveByValue(Players_Overhealed, v)
+            end
+
+        end
+    
     end)
 
 else

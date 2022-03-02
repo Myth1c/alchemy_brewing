@@ -102,7 +102,7 @@ function UpdatePositions()
 
         if k ~= "active" then
             
-            local height = 80 * (status_active_effects["active"] + 1)
+            local height = 80 * (status_active_effects["active"])
             v:SetPos(ScrW() * 1740/1920, ScrH() * height/1080) 
         end
 
@@ -120,7 +120,17 @@ function UpdateTimers()
 
                 if h:GetName() == "DLabel" and tonumber(h:GetText(), "10") then
                     if tonumber(h:GetText(), "10") == 0 then Brew_RemoveStatus(k) return end
-                    h:SetText(tonumber(h:GetText(), "10") - 1)
+                    if k == "overheal" then
+                        local hp = LocalPlayer():Health()
+
+                        DebugPrint(hp .. " " .. (hp - 100) * 3)
+                        if hp % 3 == 0 then
+                            
+                            DebugPrint("Update Overheal timer!")
+                            h:SetText(tonumber((hp - 100) * 3))
+                        else h:SetText(tonumber(h:GetText(), "10") - 1) end
+                        
+                    else h:SetText(tonumber(h:GetText(), "10") - 1) end
                 end
 
             end
