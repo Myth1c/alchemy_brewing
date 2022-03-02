@@ -18,9 +18,16 @@ if SERVER then
     ]]--
     function Effects_Speed(ply, pot, tier)
 
-        local time = Brew_Config.Effect_Speed_TimeLimit_Base * (Brew_Config.Effect_Speed_TimeLimit_Multiplier * tier)
+        local timeBase = Brew_Config.Effect_Speed_TimeLimit_Base or 10
+        local timeMult = Brew_Config.Effect_Speed_TimeLimit_Multiplier or 1
+        local boostBase = Brew_Config.Effect_Speed_SpeedBoost_Base or 1
+        local boostMult = Brew_Config.Effect_Speed_SpeedBoost_Base or 0.25
 
-        local boost = Brew_Config.Effect_Speed_SpeedBoost_Base + (Brew_Config.Effect_Speed_SpeedBoost_Multiplier * tier)
+
+
+        local time = timeBase * (timeMult * tier)
+
+        local boost = boostBase + (boostMult * tier)
 
         DebugPrint("Applying speed to: " .. tostring(ply) .. "\nTier: " .. tier .. "\nTime Limit: " .. time .. "\nSpeed Multiplier: " .. boost)
         
@@ -35,10 +42,17 @@ if SERVER then
         Applies a leaping/jump boost effect to the player.
     ]]--
     function Effects_Leaping(ply, pot, tier)
+        
+        local timeBase = Brew_Config.Effect_Leaping_TimeLimit_Base or 10
+        local timeMult = Brew_Config.Effect_Leaping_TimeLimit_Multiplier or 1
+        local boostBase = Brew_Config.Effect_Leaping_JumpBoost_Base or 1
+        local boostMult = Brew_Config.Effect_Leaping_JumpBoost_Multiplier or 0.25
 
-        local time = Brew_Config.Effect_Leaping_TimeLimit_Base * (Brew_Config.Effect_Leaping_TimeLimit_Multiplier * tier)
 
-        local boost = Brew_Config.Effect_Leaping_JumpBoost_Base + (Brew_Config.Effect_Leaping_JumpBoost_Multiplier * tier)
+
+        local time = timeBase * (timeMult * tier)
+
+        local boost = boostBase + (boostMult * tier)
 
         DebugPrint("Applying leaping to: " .. tostring(ply) .. "\nTier: " .. tier .. "\nTime Limit: " .. time .. "\nJump Multiplier: " .. boost)
         
@@ -53,9 +67,17 @@ if SERVER then
 
     function Effects_Healing(ply, pot, tier)
 
+        local boostBase = Brew_Config.Effect_Healing_Amount or 25
+        local decayMax = Brew_Config.Effect_Overheal_DecayMaxHP or 200
+        local decayRate = Brew_Config.Effect_Overheal_DecayRate or 3
+        local decayStart = Brew_Config.Effect_Overheal_DecayStart or 100
+        local maxHP = Brew_Config.Effect_Healing_MaxHP or 125
+
+
+
         local time = 0
 
-        local boost = Brew_Config.Effect_Healing_Amount * tier
+        local boost = boostBase * tier
 
         DebugPrint("Applying healing to: " .. tostring(ply) .. "\nTier: " .. tier .. "\nTime Limit: " .. time .. "\nHealth Given: " .. boost)
 
@@ -64,10 +86,10 @@ if SERVER then
 
             local plyHP = ply:Health()
 
-            ply:SetHealth( math.Clamp(plyHP + boost, 1, Brew_Config.Effect_Overheal_DecayMaxHP))
+            ply:SetHealth( math.Clamp(plyHP + boost, 1, decayMax))
 
-            if ply:Health() > Brew_Config.Effect_Overheal_DecayStart then
-                time = (ply:Health() - Brew_Config.Effect_Overheal_DecayStart) * Brew_Config.Effect_Overheal_DecayRate
+            if ply:Health() > decayStart then
+                time = (ply:Health() - decayStart) * decayRate
                 if !table.HasValue(Players_Overhealed, ply) then table.insert(Players_Overhealed, ply) end
                 if timer.TimeLeft("Decay_Overheal") < 0 then timer.Start("Decay_Overheal") end
 
@@ -75,7 +97,7 @@ if SERVER then
             end
         else
             
-            ply:SetHealth( math.Clamp(plyHP + boost, 1, Brew_Config.Effect_Healing_MaxHP))
+            ply:SetHealth( math.Clamp(plyHP + boost, 1, maxHP))
         end
 
         
@@ -99,12 +121,17 @@ if SERVER then
     ]]--
     net.Receive("brew_clear_single_effect", function(len, ply)
     
+        local defaultRunSpeed = Brew_Config.Effect_DefaultRunSpeed or 400
+        local defaultJumpPow = Brew_Config.Effect_DefaultJumpPower or 280
+
         local effect = net.ReadString()
 
         if effect == "speed" then
-            ply:SetRunSpeed(Brew_Config.Effect_DefaultRunSpeed)
+
+            ply:SetRunSpeed(defaultRunSpeed)
         elseif effect == "leaping" then
-            ply:SetJumpPower(280)
+
+            ply:SetJumpPower(defaultJumpPow)
             table.RemoveByValue(Players_NoFallDmg, ply)
         end
     
@@ -121,9 +148,12 @@ if SERVER then
     ]]--
     function ClearEffects(player)
 
-        player:SetRunSpeed(Brew_Config.Effect_DefaultRunSpeed)
+        local defaultRunSpeed = Brew_Config.Effect_DefaultRunSpeed or 400
+        local defaultJumpPow = Brew_Config.Effect_DefaultJumpPower or 280
 
-        player:SetJumpPower(280)
+        player:SetRunSpeed(defaultRunSpeed)
+
+        player:SetJumpPower(defaultJumpPow)
         table.RemoveByValue(Players_NoFallDmg, ply)
 
     end
@@ -141,7 +171,7 @@ if SERVER then
 
     end)
 
-    timer.Create("Decay_Overheal", Brew_Config.Effect_Overheal_DecayRate, 0, function() 
+    timer.Create("Decay_Overheal", (Brew_Config.Effect_Overheal_DecayRate or 3), 0, function() 
         if #Players_Overhealed < 1 then timer.Pause("Decay_Overheal") end
         
         for _, v in ipairs(Players_Overhealed) do
