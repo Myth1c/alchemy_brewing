@@ -48,8 +48,16 @@ function Brew_DrawStatus(effect, tier, timelimit)
         
     end
     
-    if status_active_effects[effect] == nil or !status_active_effects[effect] then status_active_effects[effect] = statusFrame
-    else DebugPrint("Attempting to duplicate status effects") statusFrame:Close() status_active_effects["active"] = status_active_effects["active"] - 1 return end
+    if status_active_effects[effect] ~= nil or status_active_effects[effect] then
+        
+        if !CheckIfHigherTier(effect, tier) then
+            statusFrame:Close() 
+            status_active_effects["active"] = status_active_effects["active"] - 1 
+            return
+        end
+        
+    end
+    status_active_effects[effect] = statusFrame
 
     local timeLabel = vgui.Create("DLabel", statusFrame)
     timeLabel:SetFont(FontType)
@@ -113,6 +121,8 @@ function UpdatePositions()
             local height = 80 * count
 
             v:SetPos(ScrW() * 1740/1920, ScrH() * height/1080) 
+
+            print(v:GetPos() .. " ".. height)
         end
 
     end
@@ -133,8 +143,6 @@ function UpdateTimers()
                         local hp = LocalPlayer():Health()
 
                         if tonumber(h:GetText(), "10") < ((hp - 100) * Brew_Config.Effect_Overheal_DecayRate) - 10 or tonumber(h:GetText(), "10") > ((hp - 100) * Brew_Config.Effect_Overheal_DecayRate) + 10 then
-                            
-                            DebugPrint("Update Overheal timer!")
                             h:SetText(tonumber((hp - 100) * Brew_Config.Effect_Overheal_DecayRate) - Brew_Config.Effect_Overheal_DecayRate)
                         else h:SetText(tonumber(h:GetText(), "10") - 1) end
                         
@@ -150,11 +158,13 @@ function UpdateTimers()
 
 end
 
-function Brew_RemoveStatus(key)
+function Brew_RemoveStatus(key, notiServer)
 
-    net.Start("brew_clear_single_effect")
-        net.WriteString(key)
-    net.SendToServer()
+    if notiServer then
+        net.Start("brew_clear_single_effect")
+            net.WriteString(key)
+        net.SendToServer()
+    end
 
     local frame = status_active_effects[key]
     frame:Close()
@@ -176,24 +186,25 @@ end
 
 --[[
     Script taken from https://gist.github.com/efrederickson/4080372
-    This function just converts a given number into roman numerals mainly for the tier of a potion. 
+    These functions just converts a given number into roman numerals mainly for the tier of a potion and back. 
 ]]--
+
+local map = { 
+    I = 1,
+    V = 5,
+    X = 10,
+    L = 50,
+    C = 100, 
+    D = 500, 
+    M = 1000,
+}
+local numbers = { 1, 5, 10, 50, 100, 500, 1000 }
+local chars = { "I", "V", "X", "L", "C", "D", "M" }
+
+local RomanNumerals = { }
 
 function NumberToNumeral(input)
         
-    local map = { 
-        I = 1,
-        V = 5,
-        X = 10,
-        L = 50,
-        C = 100, 
-        D = 500, 
-        M = 1000,
-    }
-    local numbers = { 1, 5, 10, 50, 100, 500, 1000 }
-    local chars = { "I", "V", "X", "L", "C", "D", "M" }
-
-    local RomanNumerals = { }
 
     input = tonumber(input)
     if not input or input ~= input then error"Unable to convert to number" end
@@ -216,6 +227,37 @@ function NumberToNumeral(input)
                 break
             end
         end
+    end
+    return ret
+end
+function NumeralToNumber(input)
+    input = input:upper()
+    local ret = 0
+    local i = 1
+    while i <= input:len() do
+    --for i = 1, s:len() do
+        local c = input:sub(i, i)
+        if c ~= " " then -- allow spaces
+            local m = map[c] or error("Unknown Roman Numeral '" .. c .. "'")
+            
+            local next = input:sub(i + 1, i + 1)
+            local nextm = map[next]
+            
+            if next and nextm then
+                if nextm > m then 
+                -- if string[i] < string[i + 1] then result += string[i + 1] - string[i]
+                -- This is used instead of programming in IV = 4, IX = 9, etc, because it is
+                -- more flexible and possibly more efficient
+                    ret = ret + (nextm - m)
+                    i = i + 1
+                else
+                    ret = ret + m
+                end
+            else
+                ret = ret + m
+            end
+        end
+        i = i + 1
     end
     return ret
 end
@@ -249,3 +291,27 @@ function NumberToNumeral(num)
     return text
 end
 ]]--
+
+function CheckIfHigherTier(effect, tier)
+    if effect == "overheal" then return false end
+    
+    DebugPrint("Attempting to duplicate status effects")
+    for k, v in pairs(status_active_effects[effect]:GetChildren()) do
+
+        if v:GetName() == "DLabel" and string.find(v:GetText(), CapitalizeFirstLetter(effect)) then
+
+            local oldTier = NumeralToNumber(string.sub(v:GetText(), string.len(effect) + 2))
+
+            if oldTier <= tier then
+                DebugPrint("Should replace old " .. effect .. " " .. NumberToNumeral(oldTier) .. " with " .. effect .. " " .. NumberToNumeral(tier))
+                Brew_RemoveStatus(effect, false)
+                return true
+            end
+            
+        end
+
+    end
+
+    return false
+
+end
