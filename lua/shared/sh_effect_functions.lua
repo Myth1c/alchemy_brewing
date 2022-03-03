@@ -108,6 +108,20 @@ if SERVER then
 
     end
 
+    function Effects_Shield(ply, pot, tier)
+
+        local time = 0
+        local boost = 50
+        local maxArmor = 100
+        
+        DebugPrint("Applying Shields to: " .. tostring(ply) .. "\nTier: " .. tier .. "\nTime Limit: " .. time .. "\nShields Given: " .. boost)
+
+
+        ply:SetArmor(math.Clamp(ply:Armor() + boost, 1, maxArmor))
+
+
+    end
+
     --[[
         Currently unused. I plan to implement a command for clearing effects from a given player.
     ]]--

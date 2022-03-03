@@ -9,6 +9,7 @@ ENT.EffectFunction =
 	Effects_Speed,
 	Effects_Leaping,
 	Effects_Healing,
+	Effects_Shield,
 }
 
 
