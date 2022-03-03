@@ -11,18 +11,23 @@ local FrameCurve = Brew_Config.GUI_Status_Curve or 2
 local PrimaryColour = Brew_Config.GUI_Status_Foreground or Color(120,120,120, 125)
 local BorderColour = Brew_Config.GUI_Status_Border or Color(0,0,0, 125)
 
-timer.Create("Brew_UpdateStatuses", 1, 0, function()
-    if status_active_effects["active"] < 1 then timer.Pause("Brew_UpdateStatuses") return end
-    UpdateTimers()
-end)
+local function CreatePlayerTimer()
+    DebugPrint("Status Timer was created for: " .. tostring(LocalPlayer()))
+    timer.Create("Brew_UpdateStatuses", 1, 0, function()
+        if status_active_effects["active"] < 1 then timer.Pause("Brew_UpdateStatuses") return end
+        UpdateTimers()
+    end)
+
+
+end
 
 function Brew_DrawStatus(effect, tier, timelimit)
 
     status_active_effects["active"] = status_active_effects["active"] + 1
     local height = 80 * (status_active_effects["active"])
-
-
-    if timer.TimeLeft("Brew_UpdateStatuses") < 0 then timer.Start("Brew_UpdateStatuses") end
+    
+    if !timer.Exists("Brew_UpdatedStatuses") then CreatePlayerTimer()
+    elseif timer.TimeLeft("Brew_UpdateStatuses") < 0 then timer.Start("Brew_UpdateStatuses") end
 
     local statusFrame = vgui.Create("DFrame")
     statusFrame:SetDraggable(false)
