@@ -54,10 +54,14 @@ function Brew_DrawStatus(effect, tier, timelimit)
             statusFrame:Close() 
             status_active_effects["active"] = status_active_effects["active"] - 1 
             return
+        else
+            status_active_effects[effect] = statusFrame
+            UpdatePositions()
         end
         
+    else
+        status_active_effects[effect] = statusFrame
     end
-    status_active_effects[effect] = statusFrame
 
     local timeLabel = vgui.Create("DLabel", statusFrame)
     timeLabel:SetFont(FontType)
@@ -121,8 +125,7 @@ function UpdatePositions()
             local height = 80 * count
 
             v:SetPos(ScrW() * 1740/1920, ScrH() * height/1080) 
-
-            print(v:GetPos() .. " ".. height)
+            
         end
 
     end
@@ -138,7 +141,7 @@ function UpdateTimers()
             for __, h in ipairs(v:GetChildren()) do
 
                 if h:GetName() == "DLabel" and tonumber(h:GetText(), "10") then
-                    if tonumber(h:GetText(), "10") <= 0 then Brew_RemoveStatus(k) return end
+                    if tonumber(h:GetText(), "10") <= 0 then Brew_RemoveStatus(k, true) return end
                     if k == "overheal" then
                         local hp = LocalPlayer():Health()
 
@@ -158,9 +161,9 @@ function UpdateTimers()
 
 end
 
-function Brew_RemoveStatus(key, notiServer)
+function Brew_RemoveStatus(key, notifyServer)
 
-    if notiServer then
+    if notifyServer then
         net.Start("brew_clear_single_effect")
             net.WriteString(key)
         net.SendToServer()
