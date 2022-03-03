@@ -12,6 +12,21 @@ if SERVER then
         DebugPrint("No effect to give to: " .. tostring(ply))
 
     end
+
+    function Effects_TestEffect(ply, pot, tier)
+
+        
+	    pot:PotionNetworkMessage(ply, "Test 1", 0, 25)
+        
+	    pot:PotionNetworkMessage(ply, "Test 2", 0, 18)
+
+	    pot:PotionNetworkMessage(ply, "Test 3", 0, 69)
+
+	    pot:PotionNetworkMessage(ply, "Test 4", 0, 420)
+	    pot:PotionNetworkMessage(ply, "Test 5", 0, 82)
+	    pot:PotionNetworkMessage(ply, "Test 6", 0, 87)
+
+    end
     
     --[[
         This function handles applying the speed effect to the player.
