@@ -178,4 +178,16 @@ Brew_Config = {
     -- Default: 125
     Effect_Healing_MaxHP = 125,
 
+    --[[
+        Shield Potion Settings
+        These options customize the shield potions and how they effect their users.
+    ]]--
+    -- Changes how much shield a potion will give per tier. Tier 1 = 25, 2 = 50, 3 = 75, etc
+    -- Default: 25
+    Effect_Shield_Base = 25,
+    -- Changes the max amount of shields a player is allowed to have
+    -- Default: 100
+    Effect_Shield_Max = 100,
+
+
 }

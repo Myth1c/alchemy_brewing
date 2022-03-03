@@ -110,9 +110,11 @@ if SERVER then
 
     function Effects_Shield(ply, pot, tier)
 
+        local shieldBase = Brew_Config.Effect_Shield_Base or 25
+        local maxArmor = Brew_Config.Effect_Shield_Max or 100
+
         local time = 0
-        local boost = 50
-        local maxArmor = 100
+        local boost = 25 * tier
         
         DebugPrint("Applying Shields to: " .. tostring(ply) .. "\nTier: " .. tier .. "\nTime Limit: " .. time .. "\nShields Given: " .. boost)
 
