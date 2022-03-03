@@ -22,6 +22,7 @@ if SERVER then
         local timeMult = Brew_Config.Effect_Speed_TimeLimit_Multiplier or 1
         local boostBase = Brew_Config.Effect_Speed_SpeedBoost_Base or 1
         local boostMult = Brew_Config.Effect_Speed_SpeedBoost_Multiplier or 0.25
+        local defaultSpeed = Brew_Config.Effect_DefaultRunSpeed or 400
 
 
 
@@ -33,7 +34,7 @@ if SERVER then
         
 	    pot:PotionNetworkMessage(ply, "speed", tier, time)
 
-        ply:SetRunSpeed(ply:GetRunSpeed() * boost)
+        ply:SetRunSpeed(defaultSpeed * boost)
 
 
     end
@@ -47,6 +48,7 @@ if SERVER then
         local timeMult = Brew_Config.Effect_Leaping_TimeLimit_Multiplier or 1
         local boostBase = Brew_Config.Effect_Leaping_JumpBoost_Base or 1
         local boostMult = Brew_Config.Effect_Leaping_JumpBoost_Multiplier or 0.25
+        local defaultJump = Brew_Config.Effect_DefaultJumpPower or 280
 
 
 
@@ -58,7 +60,7 @@ if SERVER then
         
 	    pot:PotionNetworkMessage(ply, "leaping", tier, time)
 
-        ply:SetJumpPower(ply:GetJumpPower() * boost)
+        ply:SetJumpPower(defaultJump * boost)
 
         if !table.HasValue(Players_NoFallDmg, ply) then table.insert(Players_NoFallDmg, ply) end
 
