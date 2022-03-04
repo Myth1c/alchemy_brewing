@@ -142,6 +142,14 @@ end
 
 function UpdateTimers()
 
+    if LocalPlayer():Health() < 1 then 
+        for k, v in pairs(status_active_effects) do
+            if k ~= "active" then
+                Brew_RemoveStatus(k, true)
+            end
+        end
+    end
+
     for k, v in pairs(status_active_effects) do
         
         if k ~= "active" then
@@ -177,7 +185,7 @@ function Brew_RemoveStatus(key, notifyServer)
     end
 
     local frame = status_active_effects[key]
-    frame:Close()
+    if IsValid(frame) then frame:Close() end
 
     status_active_effects[key] = nil
 
