@@ -60,9 +60,9 @@ function DrawBrewing()
 
     local brewArrow = vgui.Create("DSprite")
     brewArrow:SetMaterial(Material("gui/arrow"))
-    brewArrow:SetSize(96, 96)
+    brewArrow:SetSize(ScrW() * 96/1920, ScrH() * 96/1080)
     brewArrow:SetParent(brewFrame)
-    brewArrow:SetPos(300, 210)
+    brewArrow:SetPos(ScrW() * 300/1920, ScrH() * 210/1080)
     brewArrow:SetRotation(180)
     brewArrow:SetColor(BrewSlotBackground)
 
@@ -72,28 +72,28 @@ function DrawBrewing()
     local brewTitle = vgui.Create("DLabel")
     brewTitle:SetFont(FontType)
     brewTitle:SetText("Potion Brewing Station")
-    brewTitle:SetSize( 300, 40 )
-    brewTitle:SetPos(190 - string.len(brewTitle:GetText()), 5)
+    brewTitle:SetSize( ScrW() * 300/1920, ScrH() * 40/1080 )
+    brewTitle:SetPos(ScrW() * (190 - string.len(brewTitle:GetText()))/1920, ScrH() * 5/1080)
     brewTitle:SetParent(brewFrame)
     brewTitle:SetTextColor(FontColour)
-    brewTitle.Paint = function(s, w, h)
+    -- brewTitle.Paint = function(s, w, h)
         
-        struc = {}
-        struc["pos"] = {0, 0}
-        struc["color"] = FontColourShadow
-        struc["text"] = brewTitle:GetText()
-        struc["font"] = FontType
-        struc["xalign"] = TEXT_ALIGN_LEFT
-        struc["yalign"] = TEXT_ALIGN_TOP
+    --     struc = {}
+    --     struc["pos"] = {0, 2}
+    --     struc["color"] = FontColourShadow
+    --     struc["text"] = brewTitle:GetText()
+    --     struc["font"] = FontType
+    --     struc["xalign"] = TEXT_ALIGN_LEFT
+    --     struc["yalign"] = TEXT_ALIGN_TOP
         
 
-        draw.TextShadow(struc, 1, 200)
+    --     draw.TextShadow(struc, 1, 200)
 
-    end
+    -- end
 
     local startBrew = vgui.Create("DButton")
-    startBrew:SetPos(100 , 400)
-    startBrew:SetSize(400, 50)
+    startBrew:SetPos( ScrW() * 100/1920 , ScrH() * 400/1080)
+    startBrew:SetSize(ScrW() * 400/1920, ScrH() * 50/1080)
     startBrew:SetText("Start Brewing")
     startBrew:SetParent(brewFrame)
     startBrew:SetTextColor(Color(255, 255, 255, 255))
@@ -106,7 +106,7 @@ function DrawBrewing()
     end
 
     local closeButton = vgui.Create( "DButton", brewFrame )
-    closeButton:SetPos( 536, 0 )
+    closeButton:SetPos( ScrW() * 536/1920, 0 )
     closeButton:SetText( "X" )
     closeButton:SetFont("HudSelectionText")
     closeButton:SetTextColor( Color(255, 255, 255, 255) )
@@ -121,8 +121,8 @@ function DrawBrewing()
 	end
 
     local outputBoxFrame = vgui.Create("DFrame", brewFrame)
-    outputBoxFrame:SetPos(238, 263)
-    outputBoxFrame:SetSize(125, 125)
+    outputBoxFrame:SetPos(ScrW() * 238/1920, ScrH() * 263/1080)
+    outputBoxFrame:SetSize(ScrW() * 125/1920, ScrH() * 125/1080)
     outputBoxFrame:SetDraggable(false)
     outputBoxFrame:ShowCloseButton(false)
     outputBoxFrame:SetTitle("")
@@ -132,8 +132,8 @@ function DrawBrewing()
     end
 
     local outputBoxImage = vgui.Create("DImage", brewFrame)
-    outputBoxImage:SetPos(238, 263)
-    outputBoxImage:SetSize(125, 125)
+    outputBoxImage:SetPos(ScrW() * 238/1920, ScrH() * 263/1080)
+    outputBoxImage:SetSize(ScrW() * 125/1920, ScrH() * 125/1080)
     outputBoxImage:SetImage(BrewSlotImage)
 
 end
@@ -233,8 +233,8 @@ end
 function CreateIngredientSlot(current, max)
 
     local ingredSlot = vgui.Create("DImageButton", brewFrame)
-    ingredSlot:SetPos(GetNextPos(125, current, max ) , 50)
-    ingredSlot:SetSize(100, 100)
+    ingredSlot:SetPos(ScrW() * GetNextPos(125, current, max )/1920 , ScrH() * 50/1080)
+    ingredSlot:SetSize(ScrW() * 100/1920, ScrH() * 100/1080)
     ingredSlot:SetText("")
     ingredSlot:SetImage(BrewSlotImage)
 
@@ -265,8 +265,8 @@ function StartBrewing()
         table.insert(brew_ents, pot)
         
         local potion = vgui.Create("DModelPanel", brewFrame)
-        potion:SetPos(225, 250)
-        potion:SetSize(150, 150)
+        potion:SetPos(ScrW() * 225/1920, ScrH() * 250/1080)
+        potion:SetSize(ScrW() * 150/1920, ScrH() * 150/1080)
         potion:SetModel(pot:GetModel())
 
         local mn, mx = potion.Entity:GetRenderBounds()

@@ -15,7 +15,7 @@ else
 surface.CreateFont( "Brew_StatusFont", {
 	font = "Impact", --  Use the font-name which is shown to you by your operating system Font Viewer, not the file name
 	extended = false,
-	size = 26,
+	size = ScrW() * 26 / 1920,
 	weight = 500,
 	blursize = 0,
 	scanlines = 0,

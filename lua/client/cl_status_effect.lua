@@ -32,7 +32,7 @@ function Brew_DrawStatus(effect, tier, timelimit)
     local statusFrame = vgui.Create("DFrame")
     statusFrame:SetDraggable(false)
     statusFrame:SetTitle("")
-    statusFrame:SetSize(180, 80)
+    statusFrame:SetSize(ScrW() * 180/1920, ScrH() * 80/1080)
     statusFrame:ShowCloseButton(false)
     statusFrame:SetPos(ScrW() * 1740/1920, ScrH() * height/1080)
     statusFrame.Paint = function(s, w, h)
@@ -66,7 +66,7 @@ function Brew_DrawStatus(effect, tier, timelimit)
     local timeLabel = vgui.Create("DLabel", statusFrame)
     timeLabel:SetFont(FontType)
     timeLabel:SetText(timelimit)
-    timeLabel:SetPos(15, 45)
+    timeLabel:SetPos(ScrW() * 15/1920, ScrH() * 45/1080)
     timeLabel:SetSize(100 - string.len(timeLabel:GetText()), 20)
     timeLabel:SetTextColor(FontColour)
     timeLabel.Paint = function(s, w, h)
@@ -87,7 +87,7 @@ function Brew_DrawStatus(effect, tier, timelimit)
     local effectLabel = vgui.Create("DLabel", statusFrame)
     effectLabel:SetFont(FontType)
     effectLabel:SetText(CapitalizeFirstLetter(effect) .. " " .. NumberToNumeral(tier))
-    effectLabel:SetPos(15, 15)
+    effectLabel:SetPos(ScrW() * 15/1920, ScrH() * 15/1080)
     effectLabel:SetSize(100 - string.len(effectLabel:GetText()), 20)
     effectLabel:SetTextColor(FontColour)
     effectLabel.Paint = function(s, w, h)
@@ -105,10 +105,17 @@ function Brew_DrawStatus(effect, tier, timelimit)
 
     end
 
-    local effectImage = vgui.Create("DImage", statusFrame)
-    effectImage:SetPos( 111, 8)
-    effectImage:SetSize(64, 64)
-    effectImage:SetImage("gui/arrow")
+    
+
+    if ScrW() >= 1024 then
+
+        local effectImage = vgui.Create("DImage", statusFrame)
+        effectImage:SetPos( ScrW() * 111/1920, ScrH() * 8/1080)
+        effectImage:SetSize(ScrW() * 64/1920, ScrH() * 64/1080)
+        effectImage:SetImage("gui/arrow")
+        
+    end
+
 
 
 end

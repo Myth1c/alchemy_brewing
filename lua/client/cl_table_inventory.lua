@@ -66,10 +66,17 @@ function DrawStorage()
         draw.RoundedBox(FrameCurve, 2, 27, w-4, h-29, BorderColour)
     end
 
+    -- Setting up adjustments for different resolutions
+    local boxW = ScrW() * box/1920
+    local boxH = ScrH() * box/1080
+    
+    padding = ((ScrW() * padding/1920) + (ScrH() * padding/1080)) / 2
+
+
 
     for i = 1, max do
 
-        table_gui.inventorySlots[i] = CreateInventorySlot(box, box, 30, 30, max, i-1, padding, columns)
+        table_gui.inventorySlots[i] = CreateInventorySlot(boxW, boxH, 30, 30, max, i-1, padding, columns)
 
     end
 
