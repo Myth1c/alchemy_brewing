@@ -213,7 +213,7 @@ if SERVER then
         
         for _, v in ipairs(Players_Overhealed) do
 
-            if v:Health() > 100 then
+            if v:Health() > Brew_Config.Effect_Overheal_DecayStart then
                 v:SetHealth(v:Health() - 1)
             else
                 table.RemoveByValue(Players_Overhealed, v)

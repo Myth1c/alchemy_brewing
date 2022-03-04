@@ -152,8 +152,8 @@ function UpdateTimers()
                     if k == "overheal" then
                         local hp = LocalPlayer():Health()
 
-                        if tonumber(h:GetText(), "10") < ((hp - 100) * Brew_Config.Effect_Overheal_DecayRate) - 10 or tonumber(h:GetText(), "10") > ((hp - 100) * Brew_Config.Effect_Overheal_DecayRate) + 10 then
-                            h:SetText(tonumber((hp - 100) * Brew_Config.Effect_Overheal_DecayRate) - Brew_Config.Effect_Overheal_DecayRate)
+                        if tonumber(h:GetText(), "10") < ((hp - Brew_Config.Effect_Overheal_DecayStart) * Brew_Config.Effect_Overheal_DecayRate) - 10 or tonumber(h:GetText(), "10") > ((hp - Brew_Config.Effect_Overheal_DecayStart) * Brew_Config.Effect_Overheal_DecayRate) + 10 then
+                            h:SetText(tonumber((hp - Brew_Config.Effect_Overheal_DecayStart) * Brew_Config.Effect_Overheal_DecayRate) - Brew_Config.Effect_Overheal_DecayRate)
                         else h:SetText(tonumber(h:GetText(), "10") - 1) end
                         
                     else h:SetText(tonumber(h:GetText(), "10") - 1) end
