@@ -10,7 +10,7 @@ local brew_ents = {}
 --[[
     This chunk of code initializes settings and in case the config file doesn't load, it will set to defaults seen after the "or" statements
 ]]--
-local FontType = Brew_Config.GUI_Font or "DermaLarge"
+local FontType = Brew_Config.GUI_Font or "Brew_UIFont"
 local FontColour = Brew_Config.GUI_Font_mainColour or Color(255, 255, 255, 255)
 local FontColourShadow = Brew_Config.GUI_Font_shadowColour or Color(119, 135, 137, 255)
 local FrameCurve = Brew_Config.FrameCurve or 10
@@ -95,6 +95,7 @@ function DrawBrewing()
     startBrew:SetPos( ScrW() * 100/1920 , ScrH() * 400/1080)
     startBrew:SetSize(ScrW() * 400/1920, ScrH() * 50/1080)
     startBrew:SetText("Start Brewing")
+    startBrew:SetFont("Brew_UIFont")
     startBrew:SetParent(brewFrame)
     startBrew:SetTextColor(Color(255, 255, 255, 255))
 
@@ -106,7 +107,8 @@ function DrawBrewing()
     end
 
     local closeButton = vgui.Create( "DButton", brewFrame )
-    closeButton:SetPos( ScrW() * 536/1920, 0 )
+    closeButton:SetPos( ScrW() * 536/1920, ScrH() * 0/1080 )
+    closeButton:SetSize( ScrW() * 65/1920, ScrH() * 25/1080 )
     closeButton:SetText( "X" )
     closeButton:SetFont("HudSelectionText")
     closeButton:SetTextColor( Color(255, 255, 255, 255) )

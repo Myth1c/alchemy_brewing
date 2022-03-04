@@ -11,7 +11,7 @@ local stored_ents = {
 --[[
     This chunk of code initializes settings and in case the config file doesn't load, it will set to defaults seen after the "or" statements
 ]]--
-local FontType = Brew_Config.GUI_Font or "DermaLarge"
+local FontType = Brew_Config.GUI_Font or "Brew_UIFont"
 local FontColour = Brew_Config.GUI_Font_mainColour or Color(255, 255, 255, 255)
 local FontColourShadow = Brew_Config.GUI_Font_shadowColour or Color(119, 135, 137, 255)
 local FrameCurve = Brew_Config.FrameCurve or 10

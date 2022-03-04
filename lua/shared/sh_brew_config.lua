@@ -8,8 +8,8 @@ Brew_Config = {
     ]]--
 
     -- Set font type used for title of VGUI Elements
-    -- Default: DermaLarge
-    GUI_Font = "DermaLarge",
+    -- Default: Brew_UIFont
+    GUI_Font = "Brew_UIFont",
     -- Set the main color of title text
     -- Default: Color(255, 255, 255, 255)
     GUI_Font_mainColour = Color(255, 255, 255, 255),

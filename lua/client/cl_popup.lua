@@ -2,7 +2,7 @@
 --[[
     This chunk of code initializes settings and in case the config file doesn't load, it will set to defaults seen after the "or" statements
 ]]--
-local FontType = Brew_Config.GUI_Font or "DermaLarge"
+local FontType = Brew_Config.GUI_Font or "Brew_UIFont_Small"
 local FontColour = Brew_Config.GUI_Font_mainColour or Color(255, 255, 255, 255)
 local FontColourShadow = Brew_Config.GUI_Font_shadowColour or Color(119, 135, 137, 255)
 local FrameCurve = Brew_Config.FrameCurve or 10
@@ -41,6 +41,7 @@ function Brew_DrawContextMenu(ent, icon, transferFunc, destroyFunc, dropFunc)
 
     local transferButton = vgui.Create("DButton", contextFrame)
     transferButton:SetText("Transfer Item")
+    transferButton:SetFont("Brew_UIFont_Small")
     transferButton:SetPos(ScrW() * 1/1920, ScrH() * 1/1080)
     transferButton:SetSize(ScrW() * 123/1920, ScrH() * 20/1080)
     transferButton:SetTextColor(Color(255, 255, 255, 255))
@@ -59,6 +60,7 @@ function Brew_DrawContextMenu(ent, icon, transferFunc, destroyFunc, dropFunc)
 
     local destroyButton = vgui.Create("DButton", contextFrame)
     destroyButton:SetText("Destroy Item")
+    destroyButton:SetFont("Brew_UIFont_Small")
     destroyButton:SetPos(ScrW() * 1/1920, ScrH() * 21/1080)
     destroyButton:SetSize(ScrW() * 123/1920, ScrH() * 20/1080)
     destroyButton:SetTextColor(Color(255, 255, 255, 255))
@@ -77,6 +79,7 @@ function Brew_DrawContextMenu(ent, icon, transferFunc, destroyFunc, dropFunc)
 
     local dropButton = vgui.Create("DButton", contextFrame)
     dropButton:SetText("Drop Item")
+    dropButton:SetFont("Brew_UIFont_Small")
     dropButton:SetPos(ScrW() * 1/1920, ScrH() * 41/1080)
     dropButton:SetSize(ScrW() * 123/1920, ScrH() * 20/1080)
     dropButton:SetTextColor(Color(255, 255, 255, 255))
@@ -95,6 +98,7 @@ function Brew_DrawContextMenu(ent, icon, transferFunc, destroyFunc, dropFunc)
 
     local cancelButton = vgui.Create("DButton", contextFrame)
     cancelButton:SetText("Cancel")
+    cancelButton:SetFont("Brew_UIFont_Small")
     cancelButton:SetPos(ScrW() * 1/1920, ScrH() * 61/1080)
     cancelButton:SetSize(ScrW() * 123/1920, ScrH() * 20/1080)
     cancelButton:SetTextColor(Color(255, 255, 255, 255))
