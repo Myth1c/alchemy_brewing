@@ -6,3 +6,9 @@ function DebugPrint(message)
     print(message)
 
 end
+
+function DebugPrintTable(table)
+    if BREWING_DEBUG.Enabled ~= 1 then return end
+
+    PrintTable(table)
+end
