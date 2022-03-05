@@ -23,14 +23,18 @@ function ENT:Initialize()
 	if phys:IsValid() then phys:Wake() end
 	self:SetUseType(SIMPLE_USE)
 
-	local distribution = 100
+	if self.Reagents["speed"] == 0 and self.Reagents["leaping"] == 0 and 
+	self.Reagents["healing"] == 0 and self.Reagents["shield"] == 0 then
+		
+		local distribution = 100
 
-	for k, v in pairs(self.Reagents) do
+		for k, v in pairs(self.Reagents) do
 
-		self.Reagents[k] = math.random(0, distribution)
+			self.Reagents[k] = math.random(0, distribution)
 
-		distribution = distribution - self.Reagents[k]
+			distribution = distribution - self.Reagents[k]
 
+		end
 	end
 	
 end
