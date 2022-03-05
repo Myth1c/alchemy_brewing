@@ -186,6 +186,14 @@ function GrabIngredient(ent)
 
     DebugPrint("Ingredient should be added: " .. tostring(ent) .. "\nReagents included: ")
     DebugPrintTable(ent.Reagents)
+
+    if ent:GetClass() == "inert_potion" then 
+        for k, v in pairs(ent.Reagents) do
+
+            ent.Reagents[k] = TierToNumber(v)
+
+        end
+    end
     
 
     if !IsValid(reagentInfo) then DrawReagentInfo(ent) end
@@ -289,8 +297,7 @@ function StartBrewing()
         pot:SetModel("models/props_junk/garbage_plasticbottle001a.mdl")
         pot:SetNoDraw(true)
         pot.Reagents = {}
-
-        --table.insert(brew_ents, pot)
+        pot.FreshBrew = true
         
         local potion = vgui.Create("DModelPanel", brewFrame)
         potion:SetPos(ScrW() * 225/1920, ScrH() * 250/1080)
@@ -313,8 +320,10 @@ function StartBrewing()
 
                 brew_gui.brewArrow:SetColor(BrewSlotBackground)
                 brewFrame:Close()
-            -- elseif mcode == 108 then 
-            --     Brew_DrawContextMenu(pot, potion, Brew_TransferEnt, Brew_DestroyItem, Brew_DropItem)
+                Brew_DropItem(pot)
+
+            elseif mcode == 108 then 
+                Brew_DrawContextMenu(pot, potion, Brew_TransferEnt, Brew_DestroyItem, Brew_DropItem)
             end
 
 
@@ -322,18 +331,14 @@ function StartBrewing()
 
         SetupEffects(pot)
 
-        
-        Brew_DropItem(pot)
-
         brew_gui.brewArrow:SetColor(Color(255, 255, 255, 255))
 
         ClearIngredients()
-
-        for _, v in ipairs(brew_ents) do
-            RemoveReagents(v)
-        end
+        ClearReagents()
 
         if IsValid(reagentInfo) then reagentInfo:Close() end
+        
+        table.insert(brew_ents, pot)
     end
 
 end
@@ -385,6 +390,7 @@ end
     It checks if the inventory is full first before sending anything and will return true or false depending on if it could send anything.
 ]]--
 function Brew_TransferEnt(ent)
+    
 
     if not AddToStorage(ent) then return false end
 
@@ -404,6 +410,7 @@ function Brew_DestroyItem(ent)
 
         if IsValid(reagentInfo) and #brew_ents < 1 then reagentInfo:Close() end
 
+
         RemoveReagents(ent)
     end
 
@@ -415,13 +422,14 @@ end
 ]]--
 function Brew_DropItem(ent)
 
+    Brew_DestroyItem(ent)
+
     net.Start("brew_drop_item")
         net.WriteString(ent:GetClass())
         net.WriteString(ent:GetModel())
         net.WriteTable(ent.Reagents)
     net.SendToServer()
 
-    Brew_DestroyItem(ent)
 
     ent:Remove()
 
@@ -535,7 +543,7 @@ function AddReagents(ent)
 
     for k, v in pairs(ent.Reagents) do
 
-        reagents_Tracker[k] = reagents_Tracker[k] + v
+        reagents_Tracker[k] = math.Clamp(reagents_Tracker[k] + v, 0, 3 ^ (Brew_Config.Global_Max_Tier or 5))
 
     end
 
@@ -556,14 +564,33 @@ function RemoveReagents(ent)
 
     for k, v in pairs(ent.Reagents) do
 
-        reagents_Tracker[k] = reagents_Tracker[k] - v
+        reagents_Tracker[k] = math.Clamp(reagents_Tracker[k] - v, 0, math.huge)
 
     end
 
     DebugPrint("Reagents removed. Table now has:\n")
     DebugPrintTable(reagents_Tracker)
 
-    UpdateTierLabels()
+    if IsValid(reagentInfo) then UpdateTierLabels() end
+
+    if ent:GetClass() == "inert_potion" then 
+        if ent.FreshBrew == false then
+            for k, v in pairs(ent.Reagents) do
+
+                ent.Reagents[k] = NumberToTier(v)
+
+            end
+        else ent.FreshBrew = false end
+    end
+
+end
+
+function ClearReagents()
+
+    for k, v in pairs(reagents_Tracker) do
+        reagents_Tracker[k] = 0
+    end
+
 
 end
 
@@ -635,7 +662,7 @@ function NumberToTier(input)
     9 = tier 3
     27 = tier 4
     81 = tier 5
-    ]]
+    ]]--
     if input == 0 then return 0 end
     if input < 3 then return 1 end
     for i = 1, Brew_Config.Global_Max_Tier, 1 do
@@ -644,4 +671,13 @@ function NumberToTier(input)
             return i
         end
     end
+end
+
+function TierToNumber(input)
+    local output = 0
+
+    output = 3 ^ input
+
+    return output
+
 end
