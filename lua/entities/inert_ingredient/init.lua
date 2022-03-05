@@ -28,7 +28,7 @@ function ENT:Initialize()
 	if self.Reagents["speed"] == 0 and self.Reagents["leaping"] == 0 and 
 	self.Reagents["healing"] == 0 and self.Reagents["shield"] == 0 then
 		
-		local distribution = 25
+		local distribution = 8
 
 		local index = {
 			"healing",
@@ -39,7 +39,7 @@ function ENT:Initialize()
 		
 		local randReagent = index[math.random(1, 4)]
 
-		self.Reagents[randReagent] = math.random(5, distribution)
+		self.Reagents[randReagent] = math.random(2, distribution)
 
 		distribution = math.Clamp(distribution - self.Reagents[randReagent], 0, distribution)
 
