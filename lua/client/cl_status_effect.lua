@@ -88,7 +88,7 @@ function Brew_DrawStatus(effect, tier, timelimit)
     effectLabel:SetFont(FontType)
     effectLabel:SetText(CapitalizeFirstLetter(effect) .. " " .. NumberToNumeral(tier))
     effectLabel:SetPos(ScrW() * 15/1920, ScrH() * 15/1080)
-    effectLabel:SetSize(100 - string.len(effectLabel:GetText()), 20)
+    effectLabel:SetSize(100, 20)
     effectLabel:SetTextColor(FontColour)
     effectLabel.Paint = function(s, w, h)
         
