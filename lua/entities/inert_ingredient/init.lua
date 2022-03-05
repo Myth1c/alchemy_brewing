@@ -26,7 +26,7 @@ function ENT:Initialize()
 	if self.Reagents["speed"] == 0 and self.Reagents["leaping"] == 0 and 
 	self.Reagents["healing"] == 0 and self.Reagents["shield"] == 0 then
 		
-		local distribution = 100
+		local distribution = 25
 
 		for k, v in pairs(self.Reagents) do
 
