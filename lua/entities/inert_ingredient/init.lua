@@ -6,10 +6,10 @@ include("sh_init.lua")
 
 ENT.Reagents = {
 
-	["speed"] = 1,
-    ["leaping"] = 2,
-    ["healing"] = 3,
-    ["shield"] = 4,
+	["speed"] = 0,
+    ["leaping"] = 0,
+    ["healing"] = 0,
+    ["shield"] = 0,
 
 }
 
@@ -22,6 +22,16 @@ function ENT:Initialize()
 	local phys = self:GetPhysicsObject()
 	if phys:IsValid() then phys:Wake() end
 	self:SetUseType(SIMPLE_USE)
+
+	local distribution = 100
+
+	for k, v in pairs(self.Reagents) do
+
+		self.Reagents[k] = math.random(0, distribution)
+
+		distribution = distribution - self.Reagents[k]
+
+	end
 	
 end
 
