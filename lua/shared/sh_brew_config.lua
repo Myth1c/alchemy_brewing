@@ -2,6 +2,32 @@ Brew_Config = {
 
     -- Enable DEBUGING mode. This will cause messages to print to console at various points in the code.
     BREWING_DEBUG = { Enabled = 1},
+
+    --[[
+        General Addon settings
+    ]]--
+    -- Changes the max effects a player can have at a given time.
+    -- Default: 4
+    Max_Effects = 4,
+    -- Global max. This will override any max tier settings below.
+    -- Default: 5
+    Global_Max_Tier = 5,
+
+    -- Change the max tiers for each individual effect. Potions set down here will never go beyond the given maxes.
+    -- Speed potion's max tier.
+    -- Default: 5
+    Speed_Max_Tier = 5,
+    -- Leaping potion's max tier.
+    -- Default: 5
+    Leaping_Max_Tier = 5,
+    -- Healing potion's max tier.
+    -- Default: 4
+    Health_Max_Tier = 4,
+    -- Shield potion's max tier.
+    -- Default: 4
+    Shield_Max_tier = 4,
+
+
     --[[
         General UI Settings
         The settings here apply to every VGUI element that gets displayed.

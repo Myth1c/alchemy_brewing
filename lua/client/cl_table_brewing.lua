@@ -573,12 +573,21 @@ end
 ]]--
 function UpdateTierLabels()
 
+    local speedMax = Brew_Config.Speed_Max_Tier or 5
+    local leapMax = Brew_Config.Leaping_Max_Tier or 5
+    local healMax = Brew_Config.Health_Max_Tier or 4
+    local shieldMax = Brew_Config.Shield_Max_tier or 4
+
+    local _speedTier = math.Clamp(NumberToTier(reagents_Tracker["speed"]), 0, speedMax)
+    local _leapTier = math.Clamp(NumberToTier(reagents_Tracker["leaping"]), 0, leapMax)
+    local _healTier = math.Clamp(NumberToTier(reagents_Tracker["healing"]), 0, healMax)
+    local _shieldTier = math.Clamp(NumberToTier(reagents_Tracker["shield"]), 0, shieldMax)
     
 
-    speedTier:SetText( NumberToNumeral(NumberToTier(reagents_Tracker["speed"])))
-    leapingTier:SetText( NumberToNumeral( NumberToTier(reagents_Tracker["leaping"])))
-    healingTier:SetText( NumberToNumeral( NumberToTier(reagents_Tracker["healing"])))
-    shieldTier:SetText(NumberToNumeral( NumberToTier(reagents_Tracker["shield"])))
+    speedTier:SetText( NumberToNumeral( _speedTier ))
+    leapingTier:SetText( NumberToNumeral( _leapTier ))
+    healingTier:SetText( NumberToNumeral( _healTier ))
+    shieldTier:SetText(NumberToNumeral( _shieldTier ))
 
 end
 
@@ -587,13 +596,26 @@ end
     This potion will then use the numbers given and supply them to the potion. Which will then use those numbers to give effects to the user.
 ]]--
 function SetupEffects(ent)
+    
+    local speedMax = Brew_Config.Speed_Max_Tier or 5
+    local leapMax = Brew_Config.Leaping_Max_Tier or 5
+    local healMax = Brew_Config.Health_Max_Tier or 4
+    local shieldMax = Brew_Config.Shield_Max_tier or 4
+
+    local maxTier = 0
 
     for k, v in pairs(reagents_Tracker) do
 
         if v > 0 then 
             DebugPrint("Inserting " .. k .. " into potion.")
+
+            if k == "speed" then maxTier = speedMax
+            elseif k == "leaping" then maxTier = leapMax
+            elseif k == "healing" then maxTier = healMax
+            elseif k == "shield" then maxTier = shieldMax
+            end
             
-            ent.Effects[k] = NumberToTier(v)
+            ent.Effects[k] = math.Clamp(NumberToTier(v), 0, maxTier)
 
             DebugPrintTable(ent.Effects)
 
@@ -616,7 +638,7 @@ function NumberToTier(input)
     ]]
 
     if input < 3 then return 1 end
-    for i = 1, 5, 1 do
+    for i = 1, Brew_Config.Global_Max_Tier, 1 do
 
         if input <= 3^i then
             return i
