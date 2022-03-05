@@ -13,29 +13,65 @@ ENT.Reagents = {
 
 }
 
+ENT.ModelTable = {
+	
+	["speed"] = "models/noesis/donut.mdl",
+	["leaping"] = "models/maxofs2d/balloon_classic.mdl",
+    ["healing"] = "models/props_junk/watermelon01.mdl",
+    ["shield"] = "models/props_moonbase/moon_rock_small001.mdl",
+
+}
+
 
 function ENT:Initialize()
-	self:SetModel("models/Gibs/HGIBS.mdl")
-	self:PhysicsInit(SOLID_VPHYSICS)
-	self:SetMoveType(MOVETYPE_VPHYSICS)
-	self:SetSolid(SOLID_VPHYSICS)
-	local phys = self:GetPhysicsObject()
-	if phys:IsValid() then phys:Wake() end
-	self:SetUseType(SIMPLE_USE)
 
 	if self.Reagents["speed"] == 0 and self.Reagents["leaping"] == 0 and 
 	self.Reagents["healing"] == 0 and self.Reagents["shield"] == 0 then
 		
 		local distribution = 25
 
-		for k, v in pairs(self.Reagents) do
+		local index = {
+			"healing",
+			"leaping",
+			"shield",
+			"speed"
+		}
+		
+		local randReagent = index[math.random(1, 4)]
 
-			self.Reagents[k] = math.random(0, distribution)
+		self.Reagents[randReagent] = math.random(5, distribution)
 
-			distribution = distribution - self.Reagents[k]
+		distribution = math.Clamp(distribution - self.Reagents[randReagent], 0, distribution)
+
+
+		for i = 1, 4, 1 do
+
+			local randReagent = index[math.random(1, 4)]
+
+			self.Reagents[randReagent] = self.Reagents[randReagent] + math.random(0, distribution)
+	
+			distribution = math.Clamp(distribution - self.Reagents[randReagent], 0, distribution)
 
 		end
+
 	end
+
+	DebugPrint("Entity " .. tostring(self) .. " created with:")
+	DebugPrintTable(self.Reagents)
+
+
+	local greatest = self:DetermineGreatestReagent()
+
+	DebugPrint("Greatest Reagent: " .. greatest)
+
+
+	self:SetModel(self.ModelTable[greatest])
+	self:PhysicsInit(SOLID_VPHYSICS)
+	self:SetMoveType(MOVETYPE_VPHYSICS)
+	self:SetSolid(SOLID_VPHYSICS)
+	local phys = self:GetPhysicsObject()
+	if phys:IsValid() then phys:Wake() end
+	self:SetUseType(SIMPLE_USE)
 	
 end
 
@@ -47,4 +83,22 @@ function ENT:Use( activator, caller )
 	self:Remove()
 
 	
+end
+
+function ENT:DetermineGreatestReagent()
+
+	local greatest = 0
+	local key = nil
+
+	for k, v in pairs(self.Reagents) do
+
+		if v > greatest then 
+			key = k 
+			greatest = v
+		end
+
+	end
+
+	return key
+
 end
