@@ -344,4 +344,6 @@ function Inv_DropItem(ent)
     net.SendToServer()
 
     Inv_DestroyItem(ent)
+
+    ent:Remove()
 end

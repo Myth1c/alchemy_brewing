@@ -405,8 +405,6 @@ function Brew_DestroyItem(ent)
         if IsValid(reagentInfo) and #brew_ents < 1 then reagentInfo:Close() end
 
         RemoveReagents(ent)
-
-        ent:Remove()
     end
 
 end
@@ -424,6 +422,8 @@ function Brew_DropItem(ent)
     net.SendToServer()
 
     Brew_DestroyItem(ent)
+
+    ent:Remove()
 
 end
 
