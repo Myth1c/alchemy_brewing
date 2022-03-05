@@ -215,6 +215,11 @@ function CreateEntForStorage(class, model, abilities )
     ent:SetModel(model)
     ent:SetNoDraw(true)
 
+    ent.Reagents = abilities
+
+    DebugPrint("Entity added to storage with reagents: ")
+    DebugPrintTable(ent.Reagents)
+
     AddToStorage(ent)
 
 
@@ -335,6 +340,7 @@ function Inv_DropItem(ent)
     net.Start("brew_drop_item")
         net.WriteString(ent:GetClass())
         net.WriteString(ent:GetModel())
+        net.WriteTable(ent.Reagents or ent.Effects)
     net.SendToServer()
 
     Inv_DestroyItem(ent)

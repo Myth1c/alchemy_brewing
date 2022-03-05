@@ -4,13 +4,22 @@ AddCSLuaFile("cl_init.lua")
 AddCSLuaFile("sh_init.lua")
 include("sh_init.lua")
 
-ENT.EffectFunction = 
+ENT.Effects = 
 {
-	Effects_Speed,
-	Effects_Leaping,
-	Effects_Healing,
-	Effects_Shield,
+	["speed"] = 0,
+    ["leaping"] = 0,
+    ["healing"] = 0,
+    ["shield"] = 0,
 }
+local EffectFunctions = 
+{
+    ["speed"] = Effects_Speed,
+    ["leaping"] = Effects_Leaping,
+    ["healing"] = Effects_Healing,
+    ["shield"] = Effects_Shield,
+}
+
+
 
 
 function ENT:Initialize()
@@ -35,11 +44,13 @@ end
 
 function ENT:RunEffect(ply)
 
-	for i=1, #self.EffectFunction, 1 do
+	for k, v in pairs(self.Effects) do
 
-		local effect = self.EffectFunction[i]
+		if v > 0 then
 
-		if effect ~= nil then effect(ply, self, 1) end
+			EffectFunctions[k](ply, self, v)
+
+		end
 
 	end
 

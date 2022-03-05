@@ -2,10 +2,27 @@ local brew_gui = {
 
     ingredientSlots = {},
     brewArrow = {},
+    reagentInfo = {},
     ingredientCount = 0,
 
 }
 local brew_ents = {}
+
+local reagents_Tracker = {
+    
+    ["speed"] = 0,
+    ["leaping"] = 0,
+    ["healing"] = 0,
+    ["shield"] = 0,
+}
+
+local reagents_Tracker_Labels = {
+
+    speedTier = {},
+    leapingTier = {},
+    healingTier = {},
+    shieldTier = {}
+}
 
 --[[
     This chunk of code initializes settings and in case the config file doesn't load, it will set to defaults seen after the "or" statements
@@ -48,6 +65,7 @@ function DrawBrewing()
 
         if IsValid(storageFrame) then storageFrame:Close() end
         if IsValid(contextFrame) then contextFrame:Close() end
+        if IsValid(reagentInfo) then reagentInfo:Close() end
     end
 
     local max = Brew_Config.Max_Ingredients or 3
@@ -166,7 +184,13 @@ function GrabIngredient(ent)
     if brew_gui.ingredientCount == Brew_Config.Max_Ingredients then return false end
     brew_gui.ingredientCount = brew_gui.ingredientCount + 1
 
-    DebugPrint("Ingredient should be added: " .. tostring(ent))
+    DebugPrint("Ingredient should be added: " .. tostring(ent) .. "\nReagents included: ")
+    DebugPrintTable(ent.Reagents)
+    
+
+    if !IsValid(reagentInfo) then DrawReagentInfo(ent) end
+
+    AddReagents(ent)
 
     for k, v in ipairs(brew_gui.ingredientSlots) do
         local childCount = 0
@@ -264,8 +288,9 @@ function StartBrewing()
         local pot = ents.CreateClientside("inert_potion")
         pot:SetModel("models/props_junk/garbage_plasticbottle001a.mdl")
         pot:SetNoDraw(true)
+        pot.Effects = {}
 
-        table.insert(brew_ents, pot)
+        --table.insert(brew_ents, pot)
         
         local potion = vgui.Create("DModelPanel", brewFrame)
         potion:SetPos(ScrW() * 225/1920, ScrH() * 250/1080)
@@ -284,20 +309,31 @@ function StartBrewing()
 
         potion.OnMousePressed = function(obj, mcode)
 
-            if mcode == 107 and Brew_TransferEnt(pot) then
+            if mcode == 107 then
 
                 brew_gui.brewArrow:SetColor(BrewSlotBackground)
-                potion:Remove()
-            elseif mcode == 108 then 
-                Brew_DrawContextMenu(pot, potion, Brew_TransferEnt, Brew_DestroyItem, Brew_DropItem)
+                brewFrame:Close()
+            -- elseif mcode == 108 then 
+            --     Brew_DrawContextMenu(pot, potion, Brew_TransferEnt, Brew_DestroyItem, Brew_DropItem)
             end
 
 
         end
 
+        SetupEffects(pot)
+
+        
+        Brew_DropItem(pot)
+
         brew_gui.brewArrow:SetColor(Color(255, 255, 255, 255))
 
         ClearIngredients()
+
+        for _, v in ipairs(brew_ents) do
+            RemoveReagents(v)
+        end
+
+        if IsValid(reagentInfo) then reagentInfo:Close() end
     end
 
 end
@@ -335,6 +371,7 @@ function StoreIngredients()
 
         for _, v in ipairs(brew_ents) do
             AddToStorage(v)
+            RemoveReagents(v)
         end
 
 
@@ -351,9 +388,7 @@ function Brew_TransferEnt(ent)
 
     if not AddToStorage(ent) then return false end
 
-    table.RemoveByValue(brew_ents, ent)
-
-    brew_gui.ingredientCount = brew_gui.ingredientCount - 1
+    Brew_DestroyItem(ent)
 
     return true
 
@@ -363,8 +398,14 @@ end
     This function only handles destroying entities generally done through the context menu.
 ]]--
 function Brew_DestroyItem(ent)
-    table.RemoveByValue(brew_ents, ent)
-    brew_gui.ingredientCount = brew_gui.ingredientCount - 1
+    if table.HasValue(brew_ents, ent) then
+        table.RemoveByValue(brew_ents, ent)
+        brew_gui.ingredientCount = brew_gui.ingredientCount - 1
+
+        if IsValid(reagentInfo) and #brew_ents < 1 then reagentInfo:Close() end
+
+        RemoveReagents(ent)
+    end
 
 end
 
@@ -377,8 +418,169 @@ function Brew_DropItem(ent)
     net.Start("brew_drop_item")
         net.WriteString(ent:GetClass())
         net.WriteString(ent:GetModel())
+        net.WriteTable(ent.Reagents or ent.Effects)
     net.SendToServer()
 
     Brew_DestroyItem(ent)
+
+end
+
+function DrawReagentInfo(ent)
+
+    reagentInfo = vgui.Create("DFrame")
+    reagentInfo:SetPos(ScrW() * 330/1920, ScrH() * 75/1080)
+    reagentInfo:SetSize( ScrW() * 300/1920, ScrH() * 250/1080 )
+    reagentInfo:SetVisible(true)
+    reagentInfo:SetTitle("")
+    reagentInfo:ShowCloseButton(false)
+    reagentInfo.Paint = function(s, w, h)
+        draw.RoundedBox(FrameCurve, 0, 0, w, h, FrameBorderColour)
+        draw.RoundedBox(FrameCurve, 2, 2, w-4, h-4, FramePrimaryColour)
+        
+        draw.RoundedBox(FrameCurve, 0, 0, w, 30, Color(0, 0, 0, 255))
+        draw.RoundedBox(FrameCurve, 2, 2, w-4, 28, Color(255, 255, 255, 255))
+    end
+
+    local reagentTitle = vgui.Create("DLabel", reagentInfo)
+    reagentTitle:SetFont(FontType)
+    reagentTitle:SetText("Ingredient Information")
+    reagentTitle:SetSize( ScrW() * 300/1920, ScrH() * 40/1080 )
+    reagentTitle:SetPos(ScrW() * 15/1920, ScrH() * -3/1080)
+    reagentTitle:SetTextColor(FontColour)
+
+
+
+    local speedLabel = vgui.Create("DLabel", reagentInfo)
+    speedLabel:SetFont(FontType)
+    speedLabel:SetText("Speed: ")
+    speedLabel:SetSize( ScrW() * 300/1920, ScrH() * 40/1080 )
+    speedLabel:SetPos(ScrW() * (25 - string.len(speedLabel:GetText()))/1920, ScrH() * 30/1080)
+    speedLabel:SetTextColor(FontColour)
+
+    speedTier = vgui.Create("DLabel", reagentInfo)
+    speedTier:SetFont(FontType)
+    speedTier:SetText("0")
+    speedTier:SetSize( ScrW() * 300/1920, ScrH() * 40/1080 )
+    speedTier:SetPos(ScrW() * (270 - string.len(speedTier:GetText()))/1920, ScrH() * 30/1080)
+    speedTier:SetTextColor(FontColour)
+
+
+
+    local leapingLabel = vgui.Create("DLabel", reagentInfo)
+    leapingLabel:SetFont(FontType)
+    leapingLabel:SetText("Leaping: ")
+    leapingLabel:SetSize( ScrW() * 300/1920, ScrH() * 40/1080 )
+    leapingLabel:SetPos(ScrW() * (25 - string.len(leapingLabel:GetText()))/1920, ScrH() * 90/1080)
+    leapingLabel:SetTextColor(FontColour)
+
+    leapingTier = vgui.Create("DLabel", reagentInfo)
+    leapingTier:SetFont(FontType)
+    leapingTier:SetText("0")
+    leapingTier:SetSize( ScrW() * 300/1920, ScrH() * 40/1080 )
+    leapingTier:SetPos(ScrW() * (270 - string.len(leapingTier:GetText()))/1920, ScrH() * 90/1080)
+    leapingTier:SetTextColor(FontColour)
+
+
+
+    local healingLabel = vgui.Create("DLabel", reagentInfo)
+    healingLabel:SetFont(FontType)
+    healingLabel:SetText("Healing: ")
+    healingLabel:SetSize( ScrW() * 300/1920, ScrH() * 40/1080 )
+    healingLabel:SetPos(ScrW() * (25 - string.len(healingLabel:GetText()))/1920, ScrH() * 150/1080)
+    healingLabel:SetTextColor(FontColour)
+    
+    healingTier = vgui.Create("DLabel", reagentInfo)
+    healingTier:SetFont(FontType)
+    healingTier:SetText("0")
+    healingTier:SetSize( ScrW() * 300/1920, ScrH() * 40/1080 )
+    healingTier:SetPos(ScrW() * (270 - string.len(healingTier:GetText()))/1920, ScrH() * 150/1080)
+    healingTier:SetTextColor(FontColour)
+
+
+
+    local shieldLabel = vgui.Create("DLabel", reagentInfo)
+    shieldLabel:SetFont(FontType)
+    shieldLabel:SetText("Shield: ")
+    shieldLabel:SetSize( ScrW() * 300/1920, ScrH() * 40/1080 )
+    shieldLabel:SetPos(ScrW() * (25 - string.len(shieldLabel:GetText()))/1920, ScrH() * 210/1080)
+    shieldLabel:SetTextColor(FontColour)
+    
+    shieldTier = vgui.Create("DLabel", reagentInfo)
+    shieldTier:SetFont(FontType)
+    shieldTier:SetText("0")
+    shieldTier:SetSize( ScrW() * 300/1920, ScrH() * 40/1080 )
+    shieldTier:SetPos(ScrW() * (270 - string.len(shieldTier:GetText()))/1920, ScrH() * 210/1080)
+    shieldTier:SetTextColor(FontColour)
+
+
+
+
+
+
+end
+
+function AddReagents(ent)
+
+    DebugPrint("Adding reagents: ")
+    DebugPrintTable(ent.Reagents)
+
+    for k, v in pairs(ent.Reagents) do
+
+        reagents_Tracker[k] = reagents_Tracker[k] + v
+
+    end
+
+    DebugPrint("Reagents addedd. Table now has:\n")
+    DebugPrintTable(reagents_Tracker)
+
+    UpdateTierLabels()
+
+end
+
+function RemoveReagents(ent)
+
+    DebugPrint("Removing reagents: ")
+    DebugPrintTable(ent.Reagents)
+
+    for k, v in pairs(ent.Reagents) do
+
+        reagents_Tracker[k] = reagents_Tracker[k] - v
+
+    end
+
+    DebugPrint("Reagents removed. Table now has:\n")
+    DebugPrintTable(reagents_Tracker)
+
+    UpdateTierLabels()
+
+end
+
+function UpdateTierLabels()
+
+    speedTier:SetText(reagents_Tracker["speed"])
+    leapingTier:SetText(reagents_Tracker["leaping"])
+    healingTier:SetText(reagents_Tracker["healing"])
+    shieldTier:SetText(reagents_Tracker["shield"])
+
+
+end
+
+function SetupEffects(ent)
+
+    for k, v in pairs(reagents_Tracker) do
+
+        if v > 0 then 
+            DebugPrint("Inserting " .. k .. " into potion.")
+            
+            ent.Effects[k] = v
+
+            DebugPrintTable(ent.Effects)
+
+        end
+
+    end
+
+
+
 
 end

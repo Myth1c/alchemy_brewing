@@ -7,11 +7,12 @@ ENT.AdminSpawnable = false
 ENT.Category = "Alchemy Lab"
 
 
-function ENT:IngredNetworkMessage(type, player, ent)
+function ENT:IngredNetworkMessage(type, player, ent, reagentTable)
 
 	net.Start("brew_store_Entity")
 		net.WriteString(type)
         net.WriteEntity(ent)
+		net.WriteTable(reagentTable)
 	net.Send(player)
 
 

@@ -23,16 +23,22 @@ if SERVER then
 
 		local class = net.ReadString()
 		local model = net.ReadString()
-
-		print(model)
+		local table = net.ReadTable()
 
 		local newEnt = ents.Create(class)
 		newEnt:SetPos(pos)
+		
+		if class == "inert_ingredient" then newEnt.Reagents = table
+		elseif class == "inert_potion" then newEnt.Effects = table
+		end
 
 
 		newEnt:Spawn()
 		newEnt:SetModel(model)
 		newEnt:PhysicsInit(SOLID_VPHYSICS)
+
+		DebugPrint("User requested to drop entity " .. tostring(newEnt) .. "\nEntity model: " .. tostring(newEnt:GetModel()) .. "\nReagents included: ")
+		DebugPrintTable(newEnt.Reagents or newEnt.Effects)
 
 	end)
 end
