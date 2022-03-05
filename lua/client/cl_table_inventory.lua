@@ -340,7 +340,7 @@ function Inv_DropItem(ent)
     net.Start("brew_drop_item")
         net.WriteString(ent:GetClass())
         net.WriteString(ent:GetModel())
-        net.WriteTable(ent.Reagents or ent.Effects)
+        net.WriteTable(ent.Reagents)
     net.SendToServer()
 
     Inv_DestroyItem(ent)

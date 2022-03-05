@@ -4,7 +4,7 @@ AddCSLuaFile("cl_init.lua")
 AddCSLuaFile("sh_init.lua")
 include("sh_init.lua")
 
-ENT.Effects = 
+ENT.Reagents = 
 {
 	["speed"] = 0,
     ["leaping"] = 0,
@@ -44,7 +44,7 @@ end
 
 function ENT:RunEffect(ply)
 
-	for k, v in pairs(self.Effects) do
+	for k, v in pairs(self.Reagents) do
 
 		if v > 0 then
 

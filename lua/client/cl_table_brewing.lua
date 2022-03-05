@@ -288,7 +288,7 @@ function StartBrewing()
         local pot = ents.CreateClientside("inert_potion")
         pot:SetModel("models/props_junk/garbage_plasticbottle001a.mdl")
         pot:SetNoDraw(true)
-        pot.Effects = {}
+        pot.Reagents = {}
 
         --table.insert(brew_ents, pot)
         
@@ -418,7 +418,7 @@ function Brew_DropItem(ent)
     net.Start("brew_drop_item")
         net.WriteString(ent:GetClass())
         net.WriteString(ent:GetModel())
-        net.WriteTable(ent.Reagents or ent.Effects)
+        net.WriteTable(ent.Reagents)
     net.SendToServer()
 
     Brew_DestroyItem(ent)
@@ -615,9 +615,9 @@ function SetupEffects(ent)
             elseif k == "shield" then maxTier = shieldMax
             end
             
-            ent.Effects[k] = math.Clamp(NumberToTier(v), 0, maxTier)
+            ent.Reagents[k] = math.Clamp(NumberToTier(v), 0, maxTier)
 
-            DebugPrintTable(ent.Effects)
+            DebugPrintTable(ent.Reagents)
 
         end
 

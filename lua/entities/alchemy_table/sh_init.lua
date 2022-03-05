@@ -27,10 +27,8 @@ if SERVER then
 
 		local newEnt = ents.Create(class)
 		newEnt:SetPos(pos)
-		
-		if class == "inert_ingredient" then newEnt.Reagents = table
-		elseif class == "inert_potion" then newEnt.Effects = table
-		end
+
+		newEnt.Reagents = table
 
 
 		newEnt:Spawn()
@@ -38,7 +36,7 @@ if SERVER then
 		newEnt:PhysicsInit(SOLID_VPHYSICS)
 
 		DebugPrint("User requested to drop entity " .. tostring(newEnt) .. "\nEntity model: " .. tostring(newEnt:GetModel()) .. "\nReagents included: ")
-		DebugPrintTable(newEnt.Reagents or newEnt.Effects)
+		DebugPrintTable(newEnt.Reagents)
 
 	end)
 end
