@@ -17,3 +17,14 @@ function ENT:PotionNetworkMessage(player, effect, tier, timeLimit)
 
 
 end
+
+function ENT:StorePotNetworkMessage(type, player, ent, reagentTable)
+
+	net.Start("brew_store_Entity")
+		net.WriteString(type)
+        net.WriteEntity(ent)
+		net.WriteTable(reagentTable)
+	net.Send(player)
+
+
+end
