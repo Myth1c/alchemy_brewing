@@ -35,6 +35,7 @@ local FrameCurve = Brew_Config.FrameCurve or 10
 local BrewSlotBackground = Brew_Config.GUI_BrewSlot_Background or Color(60,60,60, 180)
 local FramePrimaryColour = Brew_Config.GUI_Brew_Foreground or Color(120,120,120, 0)
 local FrameBorderColour = Brew_Config.GUI_Brew_Background or Color(0,0,0, 0)
+local HeaderColor = Brew_Config.GUI_Inventory_Header or Color(255, 255, 255, 255)
 local BrewSlotImage = Brew_Config.GUI_BrewSlot_Image or "decals/light"
 
 --[[
@@ -156,6 +157,9 @@ function DrawBrewing()
     outputBoxImage:SetSize(ScrW() * 125/1920, ScrH() * 125/1080)
     outputBoxImage:SetImage(BrewSlotImage)
 
+    DrawReagentInfo()
+    UpdateTierLabels()
+
 end
 
 --[[
@@ -196,7 +200,7 @@ function GrabIngredient(ent)
     end
     
 
-    if !IsValid(reagentInfo) then DrawReagentInfo(ent) end
+    if !IsValid(reagentInfo) then DrawReagentInfo() end
 
     AddReagents(ent)
 
@@ -336,7 +340,6 @@ function StartBrewing()
         ClearIngredients()
         ClearReagents()
 
-        if IsValid(reagentInfo) then reagentInfo:Close() end
         
         table.insert(brew_ents, pot)
     end
@@ -408,7 +411,6 @@ function Brew_DestroyItem(ent)
         table.RemoveByValue(brew_ents, ent)
         brew_gui.ingredientCount = brew_gui.ingredientCount - 1
 
-        if IsValid(reagentInfo) and #brew_ents < 1 then reagentInfo:Close() end
 
 
         RemoveReagents(ent)
@@ -439,7 +441,7 @@ end
     This draws a UI popup on the left of the main brewing frame.
     It just displays what tiers of what effects your current potion will give you with the supplied ingredients.
 ]]--
-function DrawReagentInfo(ent)
+function DrawReagentInfo()
 
     reagentInfo = vgui.Create("DFrame")
     reagentInfo:SetPos(ScrW() * 330/1920, ScrH() * 75/1080)
@@ -451,15 +453,15 @@ function DrawReagentInfo(ent)
         draw.RoundedBox(FrameCurve, 0, 0, w, h, FrameBorderColour)
         draw.RoundedBox(FrameCurve, 2, 2, w-4, h-4, FramePrimaryColour)
         
-        draw.RoundedBox(FrameCurve, 0, 0, w, 30, Color(0, 0, 0, 255))
-        draw.RoundedBox(FrameCurve, 2, 2, w-4, 28, Color(255, 255, 255, 255))
+        draw.RoundedBox(FrameCurve, 0, 0, w, 32, Color(0, 0, 0, 255))
+        draw.RoundedBox(FrameCurve, 2, 2, w-4, 28, BrewSlotBackground)
     end
 
     local reagentTitle = vgui.Create("DLabel", reagentInfo)
     reagentTitle:SetFont(FontType)
     reagentTitle:SetText("Ingredient Information")
     reagentTitle:SetSize( ScrW() * 300/1920, ScrH() * 40/1080 )
-    reagentTitle:SetPos(ScrW() * 15/1920, ScrH() * -3/1080)
+    reagentTitle:SetPos(ScrW() * 15/1920, ScrH() * -5/1080)
     reagentTitle:SetTextColor(FontColour)
 
 
@@ -475,7 +477,7 @@ function DrawReagentInfo(ent)
     speedTier:SetFont(FontType)
     speedTier:SetText("0")
     speedTier:SetSize( ScrW() * 300/1920, ScrH() * 40/1080 )
-    speedTier:SetPos(ScrW() * (270 - string.len(speedTier:GetText()))/1920, ScrH() * 30/1080)
+    speedTier:SetPos(ScrW() * (250 - string.len(speedTier:GetText()))/1920, ScrH() * 30/1080)
     speedTier:SetTextColor(FontColour)
 
 
@@ -491,7 +493,7 @@ function DrawReagentInfo(ent)
     leapingTier:SetFont(FontType)
     leapingTier:SetText("0")
     leapingTier:SetSize( ScrW() * 300/1920, ScrH() * 40/1080 )
-    leapingTier:SetPos(ScrW() * (270 - string.len(leapingTier:GetText()))/1920, ScrH() * 90/1080)
+    leapingTier:SetPos(ScrW() * (250 - string.len(leapingTier:GetText()))/1920, ScrH() * 90/1080)
     leapingTier:SetTextColor(FontColour)
 
 
@@ -507,7 +509,7 @@ function DrawReagentInfo(ent)
     healingTier:SetFont(FontType)
     healingTier:SetText("0")
     healingTier:SetSize( ScrW() * 300/1920, ScrH() * 40/1080 )
-    healingTier:SetPos(ScrW() * (270 - string.len(healingTier:GetText()))/1920, ScrH() * 150/1080)
+    healingTier:SetPos(ScrW() * (250 - string.len(healingTier:GetText()))/1920, ScrH() * 150/1080)
     healingTier:SetTextColor(FontColour)
 
 
@@ -523,7 +525,7 @@ function DrawReagentInfo(ent)
     shieldTier:SetFont(FontType)
     shieldTier:SetText("0")
     shieldTier:SetSize( ScrW() * 300/1920, ScrH() * 40/1080 )
-    shieldTier:SetPos(ScrW() * (270 - string.len(shieldTier:GetText()))/1920, ScrH() * 210/1080)
+    shieldTier:SetPos(ScrW() * (250 - string.len(shieldTier:GetText()))/1920, ScrH() * 210/1080)
     shieldTier:SetTextColor(FontColour)
 
 
