@@ -213,6 +213,7 @@ function CreateEntForStorage(class, model, abilities )
 
     local ent = ents.CreateClientside(class)
     ent:SetModel(model)
+    ent:SetNoDraw(true)
 
     AddToStorage(ent)
 

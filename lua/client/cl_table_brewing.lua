@@ -166,7 +166,7 @@ function GrabIngredient(ent)
     if brew_gui.ingredientCount == Brew_Config.Max_Ingredients then return false end
     brew_gui.ingredientCount = brew_gui.ingredientCount + 1
 
-    print("Ingredient should be added: ", ent)
+    DebugPrint("Ingredient should be added: " .. tostring(ent))
 
     for k, v in ipairs(brew_gui.ingredientSlots) do
         local childCount = 0
@@ -263,6 +263,7 @@ function StartBrewing()
 
         local pot = ents.CreateClientside("inert_potion")
         pot:SetModel("models/props_junk/garbage_plasticbottle001a.mdl")
+        pot:SetNoDraw(true)
 
         table.insert(brew_ents, pot)
         
