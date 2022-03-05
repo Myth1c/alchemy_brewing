@@ -52,8 +52,8 @@ Brew_Config = {
     ]]--
 
     -- Set the amount of ingredients that can be added to a potion. Max = 5
-    -- Default: 3
-    Max_Ingredients = 3,
+    -- Default: 4
+    Max_Ingredients = 4,
     -- Set the color for the foreground of the main frame
     -- Default: Color(120, 120, 120, 255)
     GUI_Brew_Foreground = Color(120, 120, 120, 255),

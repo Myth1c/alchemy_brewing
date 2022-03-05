@@ -68,7 +68,7 @@ function DrawBrewing()
         if IsValid(reagentInfo) then reagentInfo:Close() end
     end
 
-    local max = Brew_Config.Max_Ingredients or 3
+    local max = Brew_Config.Max_Ingredients or 4
     if max > 5 then max = 5 end
     
     for i = 1, max do
