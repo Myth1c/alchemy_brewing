@@ -405,6 +405,8 @@ function Brew_DestroyItem(ent)
         if IsValid(reagentInfo) and #brew_ents < 1 then reagentInfo:Close() end
 
         RemoveReagents(ent)
+
+        ent:Remove()
     end
 
 end
@@ -571,11 +573,12 @@ end
 ]]--
 function UpdateTierLabels()
 
-    speedTier:SetText(reagents_Tracker["speed"])
-    leapingTier:SetText(reagents_Tracker["leaping"])
-    healingTier:SetText(reagents_Tracker["healing"])
-    shieldTier:SetText(reagents_Tracker["shield"])
+    
 
+    speedTier:SetText( NumberToNumeral(NumberToTier(reagents_Tracker["speed"])))
+    leapingTier:SetText( NumberToNumeral( NumberToTier(reagents_Tracker["leaping"])))
+    healingTier:SetText( NumberToNumeral( NumberToTier(reagents_Tracker["healing"])))
+    shieldTier:SetText(NumberToNumeral( NumberToTier(reagents_Tracker["shield"])))
 
 end
 
@@ -590,7 +593,7 @@ function SetupEffects(ent)
         if v > 0 then 
             DebugPrint("Inserting " .. k .. " into potion.")
             
-            ent.Effects[k] = v
+            ent.Effects[k] = NumberToTier(v)
 
             DebugPrintTable(ent.Effects)
 
@@ -601,4 +604,22 @@ function SetupEffects(ent)
 
 
 
+end
+
+function NumberToTier(input)
+    --[[
+    < 3 = tier 1
+    3 = tier 2
+    9 = tier 3
+    27 = tier 4
+    81 = tier 5
+    ]]
+
+    if input < 3 then return 1 end
+    for i = 1, 5, 1 do
+
+        if input <= 3^i then
+            return i
+        end
+    end
 end
