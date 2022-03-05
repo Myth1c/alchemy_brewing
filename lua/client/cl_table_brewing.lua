@@ -425,6 +425,10 @@ function Brew_DropItem(ent)
 
 end
 
+--[[
+    This draws a UI popup on the left of the main brewing frame.
+    It just displays what tiers of what effects your current potion will give you with the supplied ingredients.
+]]--
 function DrawReagentInfo(ent)
 
     reagentInfo = vgui.Create("DFrame")
@@ -519,6 +523,9 @@ function DrawReagentInfo(ent)
 
 end
 
+--[[
+    This function will add reagents to the table based on the supplied entity.
+]]--
 function AddReagents(ent)
 
     DebugPrint("Adding reagents: ")
@@ -537,6 +544,9 @@ function AddReagents(ent)
 
 end
 
+--[[
+    This function will remove reagents to the table based on the supplied entity.
+]]--
 function RemoveReagents(ent)
 
     DebugPrint("Removing reagents: ")
@@ -555,6 +565,10 @@ function RemoveReagents(ent)
 
 end
 
+--[[
+    This function is ONLY for the tracking UI.
+    It goes through all the labels we need that display what tier the effects are, and updates them each to what the table has stored internally.
+]]--
 function UpdateTierLabels()
 
     speedTier:SetText(reagents_Tracker["speed"])
@@ -565,6 +579,10 @@ function UpdateTierLabels()
 
 end
 
+--[[
+    This function does the heavy lifting of the brewing portion. It takes in everything from the internal reagents table and gives it to the created potion
+    This potion will then use the numbers given and supply them to the potion. Which will then use those numbers to give effects to the user.
+]]--
 function SetupEffects(ent)
 
     for k, v in pairs(reagents_Tracker) do
