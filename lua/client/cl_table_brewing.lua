@@ -190,14 +190,6 @@ function GrabIngredient(ent)
 
     DebugPrint("Ingredient should be added: " .. tostring(ent) .. "\nReagents included: ")
     DebugPrintTable(ent.Reagents)
-
-    if ent:GetClass() == "inert_potion" then 
-        for k, v in pairs(ent.Reagents) do
-
-            ent.Reagents[k] = TierToNumber(v)
-
-        end
-    end
     
 
     if !IsValid(reagentInfo) then DrawReagentInfo() end
@@ -575,16 +567,6 @@ function RemoveReagents(ent)
 
     if IsValid(reagentInfo) then UpdateTierLabels() end
 
-    if ent:GetClass() == "inert_potion" then 
-        if ent.FreshBrew == false then
-            for k, v in pairs(ent.Reagents) do
-
-                ent.Reagents[k] = NumberToTier(v)
-
-            end
-        else ent.FreshBrew = false end
-    end
-
 end
 
 function ClearReagents()
@@ -626,25 +608,12 @@ end
 ]]--
 function SetupEffects(ent)
     
-    local speedMax = Brew_Config.Speed_Max_Tier or 5
-    local leapMax = Brew_Config.Leaping_Max_Tier or 5
-    local healMax = Brew_Config.Health_Max_Tier or 4
-    local shieldMax = Brew_Config.Shield_Max_tier or 4
-
-    local maxTier = 0
-
     for k, v in pairs(reagents_Tracker) do
 
         if v > 0 then 
             DebugPrint("Inserting " .. k .. " into potion.")
 
-            if k == "speed" then maxTier = speedMax
-            elseif k == "leaping" then maxTier = leapMax
-            elseif k == "healing" then maxTier = healMax
-            elseif k == "shield" then maxTier = shieldMax
-            end
-            
-            ent.Reagents[k] = math.Clamp(NumberToTier(v), 0, maxTier)
+            ent.Reagents[k] = v
 
             DebugPrintTable(ent.Reagents)
 
@@ -673,13 +642,4 @@ function NumberToTier(input)
             return i
         end
     end
-end
-
-function TierToNumber(input)
-    local output = 0
-
-    output = 3 ^ input
-
-    return output
-
 end

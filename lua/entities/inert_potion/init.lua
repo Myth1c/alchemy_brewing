@@ -11,6 +11,7 @@ ENT.Reagents =
     ["healing"] = 0,
     ["shield"] = 0,
 }
+
 local EffectFunctions = 
 {
     ["speed"] = Effects_Speed,
@@ -53,14 +54,30 @@ end
 
 function ENT:RunEffect(ply)
 
+	DebugPrint("Running effects on: " .. tostring(ply) .. "\nReagents are: ")
+	DebugPrintTable(self.Reagents)
+
 	for k, v in pairs(self.Reagents) do
 
 		if v > 0 then
-
-			EffectFunctions[k](ply, self, v)
+			
+			EffectFunctions[k](ply, self, self:ConvertToTiers(v))
 
 		end
 
 	end
 
+end
+
+
+function ENT:ConvertToTiers(input)
+
+    if input == 0 then return 0 end
+    if input < 3 then return 1 end
+	for i = 1, Brew_Config.Global_Max_Tier, 1 do
+
+        if input <= 3^i then
+            return i
+        end
+    end
 end
