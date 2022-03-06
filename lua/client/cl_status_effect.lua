@@ -3,6 +3,14 @@ local status_active_effects = {
     ["active"] = 0,
 }
 
+local effect_icons = {
+    
+    ["speed"] = "status_icons/Speed_Icon.png",
+    ["leaping"] = "status_icons/Leaping_Icon.png",
+    ["overheal"] = "status_icons/Overheal_Icon.png",
+    ["shield"] = "status_icons/Shield_Icon.png",
+}
+
 local FontType = Brew_Config.GUI_Status_Font or "Brew_StatusFont"
 local FontColour = Brew_Config.GUI_Font_mainColour or Color(255, 255, 255, 255)
 local FontColourShadow = Brew_Config.GUI_Font_shadowColour or Color(0, 0, 0, 255)
@@ -112,7 +120,7 @@ function Brew_DrawStatus(effect, tier, timelimit)
         local effectImage = vgui.Create("DImage", statusFrame)
         effectImage:SetPos( ScrW() * 111/1920, ScrH() * 8/1080)
         effectImage:SetSize(ScrW() * 64/1920, ScrH() * 64/1080)
-        effectImage:SetImage("gui/arrow")
+        effectImage:SetImage(effect_icons[effect])
         
     end
 
