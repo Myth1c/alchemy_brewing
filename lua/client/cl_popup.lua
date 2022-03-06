@@ -29,7 +29,6 @@ function Brew_DrawContextMenu(ent, icon, transferFunc, destroyFunc, dropFunc)
     contextFrame:SetVisible(true)
     contextFrame:SetSize(ScrW() * 125/1920, ScrH() * 83/1080)
     contextFrame:MakePopup(true)
-    contextFrame:DoModal()
     contextFrame:SetKeyboardInputEnabled(false)
     contextFrame:SetPos(gui.MouseX(), gui.MouseY())
     contextFrame.Paint = function(s, w, h)
@@ -117,3 +116,24 @@ function Brew_DrawContextMenu(ent, icon, transferFunc, destroyFunc, dropFunc)
 
 
 end
+
+
+hook.Add( "CreateMove", "Brewing_ContextMenuCloser", function()
+    if !IsValid(contextFrame) then return end
+	if ( input.WasMousePressed( MOUSE_LEFT ) ) then 
+        
+        local lowerX = contextFrame:GetX()
+        local lowerY = contextFrame:GetY()
+        local upperX = contextFrame:GetX() + (ScrW() * 125/1920)
+        local upperY = contextFrame:GetY() + (ScrH() * 83/1080)
+
+        local mouseX = gui.MouseX()
+        local mouseY = gui.MouseY()
+
+        if !(mouseX > lowerX and mouseX < upperX and mouseY > lowerY and mouseY < upperY) then
+            
+            contextFrame:Close()
+        end
+        
+    end
+end )
