@@ -36,11 +36,12 @@ end
 function ENT:Use( activator, caller )
 	
 	if !caller:KeyDown(4) then
-		DebugPrint(tostring(caller) .. " is not holding duck.")
+		
 		self:RunEffect(caller)
 	
 		self:Remove()
 	else
+		DebugPrint("Storing potion: " .. tostring(self))
 		self:StorePotNetworkMessage("brew_store_ent", caller, self, self.Reagents)
 		
 		self:Remove()
