@@ -14,13 +14,3 @@ function ENT:Draw()
 	end
 
 end
-
-
-net.Receive("brew_draw_brewUI", function(ply, len)   
-
-	if net.ReadString() ~= "brewUI" then return end
-
-	if not IsValid(brewFrame) then DrawBrewing()
-	elseif IsValid(brewFrame) then brewFrame:Close() end
-
-end)
