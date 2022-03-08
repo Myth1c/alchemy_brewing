@@ -2,17 +2,23 @@
 A mod for garry's mod aimed at adding potion brewing into the game.
 
 # Current Features
-
+- Spawn random ingredients and brew potions
+- Create ingredients with a handful of ingredients
+- Configure how many ingredients can be used in a single potion (1 - 5)
+- Re-brew potions to increase their effects
+- Custom Status Indicators that display what effects are currently applied to you
+- Custom inventory for potions and ingredients
+- Supports up to 100 inventory slots with a default of 25
 
 # Planned Features
-- Allow for users to create custom potions with a customizable number of ingredients
-- A GUI for storing ingredients & potions in an alchemy table
-- A status GUI that shows which status effects you have active and how long until they expire
 - Modular ingredient and potion types so that custom effects and ingredients can be created by users
-- Config files to modify how many potions/ingredients a table can store
 - Config files for things such as brewing time, max effects, and max ingredients
-- Allow for ingredients to be spawned and be made persistant
-- Give players an inventory for only ingredients
+- Toolgun for ingredients to be spawned and be made persistant or modified
+- SWep that will display ingredient information before picking it up
+- Swep that will allow you to modify your ingredient inventory at will
+
+# Known Bugs
+- When an effect expires, the timers of every other effect hitchs for a second then resumes as normal.
 
 # Links
 - Trello Board: https://trello.com/b/CvF8Af7g/brewing-mod-progress
