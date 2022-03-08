@@ -16,6 +16,11 @@ local reagents_Tracker = {
     ["shield"] = 0,
 }
 
+local reagentTiers = {
+    ["total"] = 0
+
+}
+
 local reagents_Tracker_Labels = {
 
     speedTier = {},
@@ -185,16 +190,11 @@ end
 ]]--
 function GrabIngredient(ent)
 
-    if brew_gui.ingredientCount == Brew_Config.Max_Ingredients then return false end
+    if brew_gui.ingredientCount == Brew_Config.Max_Ingredients or !AddReagents(ent) then return false end
     brew_gui.ingredientCount = brew_gui.ingredientCount + 1
-
-    DebugPrint("Ingredient should be added: " .. tostring(ent) .. "\nReagents included: ")
-    DebugPrintTable(ent.Reagents)
     
 
     if !IsValid(reagentInfo) then DrawReagentInfo() end
-
-    AddReagents(ent)
 
     for k, v in ipairs(brew_gui.ingredientSlots) do
         local childCount = 0
@@ -331,6 +331,7 @@ function StartBrewing()
 
         ClearIngredients()
         ClearReagents()
+        reagentTiers["total"] = 0
 
         
         table.insert(brew_ents, pot)
@@ -532,19 +533,41 @@ end
 ]]--
 function AddReagents(ent)
 
+
+    -- figure out of the ingredient can "fit" inside the potion first
+    for k, v in pairs(ent.Reagents) do
+
+        if !(reagentTiers["total"] + NumberToTier(v) <= (Brew_Config.Global_Max_Tier or 5)) then
+            DebugPrint("This ingredient would overcharge the potion.")
+            return false
+        end
+    end
+
     DebugPrint("Adding reagents: ")
     DebugPrintTable(ent.Reagents)
+
 
     for k, v in pairs(ent.Reagents) do
 
         reagents_Tracker[k] = math.Clamp(reagents_Tracker[k] + v, 0, 3 ^ (Brew_Config.Global_Max_Tier or 5))
+        
+
+    end
+    reagentTiers["total"] = 0
+
+    for k, v in pairs(reagents_Tracker) do
+
+        reagentTiers["total"] = reagentTiers["total"] + NumberToTier(v)
 
     end
 
     DebugPrint("Reagents addedd. Table now has:\n")
     DebugPrintTable(reagents_Tracker)
+    DebugPrint("Total tiers: " .. reagentTiers["total"])
 
     UpdateTierLabels()
+
+    return true
 
 end
 
@@ -562,8 +585,17 @@ function RemoveReagents(ent)
 
     end
 
+    reagentTiers["total"] = 0
+
+    for k, v in pairs(reagents_Tracker) do
+
+        reagentTiers["total"] = reagentTiers["total"] + NumberToTier(v)
+
+    end
+
     DebugPrint("Reagents removed. Table now has:\n")
     DebugPrintTable(reagents_Tracker)
+    DebugPrint("Total tiers: " .. reagentTiers["total"])
 
     if IsValid(reagentInfo) then UpdateTierLabels() end
 
