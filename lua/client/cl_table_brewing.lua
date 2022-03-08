@@ -26,7 +26,8 @@ local reagents_Tracker_Labels = {
     speedTier = {},
     leapingTier = {},
     healingTier = {},
-    shieldTier = {}
+    shieldTier = {},
+    maxTier = {},
 }
 
 --[[
@@ -438,7 +439,7 @@ function DrawReagentInfo()
 
     reagentInfo = vgui.Create("DFrame")
     reagentInfo:SetPos(ScrW() * 330/1920, ScrH() * 75/1080)
-    reagentInfo:SetSize( ScrW() * 300/1920, ScrH() * 250/1080 )
+    reagentInfo:SetSize( ScrW() * 300/1920, ScrH() * 320/1080 )
     reagentInfo:SetVisible(true)
     reagentInfo:SetTitle("")
     reagentInfo:ShowCloseButton(false)
@@ -521,6 +522,27 @@ function DrawReagentInfo()
     shieldTier:SetPos(ScrW() * (250 - string.len(shieldTier:GetText()))/1920, ScrH() * 210/1080)
     shieldTier:SetTextColor(FontColour)
 
+    local maxTierLabel = vgui.Create("DLabel", reagentInfo)
+    maxTierLabel:SetFont(FontType)
+    maxTierLabel:SetText("Potion Tier: ")
+    maxTierLabel:SetSize( ScrW() * 300/1920, ScrH() * 40/1080 )
+    maxTierLabel:SetPos(ScrW() * (25 - string.len(maxTierLabel:GetText()))/1920, ScrH() * 270/1080)
+    maxTierLabel:SetTextColor(FontColour)
+
+    maxTier = vgui.Create("DLabel", reagentInfo)
+    maxTier:SetFont(FontType)
+    maxTier:SetText("0")
+    maxTier:SetSize( ScrW() * 300/1920, ScrH() * 40/1080 )
+    maxTier:SetPos(ScrW() * (-40 - string.len(maxTierLabel:GetText()))/1920, ScrH() * 270/1080)
+    maxTier:SetTextColor(FontColour)
+    maxTier:SetContentAlignment(6)
+
+    local maxTierCap = vgui.Create("DLabel", reagentInfo)
+    maxTierCap:SetFont(FontType)
+    maxTierCap:SetText("/ " .. NumberToNumeral(Brew_Config.Global_Max_Tier or 5 ))
+    maxTierCap:SetSize( ScrW() * 300/1920, ScrH() * 40/1080 )
+    maxTierCap:SetPos(ScrW() * (260 - string.len(maxTierCap:GetText()))/1920, ScrH() * 270/1080)
+    maxTierCap:SetTextColor(FontColour)
 
 
 
@@ -620,6 +642,7 @@ function UpdateTierLabels()
     local leapMax = Brew_Config.Leaping_Max_Tier or 5
     local healMax = Brew_Config.Health_Max_Tier or 4
     local shieldMax = Brew_Config.Shield_Max_tier or 4
+    local maxTiers = Brew_Config.Global_Max_Tier or 5
 
     local _speedTier = math.Clamp(NumberToTier(reagents_Tracker["speed"]), 0, speedMax)
     local _leapTier = math.Clamp(NumberToTier(reagents_Tracker["leaping"]), 0, leapMax)
@@ -631,6 +654,7 @@ function UpdateTierLabels()
     leapingTier:SetText( NumberToNumeral( _leapTier ))
     healingTier:SetText( NumberToNumeral( _healTier ))
     shieldTier:SetText(NumberToNumeral( _shieldTier ))
+    maxTier:SetText(NumberToNumeral( reagentTiers["total"] ))
 
 end
 
