@@ -11,8 +11,8 @@ elseif CLIENT then
  
 	SWEP.PrintName = "Ingredient Analyzer"
 
-	SWEP.Slot = 4
-	SWEP.SlotPos = 1
+	SWEP.Slot = 1
+	SWEP.SlotPos = 6
  
 	SWEP.DrawAmmo = false
  
@@ -20,10 +20,10 @@ elseif CLIENT then
 end
 
 SWEP.Author = "Mythic"
-SWEP.Contact = ""
+SWEP.Contact = "no"
 SWEP.Purpose = "Analyzes ingredients and displays what reagents it contains."
 SWEP.Instructions = "Look at an ingredient and left click over it."
-SWEP.Category = "Test"
+SWEP.Category = "Brewing"
 
 SWEP.Spawnable = true -- Whether regular players can see it
 SWEP.AdminSpawnable = true -- Whether Admins/Super Admins can see it
