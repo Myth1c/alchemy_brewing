@@ -72,7 +72,7 @@ function SWEP:PrimaryAttack()
 
 	local ent = self.Owner:GetEyeTrace().Entity
 
-	if self.Owner:GetPos():Distance(ent:GetPos()) < 100 and ent:GetClass() == "inert_ingredient" then
+	if self.Owner:GetPos():Distance(ent:GetPos()) < 100 and (ent:GetClass() == "inert_ingredient" or ent:GetClass() == "inert_potion") then
 
 		if SERVER then
 			net.Start("brew_draw_ingredient_info")

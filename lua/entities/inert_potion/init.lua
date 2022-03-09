@@ -68,16 +68,3 @@ function ENT:RunEffect(ply)
 	end
 
 end
-
-
-function ENT:ConvertToTiers(input)
-
-    if input == 0 then return 0 end
-    if input < 3 then return 1 end
-	for i = 1, Brew_Config.Global_Max_Tier, 1 do
-
-        if input <= 3^i then
-            return i
-        end
-    end
-end
