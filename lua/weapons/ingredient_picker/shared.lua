@@ -22,7 +22,7 @@ end
 SWEP.Author = "Mythic"
 SWEP.Contact = "no"
 SWEP.Purpose = "Analyzes ingredients and displays what reagents it contains."
-SWEP.Instructions = "Look at an ingredient and left click over it."
+SWEP.Instructions = "Left click an ingredient while close to reveal it's contents.\nReload over an ingredient to pick it up.\nRight click to open your inventory"
 SWEP.Category = "Brewing"
 
 SWEP.Spawnable = true
@@ -44,7 +44,19 @@ SWEP.Secondary.Ammo = "none"
 
 
 function SWEP:Reload()
-    DebugPrint("Reload pressed.")
+    
+	local ent = self.Owner:GetEyeTrace().Entity
+
+	if self.Owner:GetPos():Distance(ent:GetPos()) < 100 and ent:GetClass() == "inert_ingredient" then
+
+		if SERVER then
+			
+			ent:IngredNetworkMessage("brew_store_ent", self.Owner, ent, ent.Reagents)
+
+			ent:Remove()
+		end
+
+	end
 end
 
 function SWEP:Think()
@@ -53,13 +65,18 @@ end
 
 
 function SWEP:PrimaryAttack()
-    DebugPrint("Primary Attack Pressed.")
+
 	local ent = self.Owner:GetEyeTrace().Entity
 
-	DebugPrint(tostring(self.Owner) .. " used left click on " .. tostring(ent))
+	if self.Owner:GetPos():Distance(ent:GetPos()) < 100 and ent:GetClass() == "inert_ingredient" then
 
-	if self.Owner:GetPos():Distance(ent:GetPos()) < 150 and ent:GetClass() == "inert_ingredient" then
-		DebugPrint(tostring(self.Owner) .. " should see info about " .. tostring(ent))
+		if SERVER then
+			net.Start("brew_draw_ingredient_info")
+				net.WriteEntity(ent)
+				net.WriteTable(ent.Reagents)
+			net.Send(self.Owner)
+		end
+
 	end
 
 end

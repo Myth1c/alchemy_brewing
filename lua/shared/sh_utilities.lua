@@ -9,6 +9,8 @@ if SERVER then
 	util.AddNetworkString("brew_effect_cleared")
 	util.AddNetworkString("brew_clear_single_effect")
 
+	util.AddNetworkString("brew_draw_ingredient_info")
+
 
 else
 

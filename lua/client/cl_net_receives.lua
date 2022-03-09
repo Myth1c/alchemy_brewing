@@ -35,3 +35,15 @@ net.Receive("brew_draw_StatusUI", function(len, ply)
 
 
 end)
+
+net.Receive("brew_draw_ingredient_info", function(len, ply)
+
+	local ent = net.ReadEntity()
+	local tbl = net.ReadTable()
+
+	DebugPrint("Client received information about: " .. tostring(ent))
+	DebugPrintTable(tbl)
+
+	ent.Reagents = tbl
+
+end)
