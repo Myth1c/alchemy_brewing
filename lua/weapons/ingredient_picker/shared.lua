@@ -47,11 +47,15 @@ function SWEP:Reload()
     
 	local ent = self.Owner:GetEyeTrace().Entity
 
-	if self.Owner:GetPos():Distance(ent:GetPos()) < 100 and ent:GetClass() == "inert_ingredient" then
+	if self.Owner:GetPos():Distance(ent:GetPos()) < 100  then
+
 
 		if SERVER then
-			
-			ent:IngredNetworkMessage("brew_store_ent", self.Owner, ent, ent.Reagents)
+			if ent:GetClass() == "inert_ingredient" then
+				ent:IngredNetworkMessage("brew_store_ent", self.Owner, ent, ent.Reagents)
+			elseif ent:GetClass() == "inert_potion" then
+				ent:StorePotNetworkMessage("brew_store_ent", self.Owner, ent, ent.Reagents)
+			else return end
 
 			ent:Remove()
 		end
