@@ -8,7 +8,8 @@ end
 function ENT:Draw()
 	self:DrawModel()
 
-	if LocalPlayer():GetActiveWeapon():GetClass() == "ingredient_picker" and LocalPlayer():GetPos():Distance(self:GetPos()) < 100 and self.Reagents ~= nil then
+	if LocalPlayer():GetActiveWeapon():GetClass() == "ingredient_picker" and LocalPlayer():GetPos():Distance(self:GetPos()) < 100 and self.Reagents ~= nil
+	and LocalPlayer():GetEyeTrace().Entity == self then
 
 		local Pos = self:GetPos()
 		local Ang = self:GetAngles()
