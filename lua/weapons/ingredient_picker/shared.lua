@@ -9,9 +9,9 @@ if SERVER then
  
 elseif CLIENT then
  
-	SWEP.PrintName = "Ingredient Analyzer"
+	SWEP.PrintName = "Ingredient Picker"
 
-	SWEP.Slot = 1
+	SWEP.Slot = 0
 	SWEP.SlotPos = 6
  
 	SWEP.DrawAmmo = false
@@ -20,9 +20,9 @@ elseif CLIENT then
 end
 
 SWEP.Author = "Mythic"
-SWEP.Contact = "no"
-SWEP.Purpose = "Analyzes ingredients and displays what reagents it contains."
-SWEP.Instructions = "Left click an ingredient while close to reveal it's contents.\nReload over an ingredient to pick it up.\nRight click to open your inventory"
+SWEP.Contact = ""
+SWEP.Purpose = "Analyze or pick ingredients"
+SWEP.Instructions = "Left click an ingredient/potion while close to reveal it's contents.\nReload over an ingredient/potion to pick it up.\nRight click to open your ingredient pouch."
 SWEP.Category = "Brewing"
 
 SWEP.Spawnable = true
