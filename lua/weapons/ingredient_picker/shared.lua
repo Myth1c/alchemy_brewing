@@ -25,11 +25,11 @@ SWEP.Purpose = "Analyzes ingredients and displays what reagents it contains."
 SWEP.Instructions = "Look at an ingredient and left click over it."
 SWEP.Category = "Brewing"
 
-SWEP.Spawnable = true -- Whether regular players can see it
-SWEP.AdminSpawnable = true -- Whether Admins/Super Admins can see it
+SWEP.Spawnable = true
+SWEP.AdminSpawnable = true
 
-SWEP.ViewModel = "models/weapons/v_RPG.mdl" -- This is the model used for clients to see in first person.
-SWEP.WorldModel = "models/weapons/w_rocket_launcher.mdl" -- This is the model shown to all other clients and in third-person.
+SWEP.ViewModel = Model( "models/weapons/c_arms.mdl" )
+SWEP.WorldModel = Model("models/props_junk/garbage_coffeemug001a.mdl")
 
 
 SWEP.Primary.ClipSize = -1
@@ -42,7 +42,6 @@ SWEP.Secondary.DefaultClip = -1
 SWEP.Secondary.Automatic = false
 SWEP.Secondary.Ammo = "none"
 
-local ShootSound = Sound("Metal.SawbladeStick")
 
 function SWEP:Reload()
     DebugPrint("Reload pressed.")
