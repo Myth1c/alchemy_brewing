@@ -54,8 +54,20 @@ end
 
 function SWEP:PrimaryAttack()
     DebugPrint("Primary Attack Pressed.")
+	local ent = self.Owner:GetEyeTrace().Entity
+
+	DebugPrint(tostring(self.Owner) .. " used left click on " .. tostring(ent))
+
+	if self.Owner:GetPos():Distance(ent:GetPos()) < 150 and ent:GetClass() == "inert_ingredient" then
+		DebugPrint(tostring(self.Owner) .. " should see info about " .. tostring(ent))
+	end
+
 end
 
 function SWEP:SecondaryAttack()
-    DebugPrint("Secondary Attack Pressed.")
+    DebugPrint("Open this player's inventory!")
+
+	if CLIENT then
+		DrawStorage()
+	end
 end
