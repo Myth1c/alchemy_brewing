@@ -82,6 +82,24 @@ function DrawStorage()
 
     DrawIngredients()
 
+    if !IsValid(brewFrame) then
+        local closeButton = vgui.Create( "DButton", storageFrame )
+        closeButton:SetPos( ScrW() * (354 - frameWidth/2)/1920, ScrH() * 0/1080 )
+        closeButton:SetSize( ScrW() * 65/1920, ScrH() * 25/1080 )
+        closeButton:SetText( "X" )
+        closeButton:SetFont("HudSelectionText")
+        closeButton:SetTextColor( Color(255, 255, 255, 255) )
+        closeButton.Paint = function(s, w, h)
+
+            draw.RoundedBox(FrameCurve-4,0,0,w,h,BorderColour)
+            draw.RoundedBox(FrameCurve-4,2,2,w-4,h-4,SlotBackground)
+
+        end
+        closeButton.DoClick = function()
+            storageFrame:Close()
+        end
+    end
+
 
 end
 
@@ -311,7 +329,7 @@ end
     Transfer Function for the inventory. Mainly handles transfering between the brewing UI and the inventory.
 ]]--
 function Inv_TransferEnt(ent)
-
+    if !IsValid(brewFrame) then return false end
     if GrabIngredient(ent) then 
         table.RemoveByValue(stored_ents, ent)
         return true

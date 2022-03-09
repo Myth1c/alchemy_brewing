@@ -53,7 +53,6 @@ local BrewSlotImage = Brew_Config.GUI_BrewSlot_Image or "decals/light"
 ]]--
 function DrawBrewing()
 
-    DrawStorage()
     
     brewFrame = vgui.Create("DFrame")
     brewFrame:SetPos(ScrW() * 660/1920, ScrH() * 75/1080)
@@ -165,6 +164,7 @@ function DrawBrewing()
 
     DrawReagentInfo()
     UpdateTierLabels()
+    DrawStorage()
 
 end
 

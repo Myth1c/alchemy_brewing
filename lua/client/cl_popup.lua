@@ -10,6 +10,7 @@ local FrameCurve = Brew_Config.FrameCurve or 10
 local ButtonPrimaryColour = Brew_Config.GUI_Context_Button_Foreground or Color(120,120,120, 255)
 local ButtonBorderColour = Brew_Config.GUI_Context_Button_Border or Color(255,255,255, 255)
 local MainBorderColour = Brew_Config.GUI_Context_Main_Border or Color(255,255,255, 255)
+local ButtonDisabledColour = Color(70, 70, 70, 255)
 
 
 --[[
@@ -47,7 +48,12 @@ function Brew_DrawContextMenu(ent, icon, transferFunc, destroyFunc, dropFunc)
     transferButton.Paint = function(s, w, h)
 
         draw.RoundedBox(0, 0, 0, w, h, ButtonBorderColour)
-        draw.RoundedBox(0, 2, 2, w-4, h-4, ButtonPrimaryColour)
+        if IsValid(brewFrame) then
+            draw.RoundedBox(0, 2, 2, w-4, h-4, ButtonPrimaryColour)
+        else
+            draw.RoundedBox(0, 2, 2, w-4, h-4, ButtonDisabledColour)
+        end
+
 
     end
     transferButton.DoClick = function() 
@@ -55,6 +61,11 @@ function Brew_DrawContextMenu(ent, icon, transferFunc, destroyFunc, dropFunc)
         contextFrame:Close()
         transferFunc(ent)
         icon:Remove()
+    end
+
+    if !IsValid(brewFrame) then
+        transferButton:SetEnabled(false)
+        transferButton:SetColor(ButtonPrimaryColour)
     end
 
     local destroyButton = vgui.Create("DButton", contextFrame)
