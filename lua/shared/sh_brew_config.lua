@@ -45,6 +45,9 @@ Brew_Config = {
     -- Set how much panels should round out around the corners. 0 = off
     -- Default: 10
     GUI_FrameCurve = 10,
+    -- The color for the border of a selected ingredient when inspecting an ingredient (Left click in the inventory)
+    -- Default: Color(0, 161, 255, 255)
+    GUI_BrewSlot_Image = Color(0, 161, 255, 255),
 
     --[[
         Brewing UI Section

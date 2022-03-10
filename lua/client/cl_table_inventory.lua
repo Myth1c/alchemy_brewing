@@ -321,8 +321,8 @@ function CreateIngredient(slot, ent)
 
     function ingredModel:DoClick()
         if IsValid(ingredModel) then
-            if !IsValid(hoverInfo) then DrawHoverInfo(ent, ingredModel)
-            elseif IsValid(hoverInfo) then UpdateHoverInfo(ent, ingredModel) end
+            if !IsValid(hoverInfo) then DrawHoverInfo(ent, ingredModel, slot)
+            elseif IsValid(hoverInfo) then UpdateHoverInfo(ent, ingredModel, slot) end
         end
     end
 

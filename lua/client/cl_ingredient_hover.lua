@@ -1,8 +1,17 @@
 
 local displayed_ent = nil
 local displayed_slot = nil
+local displayed_bg = nil
 
 local infoLabels = {}
+
+local displayedReagents = {
+    
+    ["speed"] = 0,
+    ["leaping"] = 0,
+    ["healing"] = 0,
+    ["shield"] = 0,
+}
 
 local FontType = "Brew_UIFont_Small"
 local FontColour = Brew_Config.GUI_Font_mainColour or Color(255, 255, 255, 255)
@@ -15,14 +24,17 @@ local FrameBorderColour = Brew_Config.GUI_Brew_Background or Color(0,0,0, 0)
 local HeaderColor = Brew_Config.GUI_Inventory_Header or Color(255, 255, 255, 255)
 local BrewSlotImage = Brew_Config.GUI_BrewSlot_Image or "decals/light"
 
+local HoverColor = Brew_Config.GUI_BrewSlot_Hover or Color(0, 161, 255, 255)
 
-function DrawHoverInfo(ent, slot)
+
+function DrawHoverInfo(ent, slot, background)
 
     local invX = storageFrame:GetX() - 160
     local invY = storageFrame:GetY()
 
     displayed_ent = ent
     displayed_slot = slot
+    displayed_bg = background
 
     hoverInfo = vgui.Create("DFrame")
     hoverInfo:SetPos(ScrW() * invX/1920, ScrH() * invY/1080)
@@ -37,12 +49,28 @@ function DrawHoverInfo(ent, slot)
         draw.RoundedBox(FrameCurve, 0, 0, w, 32, Color(0, 0, 0, 255))
         draw.RoundedBox(FrameCurve, 2, 2, w-4, 28, BrewSlotBackground)
     end
+    
+    displayed_bg.Paint = function(s, w, h)
+        
+        draw.RoundedBox(FrameCurve, 0, 0, w, h, HoverColor)
+        draw.RoundedBox(FrameCurve, 2, 2, w-4, h-4, BrewSlotBackground)
 
-    hoverInfo.Onclose = function()
+    end
+    
+
+    function hoverInfo:OnClose() 
+
+        DebugPrint("Hover info closed.")
+
+        displayed_bg.Paint = function(s, w, h)
+            draw.RoundedBox(FrameCurve, 0, 0, w, h, FrameBorderColour)
+            draw.RoundedBox(FrameCurve, 2, 2, w-4, h-4, BrewSlotBackground)
+        end
 
         displayed_ent = nil
         displayed_slot = nil
-
+        displayed_bg = nil
+        
     end
 
 
@@ -71,6 +99,7 @@ function DrawHoverInfo(ent, slot)
 
 	end
 	transferButton.DoClick = function()
+                
         if IsValid(brewFrame) then
             if Inv_TransferEnt(displayed_ent) then
                 displayed_slot:Remove()
@@ -81,11 +110,12 @@ function DrawHoverInfo(ent, slot)
             displayed_slot:Remove()
             hoverInfo:Close()
         end
+        
 	end
 
     local height = 30
 
-    for k, v in pairs(ent.Reagents) do
+    for k, v in pairs(displayedReagents) do
 
         local reagentLabel = vgui.Create("DLabel", hoverInfo)
         reagentLabel:SetFont(FontType)
@@ -108,23 +138,48 @@ function DrawHoverInfo(ent, slot)
 
     end
 
+    UpdateDisplayedReagents(ent)
+
+end
+
+function UpdateDisplayedReagents(ent)
+
+    for k, v in pairs(displayedReagents) do
+
+        if ent.Reagents[k] ~= nil then
+            infoLabels[k]:SetText(ent.Reagents[k] .. " ppm")
+        else
+            infoLabels[k]:SetText("0 ppm")
+        end
+
+    end
 
 
 end
 
 
-function UpdateHoverInfo(ent, slot)
+function UpdateHoverInfo(ent, slot, bg)
+
+    displayed_bg.Paint = function(s, w, h)
+        draw.RoundedBox(FrameCurve, 0, 0, w, h, FrameBorderColour)
+        draw.RoundedBox(FrameCurve, 2, 2, w-4, h-4, BrewSlotBackground)
+    end
 
     if displayed_ent == ent then hoverInfo:Close() return end
 
-    DebugPrintTable(ent.Reagents)
 
-    for k, v in pairs(ent.Reagents) do
-
-        infoLabels[k]:SetText(v .. " ppm")
-
-    end
+    UpdateDisplayedReagents(ent)
     
     displayed_ent = ent
     displayed_slot = slot
+    displayed_bg = bg
+
+    
+    displayed_bg.Paint = function(s, w, h)
+        
+        draw.RoundedBox(FrameCurve, 0, 0, w, h, HoverColor)
+        draw.RoundedBox(FrameCurve, 2, 2, w-4, h-4, BrewSlotBackground)
+
+    end
+
 end
