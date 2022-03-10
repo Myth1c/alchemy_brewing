@@ -1,4 +1,4 @@
-hook.Add("PlayerDeath", "brewing_dead_player", function(victim, inflictor, attacker)
+hook.Add("PostPlayerDeath", "brewing_dead_player", function(victim, inflictor, attacker)
 
     if !(Brew_Config.Drop_Inventory_On_Death or false) then return end
 
