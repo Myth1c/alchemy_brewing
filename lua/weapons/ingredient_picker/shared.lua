@@ -42,13 +42,37 @@ SWEP.Secondary.DefaultClip = -1
 SWEP.Secondary.Automatic = false
 SWEP.Secondary.Ammo = "none"
 
+local analyzeSound = {
+	"ambient/computer_tape.wav",
+	"ambient/computer_tape2.wav",
+	"ambient/computer_tape3.wav"
+}
+local finishSounds = {
+	"garrysmod/save_load1.wav",
+	"garrysmod/save_load2.wav",
+	"garrysmod/save_load3.wav",
+	"garrysmod/save_load4.wav",
+}
+local pickupSounds = {
+	"ui/item_bottle_pickup.wav",
+	"ui/item_cardboard_pickup.wav",
+	"ui/item_default_pickup.wav",
+	"ui/item_gooey_pickup.wav",
+
+}
+local openBagSounds = {
+	"ui/item_bag_pickup.wav",
+}
+
+SWEP.Analyzing = false
 
 function SWEP:Reload()
     
 	local ent = self.Owner:GetEyeTrace().Entity
 
-	if self.Owner:GetPos():Distance(ent:GetPos()) < 100  then
-
+	if self.Owner:GetPos():Distance(ent:GetPos()) < 100 and self.Analyzing == false then
+		local sound = table.Random(pickupSounds)
+		self:EmitSound(sound)
 
 		if SERVER then
 			if ent:GetClass() == "inert_ingredient" then
@@ -72,22 +96,34 @@ function SWEP:PrimaryAttack()
 
 	local ent = self.Owner:GetEyeTrace().Entity
 
-	if self.Owner:GetPos():Distance(ent:GetPos()) < 100 and (ent:GetClass() == "inert_ingredient" or ent:GetClass() == "inert_potion") then
+	if self.Owner:GetPos():Distance(ent:GetPos()) < 100 and (ent:GetClass() == "inert_ingredient" or ent:GetClass() == "inert_potion") and self.Analyzing == false then
+		local sound = table.Random(analyzeSound)
+		self:EmitSound(sound)
+		self.Analyzing = true
+		timer.Simple(5, function()
+			if SERVER then
+				if !IsValid(ent) then return end
+				net.Start("brew_draw_ingredient_info")
+					net.WriteEntity(ent)
+					net.WriteTable(ent.Reagents)
+				net.Send(self.Owner)
 
-		if SERVER then
-			net.Start("brew_draw_ingredient_info")
-				net.WriteEntity(ent)
-				net.WriteTable(ent.Reagents)
-			net.Send(self.Owner)
-		end
+			end
+			self:StopSound(sound)
+			sound = table.Random(finishSounds)
+			self:EmitSound(sound)
+
+			self.Analyzing = false
+		end)
 
 	end
 
 end
 
 function SWEP:SecondaryAttack()
-    DebugPrint("Open this player's inventory!")
-
+	local sound = table.Random(openBagSounds)
+	if self.Analyzing ~= false then return end
+	self:EmitSound(sound)
 	if CLIENT then
 		DrawStorage()
 	end
