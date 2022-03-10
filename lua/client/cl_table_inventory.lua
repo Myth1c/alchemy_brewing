@@ -66,6 +66,10 @@ function DrawStorage()
         draw.RoundedBox(FrameCurve, 2, 27, w-4, h-29, BorderColour)
     end
 
+    storageFrame.OnClose = function() 
+        if IsValid(hoverInfo) then hoverInfo:Close() end
+    end
+
     -- Setting up adjustments for different resolutions
     local boxW = ScrW() * box/1920
     local boxH = ScrH() * box/1080
@@ -308,20 +312,25 @@ function CreateIngredient(slot, ent)
     ingredModel:SetCamPos( Vector( size, size, size ) )
     ingredModel:SetLookAt( (mn + mx) * 0.5 )
 
-    ingredModel.OnMousePressed = function(obj, mcode)
-
-        if mcode == 107 and Inv_TransferEnt(ent) then
-        
+    function ingredModel:DoDoubleClick()
+        if Inv_TransferEnt(ent) then
             ingredModel:Remove()
-
-        elseif mcode == 108 then 
-
-            if IsValid(contextFrame) then contextFrame:Close() end
-            Brew_DrawContextMenu(ent, ingredModel, Inv_TransferEnt, Inv_DestroyItem, Inv_DropItem)
+            if IsValid(hoverInfo) then hoverInfo:Close() end
         end
-
     end
 
+    function ingredModel:DoClick()
+        if IsValid(ingredModel) then
+            if !IsValid(hoverInfo) then DrawHoverInfo(ent, ingredModel)
+            elseif IsValid(hoverInfo) then UpdateHoverInfo(ent, ingredModel) end
+        end
+    end
+
+    function ingredModel:DoRightClick()
+        if IsValid(contextFrame) then contextFrame:Close() end
+        if IsValid(hoverInfo) then hoverInfo:Close() end
+        Brew_DrawContextMenu(ent, ingredModel, Inv_TransferEnt, Inv_DestroyItem, Inv_DropItem)
+    end
 
 end
 
