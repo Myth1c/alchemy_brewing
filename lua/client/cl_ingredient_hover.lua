@@ -15,14 +15,11 @@ local displayedReagents = {
 
 local FontType = "Brew_UIFont_Small"
 local FontColour = Brew_Config.GUI_Font_mainColour or Color(255, 255, 255, 255)
-local FontColourShadow = Brew_Config.GUI_Font_shadowColour or Color(119, 135, 137, 255)
 local FrameCurve = Brew_Config.FrameCurve or 10
 
 local BrewSlotBackground = Brew_Config.GUI_BrewSlot_Background or Color(60,60,60, 180)
 local FramePrimaryColour = Brew_Config.GUI_Brew_Foreground or Color(120,120,120, 0)
 local FrameBorderColour = Brew_Config.GUI_Brew_Background or Color(0,0,0, 0)
-local HeaderColor = Brew_Config.GUI_Inventory_Header or Color(255, 255, 255, 255)
-local BrewSlotImage = Brew_Config.GUI_BrewSlot_Image or "decals/light"
 
 local HoverColor = Brew_Config.GUI_BrewSlot_Hover or Color(0, 161, 255, 255)
 
