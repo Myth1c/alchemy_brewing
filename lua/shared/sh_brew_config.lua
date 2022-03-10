@@ -9,8 +9,7 @@ Brew_Config = {
     -- Changes the max effects a player can have at a given time.
     -- Default: 4
     Max_Effects = 4,
-    -- Global max for potions. Potions can not have more than this many tiers of ANY type. 
-    -- IE Speed 3 + Leaping 2 = 5 total so no more effects can be added
+    -- Global max for potions. Potions can not have more than this many tiers of ANY type. IE Speed 3 + Leaping 2 = 5 so no more
     -- Default: 5
     Global_Max_Tier = 5,
 
@@ -51,7 +50,7 @@ Brew_Config = {
     GUI_FrameCurve = 10,
     -- The color for the border of a selected ingredient when inspecting an ingredient (Left click in the inventory)
     -- Default: Color(0, 161, 255, 255)
-    GUI_BrewSlot_Image = Color(0, 161, 255, 255),
+    GUI_BrewSlot_Hover = Color(0, 161, 255, 255),
 
     --[[
         Brewing UI Section
