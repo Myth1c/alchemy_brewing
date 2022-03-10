@@ -9,7 +9,8 @@ Brew_Config = {
     -- Changes the max effects a player can have at a given time.
     -- Default: 4
     Max_Effects = 4,
-    -- Global max. This will override any max tier settings below.
+    -- Global max for potions. Potions can not have more than this many tiers of ANY type. 
+    -- IE Speed 3 + Leaping 2 = 5 total so no more effects can be added
     -- Default: 5
     Global_Max_Tier = 5,
 
@@ -26,6 +27,9 @@ Brew_Config = {
     -- Shield potion's max tier.
     -- Default: 4
     Shield_Max_tier = 4,
+    -- Should ingredients be dropp on death?
+    -- Default: false
+    Drop_Inventory_On_Death = true,
 
 
     --[[
