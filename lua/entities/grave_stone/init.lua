@@ -7,7 +7,7 @@ include("sh_init.lua")
 function ENT:Initialize()
 	
 	
-	self:SetModel("models/props_c17/gravestone004a.mdl")
+	self:SetModel("models/props_survival/cash/dufflebag.mdl")
 	self:PhysicsInit(SOLID_VPHYSICS)
 	self:SetMoveType(MOVETYPE_VPHYSICS)
 	self:SetSolid(SOLID_VPHYSICS)
