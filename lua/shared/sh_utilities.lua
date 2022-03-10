@@ -11,6 +11,8 @@ if SERVER then
 
 	util.AddNetworkString("brew_draw_ingredient_info")
 
+	util.AddNetworkString("brew_player_died")
+
 
 else
 

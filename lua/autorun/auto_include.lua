@@ -41,3 +41,4 @@ end
 IncludeDir( "shared")
 IncludeDir( "debug")
 IncludeDir( "client")
+IncludeDir( "server" )
