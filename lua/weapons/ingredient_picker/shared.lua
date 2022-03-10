@@ -60,9 +60,6 @@ local pickupSounds = {
 	"ui/item_gooey_pickup.wav",
 
 }
-local openBagSounds = {
-	"ui/item_bag_pickup.wav",
-}
 
 SWEP.Analyzing = false
 
@@ -121,9 +118,8 @@ function SWEP:PrimaryAttack()
 end
 
 function SWEP:SecondaryAttack()
-	local sound = table.Random(openBagSounds)
+	
 	if self.Analyzing ~= false then return end
-	self:EmitSound(sound)
 	if CLIENT then
 		DrawStorage()
 	end

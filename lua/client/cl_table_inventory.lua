@@ -40,7 +40,6 @@ function DrawStorage()
     local rows = factor.y
     local columns = factor.x
 
-
     local frameHeight = 25 + (rows * box) + (rows * padding) + padding
     local frameWidth = (columns * box) + (columns * padding) + padding
 
@@ -68,6 +67,7 @@ function DrawStorage()
 
     storageFrame.OnClose = function() 
         if IsValid(hoverInfo) then hoverInfo:Close() end
+        if !IsValid(brewFrame) then LocalPlayer():EmitSound("ui/item_bag_drop.wav") end
     end
 
     -- Setting up adjustments for different resolutions
@@ -104,7 +104,7 @@ function DrawStorage()
         end
     end
 
-
+    LocalPlayer():EmitSound("ui/item_bag_pickup.wav")
 end
 
 --[[
