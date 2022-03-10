@@ -374,3 +374,15 @@ function Inv_DropItem(ent)
 
     ent:Remove()
 end
+
+function Inv_RequestStorage()
+
+    local temp = {}
+
+    table.CopyFromTo(stored_ents, temp)
+
+    table.Empty(stored_ents)
+
+    return temp
+
+end

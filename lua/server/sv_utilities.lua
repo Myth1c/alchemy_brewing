@@ -1,6 +1,14 @@
+hook.Add("PlayerDeath", "brewing_dead_player", function(victim, inflictor, attacker)
 
-net.Receive("brew_player_died", function(len, ply) 
+    if !(Brew_Config.Drop_Inventory_On_Death or false) then return end
 
-    DebugPrint(tostring(ply) .. " has died and should drop their inventory.")
+    DebugPrint(tostring(victim) .. " has died and should drop their inventory.")
+
+    local grave = ents.Create("grave_stone")
+    grave:SetPos(victim:GetPos() + Vector(0, 0, 20))
+    grave:SetOwner(victim)
+
+    grave:Spawn()
+
 
 end)

@@ -3,7 +3,6 @@ AddCSLuaFile("cl_init.lua")
 AddCSLuaFile("sh_init.lua")
 include("sh_init.lua")
 
-ENT.StoredInventory = {}
 
 function ENT:Initialize()
 	
@@ -20,8 +19,12 @@ function ENT:Initialize()
 
 end
 
-function ENT:Use( ent, ply )
 
-	DebugPrintTable(self.StoredInventory)
+function ENT:Use()
+
+	self:SetPickup(true)
+	
+	self:Remove()
+
 
 end

@@ -26,9 +26,9 @@ Brew_Config = {
     -- Shield potion's max tier.
     -- Default: 4
     Shield_Max_tier = 4,
-    -- Should ingredients be dropp on death?
+    -- Should ingredients be dropped on death?
     -- Default: false
-    Drop_Inventory_On_Death = true,
+    Drop_Inventory_On_Death = false,
 
 
     --[[
