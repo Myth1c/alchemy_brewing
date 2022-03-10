@@ -100,20 +100,6 @@ function DrawBrewing()
     brewTitle:SetPos(ScrW() * (190 - string.len(brewTitle:GetText()))/1920, ScrH() * 5/1080)
     brewTitle:SetParent(brewFrame)
     brewTitle:SetTextColor(FontColour)
-    -- brewTitle.Paint = function(s, w, h)
-        
-    --     struc = {}
-    --     struc["pos"] = {0, 2}
-    --     struc["color"] = FontColourShadow
-    --     struc["text"] = brewTitle:GetText()
-    --     struc["font"] = FontType
-    --     struc["xalign"] = TEXT_ALIGN_LEFT
-    --     struc["yalign"] = TEXT_ALIGN_TOP
-        
-
-    --     draw.TextShadow(struc, 1, 200)
-
-    -- end
 
     local startBrew = vgui.Create("DButton")
     startBrew:SetPos( ScrW() * 100/1920 , ScrH() * 400/1080)
