@@ -20,10 +20,12 @@ function ENT:Initialize()
 end
 
 
-function ENT:Use()
+function ENT:Use(activator)
+
+	if activator ~= self:GetOwner() then return end
 
 	self:SetPickup(true)
-	
+
 	self:Remove()
 
 
