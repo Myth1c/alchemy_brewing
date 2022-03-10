@@ -22,7 +22,7 @@ end
 SWEP.Author = "Mythic"
 SWEP.Contact = ""
 SWEP.Purpose = "Analyze or pick ingredients"
-SWEP.Instructions = "Left click an ingredient/potion while close to reveal it's contents.\nReload over an ingredient/potion to pick it up.\nRight click to open your ingredient pouch."
+SWEP.Instructions = "Left click an ingredient/potion while close to reveal it's contents.\nRight click over an ingredient/potion to pick it up.\nReload to open or close your ingredient pouch."
 SWEP.Category = "Brewing"
 
 SWEP.Spawnable = true
@@ -30,7 +30,6 @@ SWEP.AdminSpawnable = true
 
 SWEP.ViewModel = Model( "models/weapons/c_arms.mdl" )
 SWEP.WorldModel = Model("models/props_junk/garbage_coffeemug001a.mdl")
-
 
 SWEP.Primary.ClipSize = -1
 SWEP.Primary.DefaultClip = -1
@@ -63,24 +62,20 @@ local pickupSounds = {
 
 SWEP.Analyzing = false
 
+SWEP.Inv_Cooldown = 0.5
+SWEP.Inv_LastOpen = os.time()
+
 function SWEP:Reload()
     
-	local ent = self.Owner:GetEyeTrace().Entity
-
-	if self.Owner:GetPos():Distance(ent:GetPos()) < 100 and self.Analyzing == false then
-		local sound = table.Random(pickupSounds)
-		self:EmitSound(sound)
-
-		if SERVER then
-			if ent:GetClass() == "inert_ingredient" then
-				ent:IngredNetworkMessage("brew_store_ent", self.Owner, ent, ent.Reagents)
-			elseif ent:GetClass() == "inert_potion" then
-				ent:StorePotNetworkMessage("brew_store_ent", self.Owner, ent, ent.Reagents)
-			else return end
-
-			ent:Remove()
+	if self.Analyzing ~= false then return end
+	if CLIENT and self.Inv_LastOpen < os.time() then
+		if !IsValid(storageFrame) then
+			DrawStorage()
+			self.Inv_LastOpen = os.time() + self.Inv_Cooldown
+		else
+			storageFrame:Close()
+			self.Inv_LastOpen = os.time() + self.Inv_Cooldown
 		end
-
 	end
 end
 
@@ -118,9 +113,23 @@ function SWEP:PrimaryAttack()
 end
 
 function SWEP:SecondaryAttack()
-	
-	if self.Analyzing ~= false then return end
-	if CLIENT then
-		DrawStorage()
+
+	local ent = self.Owner:GetEyeTrace().Entity
+
+	if self.Owner:GetPos():Distance(ent:GetPos()) < 100 and self.Analyzing == false then
+		local sound = table.Random(pickupSounds)
+		self:EmitSound(sound)
+
+		if SERVER then
+			if ent:GetClass() == "inert_ingredient" then
+				ent:IngredNetworkMessage("brew_store_ent", self.Owner, ent, ent.Reagents)
+			elseif ent:GetClass() == "inert_potion" then
+				ent:StorePotNetworkMessage("brew_store_ent", self.Owner, ent, ent.Reagents)
+			else return end
+
+			ent:Remove()
+		end
+
 	end
+	
 end
