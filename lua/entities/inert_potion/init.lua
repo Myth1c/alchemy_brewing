@@ -20,11 +20,37 @@ local EffectFunctions =
     ["shield"] = Effects_Shield,
 }
 
+local potionModels = {
+	"models/sohald_spike/props/potion_1.mdl",
+	"models/sohald_spike/props/potion_2.mdl",
+	"models/sohald_spike/props/potion_3.mdl",
+	"models/sohald_spike/props/potion_4.mdl",
+	"models/sohald_spike/props/potion_5.mdl",
+}
+
+local modelIndexes = {
+	
+    ["speed"] = 5,
+    ["leaping"] = 6,
+    ["healing"] = 1,
+    ["shield"] = 4,
+
+}
+
 
 
 
 function ENT:Initialize()
-	self:SetModel("models/props_junk/garbage_plasticbottle001a.mdl")
+
+
+	local mainEffect = self:DetermineGreatestReagent()
+
+	local model = table.Random(potionModels)
+
+	self:SetModel(model)
+
+	self:SetSkin(modelIndexes[mainEffect] or 7)
+
 	self:PhysicsInit(SOLID_VPHYSICS)
 	self:SetMoveType(MOVETYPE_VPHYSICS)
 	self:SetSolid(SOLID_VPHYSICS)
@@ -34,6 +60,9 @@ function ENT:Initialize()
 	
 	self:SetPos(self:GetPos() + Vector(0, 0, 50))
 	self:DropToFloor()
+
+
+
 	
 end
 
@@ -69,5 +98,23 @@ function ENT:RunEffect(ply)
 		end
 
 	end
+
+end
+
+function ENT:DetermineGreatestReagent()
+
+	local greatest = 0
+	local key = nil
+
+	for k, v in pairs(self.Reagents) do
+
+		if v > greatest then 
+			key = k 
+			greatest = v
+		end
+
+	end
+
+	return key
 
 end
