@@ -23,3 +23,6 @@ A mod for garry's mod aimed at adding potion brewing into the game.
 # Links
 - Trello Board: https://trello.com/b/CvF8Af7g/brewing-mod-progress
 - Steam Page: https://steamcommunity.com/id/MythicalMythic/
+
+# Credits
+- Potion models belong to: https://steamcommunity.com/sharedfiles/filedetails/?id=1163019696
