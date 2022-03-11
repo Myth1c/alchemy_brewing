@@ -14,7 +14,9 @@ function ENT:Initialize()
 	if phys:IsValid() then phys:Wake() end
 	self:SetUseType(SIMPLE_USE)
 	self:Activate()
-	self:SetColor(Color(212, 212, 212, 255))
+
+	self:SetPos(self:GetPos() + Vector(0, 0, 50))
+	self:DropToFloor()
 
 end
 
