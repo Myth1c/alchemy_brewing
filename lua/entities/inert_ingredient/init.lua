@@ -43,17 +43,6 @@ function ENT:Initialize()
 
 		distribution = math.Clamp(distribution - self.Reagents[randReagent], 0, distribution)
 
-
-		-- for i = 1, 4, 1 do
-
-		-- 	local randReagent = index[math.random(1, 4)]
-
-		-- 	self.Reagents[randReagent] = self.Reagents[randReagent] + math.random(0, distribution)
-	
-		-- 	distribution = math.Clamp(distribution - self.Reagents[randReagent], 0, distribution)
-
-		-- end
-
 	end
 
 	DebugPrint("Entity " .. tostring(self) .. " created with:")
