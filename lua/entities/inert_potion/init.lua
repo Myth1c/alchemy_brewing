@@ -37,6 +37,11 @@ local modelIndexes = {
 
 }
 
+local drinkingSounds = {
+	"player/pl_scout_dodge_can_drink.wav",
+	"player/pl_scout_dodge_can_drink_fast.wav",
+}
+
 
 
 
@@ -73,6 +78,10 @@ function ENT:Use( activator, caller )
 		self:RunEffect(caller)
 	
 		self:Remove()
+
+		local sound = table.Random(drinkingSounds)
+
+		self:EmitSound(sound)
 	else
 		DebugPrint("Storing potion: " .. tostring(self))
 		self:StorePotNetworkMessage("brew_store_ent", caller, self, self.Reagents)
