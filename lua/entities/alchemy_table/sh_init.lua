@@ -30,10 +30,10 @@ if SERVER then
 
 		newEnt.Reagents = table
 
-
-		newEnt:Spawn()
 		newEnt:SetModel(model)
 		newEnt:PhysicsInit(SOLID_VPHYSICS)
+
+		newEnt:Spawn()
 
 		DebugPrint("User requested to drop entity " .. tostring(newEnt) .. "\nEntity model: " .. tostring(newEnt:GetModel()) .. "\nReagents included: ")
 		DebugPrintTable(newEnt.Reagents)
