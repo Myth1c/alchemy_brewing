@@ -350,6 +350,9 @@ function StartBrewing()
         table.insert(brew_ents, pot)
 
         isBrewing = false
+
+        DebugPrint("Post-Brew\nTable has: ")
+        DebugPrintTable(brew_ents)
     end
 
 end
@@ -388,9 +391,10 @@ function StoreIngredients()
 
     if isBrewing then return end
 
-    if brew_gui.ingredientCount > 0 then
+    if #brew_ents > 0 then
 
         for _, v in ipairs(brew_ents) do
+            DebugPrint("Storing entity: " .. tostring(v))
             AddToStorage(v)
             RemoveReagents(v)
         end
