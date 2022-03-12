@@ -28,6 +28,8 @@ function ENT:Use(activator)
 
 	self:SetPickup(true)
 
+    self:EmitSound("ui/item_bag_pickup.wav")
+
 	self:Remove()
 
 
