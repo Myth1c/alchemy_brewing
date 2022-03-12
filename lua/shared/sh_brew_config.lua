@@ -32,7 +32,7 @@ Brew_Config = {
     -- How long should a potion take to brew (in seconds)
     -- Default: 15
     Brew_Brew_Time = 15,
-    -- Should tiers affect brew time?
+    -- Should tiers affect brew time? Time is multiplied by total tiers in potion. IE tier 1 = 15 seconds, tier 4 = 60 seconds
     -- Default: true
     Brew_Tiers_Are_Multipliers = true,
 
