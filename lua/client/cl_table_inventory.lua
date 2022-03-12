@@ -67,7 +67,6 @@ function DrawStorage()
 
     storageFrame.OnClose = function() 
         if IsValid(hoverInfo) then hoverInfo:Close() end
-        if !IsValid(brewFrame) then LocalPlayer():EmitSound("ui/item_bag_drop.wav") end
     end
 
     -- Setting up adjustments for different resolutions
@@ -103,8 +102,6 @@ function DrawStorage()
             storageFrame:Close()
         end
     end
-
-    LocalPlayer():EmitSound("ui/item_bag_pickup.wav")
 end
 
 --[[
