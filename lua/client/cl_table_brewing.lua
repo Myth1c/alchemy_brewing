@@ -32,6 +32,11 @@ local reagents_Tracker_Labels = {
 
 local isBrewing = false
 
+local brewedPot = {
+    ["slot"] = nil,
+    ["ent"] = nil,
+}
+
 alchemyTable = nil
 
 --[[
@@ -167,6 +172,8 @@ function DrawBrewing()
     outputBoxImage:SetPos(ScrW() * 238/1920, ScrH() * 263/1080)
     outputBoxImage:SetSize(ScrW() * 125/1920, ScrH() * 125/1080)
     outputBoxImage:SetImage(BrewSlotImage)
+
+    brewedPot["slot"] = outputBoxImage
 
     DrawReagentInfo()
     UpdateTierLabels()
@@ -306,6 +313,8 @@ function StartBrewing()
         pot.Reagents = {}
         pot.FreshBrew = true
 
+        brewedPot["ent"] = pot
+
         if pot:GetModel() == nil then pot:SetModel("models/sohald_spike/props/potion_5.mdl") pot:SetSkin(7) end
         
         local potion = vgui.Create("DModelPanel", brewFrame)
@@ -328,8 +337,9 @@ function StartBrewing()
             if mcode == 107 then
 
                 brew_gui.brewArrow:SetColor(BrewSlotBackground)
-                brewFrame:Close()
                 Brew_DropItem(pot)
+                brewFrame:Close()
+                brewedPot["ent"] = nil
 
             elseif mcode == 108 then 
                 Brew_DrawContextMenu(pot, potion, Brew_TransferEnt, Brew_DestroyItem, Brew_DropItem)
@@ -349,11 +359,9 @@ function StartBrewing()
         
         table.insert(brew_ents, pot)
 
-        isBrewing = false
-
-        DebugPrint("Post-Brew\nTable has: ")
-        DebugPrintTable(brew_ents)
     end
+    
+    isBrewing = false
 
 end
 
@@ -397,6 +405,8 @@ function StoreIngredients()
             DebugPrint("Storing entity: " .. tostring(v))
             AddToStorage(v)
             RemoveReagents(v)
+
+            if v == brewedPot["ent"] then brewedPot["ent"] = nil end
         end
 
 
@@ -427,8 +437,6 @@ function Brew_DestroyItem(ent)
     if table.HasValue(brew_ents, ent) then
         table.RemoveByValue(brew_ents, ent)
         brew_gui.ingredientCount = brew_gui.ingredientCount - 1
-
-
 
         RemoveReagents(ent)
     end
@@ -740,7 +748,11 @@ function Brew_DrawIngredients()
                 
                 if j:GetClassName() == "Label" then break
                 elseif j:GetClassName() == "Panel" and childCount == #v:GetChildren() then
-                    Brew_CreateIngredient(brew_ents[i], v)
+                    if brew_ents[i] == brewedPot["ent"] then
+                        Brew_CreateIngredient(brew_ents[i], brewedPot["slot"])
+                    else
+                        Brew_CreateIngredient(brew_ents[i], v)
+                    end
                     didDraw = true
                     break
 
