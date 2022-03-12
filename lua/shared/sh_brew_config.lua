@@ -29,7 +29,12 @@ Brew_Config = {
     -- Should ingredients be dropped on death?
     -- Default: false
     Drop_Inventory_On_Death = false,
-
+    -- How long should a potion take to brew (in seconds)
+    -- Default: 15
+    Brew_Brew_Time = 15,
+    -- Should tiers affect brew time?
+    -- Default: true
+    Brew_Tiers_Are_Multipliers = true,
 
     --[[
         General UI Settings
