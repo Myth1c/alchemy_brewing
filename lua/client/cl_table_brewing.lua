@@ -100,6 +100,38 @@ function DrawBrewing()
     brewArrow:SetColor(BrewSlotBackground)
 
     brew_gui.brewArrow = brewArrow
+
+
+    local anim = Derma_Anim("FadeIn", brewArrow, function(pnl, anim, delta, data)
+
+        local timeElapsed = math.floor(data - timer.TimeLeft("Brew_Brewing_Time"))
+
+        local timeDelta = math.Clamp( ((timeElapsed / data) - 0.24), 0, 1)
+        
+        local progress = Vector(timeDelta + 0.24, timeDelta + 0.24, timeDelta + 0.24)
+
+        pnl:SetColor(progress:ToColor())
+
+
+    
+    end)
+
+    brewArrow.Think = function(self)
+
+        if isBrewing and !anim:Active() then
+            
+            local time = (Brew_Config.Brew_Brew_Time or 15)
+            local mult = Brew_Config.Brew_Tiers_Are_Multipliers or true
+            if mult then time = time * reagentTiers["total"] end
+
+            anim:Start(time, time)
+        elseif anim:Active() and isBrewing then
+            anim:Run()
+        elseif anim:Active() and !isBrewing then
+            anim:Stop()
+        end
+
+    end
     
 
     local brewTitle = vgui.Create("DLabel")
