@@ -157,23 +157,19 @@ function DrawBrewing()
 		brewFrame:Close()
 	end
 
-    local outputBoxFrame = vgui.Create("DFrame", brewFrame)
+    DebugPrint("Drawing Potion Box Frame")
+    local outputBoxFrame = vgui.Create("DImageButton", brewFrame)
     outputBoxFrame:SetPos(ScrW() * 238/1920, ScrH() * 263/1080)
     outputBoxFrame:SetSize(ScrW() * 125/1920, ScrH() * 125/1080)
-    outputBoxFrame:SetDraggable(false)
-    outputBoxFrame:ShowCloseButton(false)
-    outputBoxFrame:SetTitle("")
+    outputBoxFrame:SetText("")
+    outputBoxFrame:SetImage(BrewSlotImage)
     outputBoxFrame.Paint = function(s, w, h)
         draw.RoundedBox(FrameCurve, 0, 0, w, h, FrameBorderColour)
         draw.RoundedBox(FrameCurve, 2, 2, w-4, h-4, BrewSlotBackground)
     end
 
-    local outputBoxImage = vgui.Create("DImage", brewFrame)
-    outputBoxImage:SetPos(ScrW() * 238/1920, ScrH() * 263/1080)
-    outputBoxImage:SetSize(ScrW() * 125/1920, ScrH() * 125/1080)
-    outputBoxImage:SetImage(BrewSlotImage)
 
-    brewedPot["slot"] = outputBoxImage
+    brewedPot["slot"] = outputBoxFrame
 
     DrawReagentInfo()
     UpdateTierLabels()
@@ -258,20 +254,25 @@ function Brew_CreateIngredient(ent, button)
     ingredModel:SetCamPos( Vector( size, size, size ) )
     ingredModel:SetLookAt( (mn + mx) * 0.5 )
 
-    ingredModel.OnMousePressed = function(obj, mcode)
-
-        if mcode == 107 and Brew_TransferEnt(ent) then
-
+    function ingredModel:DoClick()
+        if ent == brewedPot["ent"] then
+            brew_gui.brewArrow:SetColor(BrewSlotBackground)
+            Brew_DropItem(ent)
+            brewFrame:Close()
+            brewedPot["ent"] = nil
+        elseif Brew_TransferEnt(ent) then
             ingredModel:Remove()
-
-        elseif mcode == 108 then 
-
-            if IsValid(contextFrame) then contextFrame:Close() end
-            Brew_DrawContextMenu(ent, ingredModel, Brew_TransferEnt, Brew_DestroyItem, Brew_DropItem)
         end
-        
 
     end
+
+    function ingredModel:DoRightClick()
+
+        if IsValid(contextFrame) then contextFrame:Close() end
+        Brew_DrawContextMenu(ent, ingredModel, Brew_TransferEnt, Brew_DestroyItem, Brew_DropItem)
+
+    end
+
 end
 
 --[[
@@ -285,10 +286,6 @@ function CreateIngredientSlot(current, max)
     ingredSlot:SetSize(ScrW() * 100/1920, ScrH() * 100/1080)
     ingredSlot:SetText("")
     ingredSlot:SetImage(BrewSlotImage)
-
-    -- ingredSlot.DoClick = function ()
-    --     GrabIngredient(ingredSlot)
-    -- end
 
     ingredSlot.Paint = function(s, w, h)
         draw.RoundedBox(FrameCurve, 0, 0, w, h, FrameBorderColour)
@@ -341,7 +338,8 @@ function StartBrewing()
                 brewFrame:Close()
                 brewedPot["ent"] = nil
 
-            elseif mcode == 108 then 
+            elseif mcode == 108 then
+                if IsValid(contextFrame) then contextFrame:Close() end
                 Brew_DrawContextMenu(pot, potion, Brew_TransferEnt, Brew_DestroyItem, Brew_DropItem)
             end
 
@@ -749,6 +747,7 @@ function Brew_DrawIngredients()
                 if j:GetClassName() == "Label" then break
                 elseif j:GetClassName() == "Panel" and childCount == #v:GetChildren() then
                     if brew_ents[i] == brewedPot["ent"] then
+                        DebugPrint("Drawing Potion Model Panel")
                         Brew_CreateIngredient(brew_ents[i], brewedPot["slot"])
                     else
                         Brew_CreateIngredient(brew_ents[i], v)
