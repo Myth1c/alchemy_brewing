@@ -32,6 +32,8 @@ local reagents_Tracker_Labels = {
 
 local isBrewing = false
 
+alchemyTable = nil
+
 --[[
     This chunk of code initializes settings and in case the config file doesn't load, it will set to defaults seen after the "or" statements
 ]]--
@@ -55,7 +57,7 @@ local BrewSlotImage = Brew_Config.GUI_BrewSlot_Image or "decals/light"
 ]]--
 function DrawBrewing()
 
-    
+
     brewFrame = vgui.Create("DFrame")
     brewFrame:SetPos(ScrW() * 660/1920, ScrH() * 75/1080)
     brewFrame:SetSize( ScrW() * 600/1920, ScrH() * 500/1080 )
@@ -112,11 +114,17 @@ function DrawBrewing()
     startBrew:SetTextColor(Color(255, 255, 255, 255))
 
     startBrew.DoClick = function() 
-        local time = (Brew_Config.Brew_Brew_Time or 30)
+        local time = (Brew_Config.Brew_Brew_Time or 15)
         local mult = Brew_Config.Brew_Tiers_Are_Multipliers or true
         if mult then time = time * reagentTiers["total"] end
 
         isBrewing = true
+
+        net.Start("brew_Play_Sound")
+            net.WriteEntity(alchemyTable)
+            net.WriteString("ambient/machines/deep_boil.wav")
+            net.WriteInt(time, 32)
+        net.SendToServer()
         
         timer.Create("Brew_Brewing_Time", time, 1, function()
             StartBrewing() 

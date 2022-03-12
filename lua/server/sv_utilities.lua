@@ -12,3 +12,20 @@ hook.Add("PostPlayerDeath", "brewing_dead_player", function(victim, inflictor, a
 
 
 end)
+
+net.Receive("brew_Play_Sound", function(len, ply)
+
+    local ent = net.ReadEntity()
+    local sound = net.ReadString()
+    local time = net.ReadInt(32)
+
+
+    ent:EmitSound(sound)
+
+    timer.Simple(time, function() 
+    
+        ent:StopSound(sound)
+    end)
+
+
+end)

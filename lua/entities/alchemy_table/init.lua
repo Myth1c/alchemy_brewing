@@ -23,7 +23,7 @@ end
 function ENT:Use( ent, ply )
 
 	
-	self:TableNetworkMessage("brewUI", ply)
+	self:TableNetworkMessage("brewUI", ply, self)
 
 
 end

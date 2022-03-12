@@ -4,8 +4,12 @@ net.Receive("brew_draw_brewUI", function(ply, len)
 
 	if net.ReadString() ~= "brewUI" then return end
 
+	local tbl = net.ReadEntity()
+
 	if not IsValid(brewFrame) then DrawBrewing()
 	elseif IsValid(brewFrame) then brewFrame:Close() end
+
+	alchemyTable = tbl
 
 end)
 

@@ -13,6 +13,8 @@ if SERVER then
 
 	util.AddNetworkString("brew_player_died")
 
+	util.AddNetworkString("brew_Play_Sound")
+
 
 else
 
