@@ -631,15 +631,24 @@ end
 ]]--
 function AddReagents(ent)
 
+    DebugPrint (reagentTiers["total"])
+    local totalTiers = 0
 
-    -- figure out of the ingredient can "fit" inside the potion first
-    for k, v in pairs(ent.Reagents) do
+    for k, v in pairs(reagents_Tracker) do
+        local totalPPM = 0
+        totalPPM = totalPPM + v + (ent.Reagents[k] or 0)
+        totalTiers = totalTiers + NumberToTier(totalPPM)
 
-        if !(reagentTiers["total"] + NumberToTier(v) <= (Brew_Config.Global_Max_Tier or 5)) then
-            DebugPrint("This ingredient would overcharge the potion.")
-            return false
-        end
     end
+
+    DebugPrint("Total Tiers: " .. totalTiers .. "\nMax Tiers: " .. (Brew_Config.Global_Max_Tier or 5))
+    DebugPrint(tostring(totalTiers > (Brew_Config.Global_Max_Tier or 5)))
+
+    if totalTiers > (Brew_Config.Global_Max_Tier or 5) then
+        DebugPrint("Cannot insert. This would overload the potion.")
+        return false
+    end
+
 
     DebugPrint("Adding reagents: ")
     DebugPrintTable(ent.Reagents)
@@ -769,7 +778,7 @@ function NumberToTier(input)
     if input == 0 then return 0 end
     if input < 3 then return 1 end
     for i = 1, Brew_Config.Global_Max_Tier, 1 do
-
+        
         if input < 3^i then
             return i
         end
