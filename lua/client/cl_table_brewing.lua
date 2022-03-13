@@ -81,6 +81,7 @@ function DrawBrewing()
         if IsValid(storageFrame) then storageFrame:Close() end
         if IsValid(contextFrame) then contextFrame:Close() end
         if IsValid(reagentInfo) then reagentInfo:Close() end
+        if IsValid(helpFrame) then helpFrame:Close() end
     end
 
     local max = Brew_Config.Max_Ingredients or 4
@@ -189,7 +190,6 @@ function DrawBrewing()
 		brewFrame:Close()
 	end
 
-    DebugPrint("Drawing Potion Box Frame")
     local outputBoxFrame = vgui.Create("DImageButton", brewFrame)
     outputBoxFrame:SetPos(ScrW() * 238/1920, ScrH() * 263/1080)
     outputBoxFrame:SetSize(ScrW() * 125/1920, ScrH() * 125/1080)
@@ -199,9 +199,24 @@ function DrawBrewing()
         draw.RoundedBox(FrameCurve, 0, 0, w, h, FrameBorderColour)
         draw.RoundedBox(FrameCurve, 2, 2, w-4, h-4, BrewSlotBackground)
     end
-
-
     brewedPot["slot"] = outputBoxFrame
+
+    local helpButton = vgui.Create("DImageButton", brewFrame)
+    helpButton:SetPos(ScrW() * 2/1920, ScrH() * 2/1080)
+    helpButton:SetSize(ScrW() * 24/1920, ScrH() * 24/1080)
+    helpButton:SetText("")
+    helpButton:SetImage("ui_icons/brew_help_icon.png")
+    helpButton.Paint = function(s, w, h)
+        draw.RoundedBox(FrameCurve, 0, 0, w, h, FrameBorderColour)
+        draw.RoundedBox(FrameCurve, 2, 2, w-4, h-4, BrewSlotBackground)
+    end
+
+    function helpButton:DoClick()
+
+        DrawHelpMenu()
+
+    end
+
 
     DrawReagentInfo()
     UpdateTierLabels()
