@@ -318,8 +318,18 @@ function CreateIngredient(slot, ent)
 
     function ingredModel:DoClick()
         if IsValid(ingredModel) then
-            if !IsValid(hoverInfo) then DrawHoverInfo(ent, ingredModel, slot)
-            elseif IsValid(hoverInfo) then UpdateHoverInfo(ent, ingredModel, slot) end
+            if input.IsKeyDown(KEY_LALT) then 
+                Inv_DestroyItem(ent)
+                ingredModel:Remove()
+                if IsValid(hoverInfo) then hoverInfo:Close() end
+            elseif input.IsKeyDown(KEY_LSHIFT) then
+                Inv_DropItem(ent)
+                ingredModel:Remove()
+                if IsValid(hoverInfo) then hoverInfo:Close() end
+            else
+                if !IsValid(hoverInfo) then DrawHoverInfo(ent, ingredModel, slot)
+                elseif IsValid(hoverInfo) then UpdateHoverInfo(ent, ingredModel, slot) end
+            end
         end
     end
 
