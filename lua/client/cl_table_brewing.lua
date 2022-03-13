@@ -770,7 +770,7 @@ function NumberToTier(input)
     if input < 3 then return 1 end
     for i = 1, Brew_Config.Global_Max_Tier, 1 do
 
-        if input <= 3^i then
+        if input < 3^i then
             return i
         end
     end
