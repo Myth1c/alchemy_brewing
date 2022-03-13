@@ -147,8 +147,8 @@ Brew_Config = {
     -- Speed potion time calculation is: base time + (time multiplier * tier)
     -- A tier 1 speed potion would be: 10 * (1 * 1) meaning you get a 10 second speed potion. Tier 2 would be 20 seconds.
     -- Changes the base time for a speed potion. 
-    -- Default: 10
-    Effect_Speed_TimeLimit_Base = 10,
+    -- Default: 30
+    Effect_Speed_TimeLimit_Base = 30,
     -- Changes the multiplier for the time of a speed potion.
     -- Default: 1
     Effect_Speed_TimeLimit_Multiplier = 1,
@@ -171,8 +171,8 @@ Brew_Config = {
 
     -- Leaping potion time calculation is: base time + (time multiplier * tier)
     -- Changes the base time for a leaping potion. 
-    -- Default: 10
-    Effect_Leaping_TimeLimit_Base = 10,
+    -- Default: 30
+    Effect_Leaping_TimeLimit_Base = 30,
     -- Changes the multiplier for the time of a leaping potion.
     -- Default: 1
     Effect_Leaping_TimeLimit_Multiplier = 1,
