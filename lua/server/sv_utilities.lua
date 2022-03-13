@@ -23,8 +23,10 @@ net.Receive("brew_Play_Sound", function(len, ply)
     ent:EmitSound(sound)
 
     timer.Simple(time, function() 
-    
-        ent:StopSound(sound)
+        
+        if IsValid(ent) then
+            ent:StopSound(sound)
+        end
     end)
 
 
