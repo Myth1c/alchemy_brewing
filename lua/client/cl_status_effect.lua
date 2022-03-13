@@ -121,6 +121,60 @@ function Brew_DrawStatus(effect, tier, timelimit)
         effectImage:SetPos( ScrW() * 111/1920, ScrH() * 8/1080)
         effectImage:SetSize(ScrW() * 64/1920, ScrH() * 64/1080)
         effectImage:SetImage(effect_icons[effect])
+
+        local pulse = Derma_Anim("IconPulse", effectImage, function(pnl, anim, delta, data)
+            
+            local maxAlpha = 255
+            local minAlpha = 180
+
+            local maxSize = 64
+            local minSize = 64
+
+            local percentage = math.floor(delta * 100)
+
+            local rate = 0
+
+            if percentage <= 25 then
+                rate = 25
+                minAlpha = 180
+            elseif percentage < 50 then
+                rate = 15
+                minAlpha = 175
+            elseif percentage < 75 then
+                rate = 10
+                minAlpha = 170
+                minSize = 60
+            elseif percentage < 90 then
+                rate = 5
+                minAlpha = 165
+                minSize = 60
+            else
+                rate = 2
+                minAlpha = 150
+                minSize = 58
+            end
+            
+            if percentage % rate == 0 then
+                
+                pnl:SetAlpha(minAlpha)
+                pnl:SetSize(ScrW() * minSize/1920, ScrH() * minSize/1080)
+
+            else
+                pnl:SetAlpha(maxAlpha)
+                pnl:SetSize(ScrW() * maxSize/1920, ScrH() * maxSize/1080)
+            end
+        end)
+
+        
+        effectImage.Think = function(self)
+
+            if pulse:Active() then
+                pulse:Run()
+            end
+
+        end
+
+        pulse:Start(timelimit)
         
     end
 
