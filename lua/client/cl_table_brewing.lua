@@ -631,7 +631,6 @@ end
 ]]--
 function AddReagents(ent)
 
-    DebugPrint (reagentTiers["total"])
     local totalTiers = 0
 
     for k, v in pairs(reagents_Tracker) do
