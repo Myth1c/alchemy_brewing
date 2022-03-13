@@ -21,11 +21,17 @@ net.Receive("brew_Play_Sound", function(len, ply)
 
 
     ent:EmitSound(sound)
+    if ent:GetClass() == "alchemy_table" then
+        ent:MoveFlaskToBurner()
+    end
 
     timer.Simple(time, function() 
         
         if IsValid(ent) then
             ent:StopSound(sound)
+            if ent:GetClass() == "alchemy_table" then
+                ent:MoveFlaskFromBurner()
+            end
         end
     end)
 
