@@ -20,13 +20,6 @@ function ENT:Initialize()
 
 	self:DecorateSelf()
 
-	timer.Simple(3, function() 
-		self:MoveFlaskToBurner() 
-		timer.Simple(3, function() 
-			self:MoveFlaskFromBurner() 
-		end)
-	end)
-
 end
 
 function ENT:Use( ent, ply )
