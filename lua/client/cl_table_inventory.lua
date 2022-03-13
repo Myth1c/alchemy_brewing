@@ -327,8 +327,8 @@ function CreateIngredient(slot, ent)
                 ingredModel:Remove()
                 if IsValid(hoverInfo) then hoverInfo:Close() end
             else
-                if !IsValid(hoverInfo) then DrawHoverInfo(ent, ingredModel, slot)
-                elseif IsValid(hoverInfo) then UpdateHoverInfo(ent, ingredModel, slot) end
+                if !IsValid(hoverInfo) and IsValid(brewFrame) then DrawHoverInfo(ent, ingredModel, slot)
+                elseif IsValid(hoverInfo) and IsValid(brewFrame) then UpdateHoverInfo(ent, ingredModel, slot) end
             end
         end
     end
