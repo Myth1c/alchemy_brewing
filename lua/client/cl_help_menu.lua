@@ -104,6 +104,14 @@ function DrawHelpMenu()
         Tips3["xalign"] = TEXT_ALIGN_CENTER
         Tips3["yalign"] = TEXT_ALIGN_TOP
         
+        Tips4 = {}
+        Tips4["pos"] = {265, 190}
+        Tips4["color"] = FontColour
+        Tips4["text"] = "In the inventory, holding Shift while clicking will drop the item. Alt will delete it."
+        Tips4["font"] = BodyFont
+        Tips4["xalign"] = TEXT_ALIGN_CENTER
+        Tips4["yalign"] = TEXT_ALIGN_TOP
+        
 
         
         draw.Text(HowToTitle)
@@ -114,6 +122,7 @@ function DrawHelpMenu()
         draw.Text(Tips1)
         draw.Text(Tips2)
         draw.Text(Tips3)
+        draw.Text(Tips4)
     end 
    
     local openAnimation = Derma_Anim("ExpandOpen", helpFrame, function(pnl, anim, delta, data)
