@@ -7,7 +7,7 @@ end
 
 function ENT:Draw()
 	self:DrawModel()
-
+	if !LocalPlayer():Alive() then return end
 	if LocalPlayer():GetActiveWeapon():GetClass() == "ingredient_picker" and LocalPlayer():GetPos():Distance(self:GetPos()) < 100 and self.Reagents ~= nil
 	and LocalPlayer():GetEyeTrace().Entity == self then
 
