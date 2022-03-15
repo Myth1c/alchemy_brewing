@@ -93,7 +93,6 @@ function TOOL:Reload( trace )
 end
  
 function TOOL.BuildCPanel( panel )
-	panel:AddControl("Header", { Text = "header", Description = "#tool.ingredient_spawner.headerDescription" })
 
 	panel:AddControl("Header", { Text = "randomizeHeader", Description = "#tool.ingredient_spawner.randomizeHeader" })
 	panel:AddControl("Checkbox", {Label = "#tool.ingredient_spawner.randomize", Command = "ingredient_spawner_randomize"})
@@ -122,8 +121,6 @@ if CLIENT then
 	language.Add("tool.ingredient_spawner.right", "Spawn/Make targeted ingredient persistant")
 	language.Add("tool.ingredient_spawner.reload", "Remove ingredient from map and remove persistance")
 	
-	language.Add("tool.ingredient_spawner.headerDescription", "Ingredient Modifier")
-
 	language.Add("tool.ingredient_spawner.randomizeHeader", "Reagent Randomizer Options")
 	language.Add("tool.ingredient_spawner.randomize", "Randomize ingredients?")
 	language.Add("tool.ingredient_spawner.randomize_min", "Minimum value for randomizer")
