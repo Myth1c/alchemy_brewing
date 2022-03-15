@@ -40,13 +40,15 @@ function TOOL:LeftClick( trace )
 		end
 
 		if ent:GetClass() == "inert_ingredient" then 
-			ent.Reagents = Reagents
+			if self:GetClientInfo("reroll") == "1" then
+				self:SpawnNewIngredient(trace, nil, ent)
+			else
+				self:SpawnNewIngredient(trace, Reagents, ent)
+			end
 			
 		elseif trace.HitWorld then
-			local newEnt = ents.Create("inert_ingredient")
-			newEnt:SetPos(trace.HitPos)
-			newEnt.Reagents = Reagents
-			newEnt:Spawn()
+
+			self:SpawnNewIngredient(trace, Reagents, nil)
 			undo.Create("#tool.ingredient_spawner.undo_message")
 				undo.AddEntity(newEnt)
 				undo.SetPlayer(self:GetOwner())
@@ -106,6 +108,22 @@ function TOOL.BuildCPanel( panel )
 	panel:AddControl("Slider", { Label = "#tool.ingredient_spawner.leaping", Min = "0", Max = "100", Command = "ingredient_spawner_leaping" })
 	panel:AddControl("Slider", { Label = "#tool.ingredient_spawner.shield", Min = "0", Max = "100", Command = "ingredient_spawner_shield" })
 	panel:AddControl("Slider", { Label = "#tool.ingredient_spawner.speed", Min = "0", Max = "100", Command = "ingredient_spawner_speed" })
+end
+
+
+function TOOL:SpawnNewIngredient(trace, tbl, oldEnt)
+
+	local pos = trace.HitPos
+	if oldEnt ~= nil then
+		pos = oldEnt:GetPos()
+		oldEnt:Remove()
+	end
+
+	local newEnt = ents.Create("inert_ingredient")
+	newEnt:SetPos(pos)
+	if tbl ~= nil then newEnt.Reagents = tbl end
+	newEnt:Spawn()
+
 end
 
 
