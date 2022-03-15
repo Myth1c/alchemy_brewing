@@ -28,33 +28,13 @@ function ENT:Initialize()
 	if self.Reagents["speed"] == 0 and self.Reagents["leaping"] == 0 and 
 	self.Reagents["healing"] == 0 and self.Reagents["shield"] == 0 then
 		
-		local distribution = 3
-
-		local index = {
-			"healing",
-			"leaping",
-			"shield",
-			"speed"
-		}
-		
-		local randReagent = index[math.random(1, 4)]
-
-		self.Reagents[randReagent] = math.random(1, distribution)
-
-		distribution = math.Clamp(distribution - self.Reagents[randReagent], 0, distribution)
+		self:RollReagents()
 
 	end
 
 	DebugPrint("Entity " .. tostring(self) .. " created with:")
 	DebugPrintTable(self.Reagents)
 
-
-	local greatest = self:DetermineGreatestReagent()
-
-	DebugPrint("Greatest Reagent: " .. greatest)
-
-
-	self:SetModel(self.ModelTable[greatest])
 	self:PhysicsInit(SOLID_VPHYSICS)
 	self:SetMoveType(MOVETYPE_VPHYSICS)
 	self:SetSolid(SOLID_VPHYSICS)
@@ -91,6 +71,28 @@ function ENT:DetermineGreatestReagent()
 
 	end
 
+	local mdl = self.ModelTable[key]
+
+	self:SetModel(mdl)
+
 	return key
+
+end
+
+function ENT:RollReagents()
+
+	self.Reagents = { ["speed"] = 0, ["leaping"] = 0, ["healing"] = 0, ["shield"] = 0 }
+
+	local distribution = 3
+
+	local index = { "healing", "leaping", "shield", "speed" }
+	
+	local randReagent = index[math.random(1, 4)]
+
+	self.Reagents[randReagent] = math.random(1, distribution)
+
+	distribution = math.Clamp(distribution - self.Reagents[randReagent], 0, distribution)
+
+	self:DetermineGreatestReagent()
 
 end
