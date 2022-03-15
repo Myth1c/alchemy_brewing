@@ -152,7 +152,7 @@ if CLIENT then
 	language.Add("tool.ingredient_spawner.right", "Spawn/Make targeted ingredient persistant")
 	language.Add("tool.ingredient_spawner.reload", "Remove ingredient from map and remove persistance")
 
-	language.Add("tool.ingredient_spawner.rerollHeader", "Re-rolling re-rolls all the reagents in the targeted entity")
+	language.Add("tool.ingredient_spawner.rerollHeader", "Re-rolls all the reagents in the targeted ingredient with their default parameters")
 	language.Add("tool.ingredient_spawner.reroll", "Enable re-roll")
 	language.Add("tool.ingredient_spawner.reroll.help", "Does nothing while spawning a new entity.\nTakes priority over all options")
 	
