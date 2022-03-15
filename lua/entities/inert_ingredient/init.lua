@@ -30,10 +30,9 @@ function ENT:Initialize()
 		
 		self:RollReagents()
 
+	else
+		local greatest = self:DetermineGreatestReagent()
 	end
-
-	DebugPrint("Entity " .. tostring(self) .. " created with:")
-	DebugPrintTable(self.Reagents)
 
 	self:PhysicsInit(SOLID_VPHYSICS)
 	self:SetMoveType(MOVETYPE_VPHYSICS)
