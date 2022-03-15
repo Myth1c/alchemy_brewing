@@ -18,6 +18,7 @@ TOOL.ClientConVar[ "randomize" ] = 0
 TOOL.ClientConVar[ "randomize_min" ] = 0
 TOOL.ClientConVar[ "randomize_max" ] = 0
 TOOL.ClientConVar[ "reroll" ] = 0
+TOOL.ClientConVar[ "manual" ] = 0
  
 function TOOL:LeftClick( trace )
 	if SERVER then
@@ -37,18 +38,23 @@ function TOOL:LeftClick( trace )
 				Reagents[k] = math.random(tonumber(self:GetClientInfo("randomize_min")), tonumber(self:GetClientInfo("randomize_max")))
 
 			end
+
+			DebugPrint("New reagents are: ")
+			DebugPrintTable(Reagents)
 		end
 
 		if ent:GetClass() == "inert_ingredient" then 
 			if self:GetClientInfo("reroll") == "1" then
 				self:SpawnNewIngredient(trace, nil, ent)
-			else
+			elseif self:GetClientInfo("manual") == "1" or self:GetClientInfo("randomize") == "1" then
 				self:SpawnNewIngredient(trace, Reagents, ent)
 			end
 			
 		elseif trace.HitWorld then
+			local tbl = nil
+			if self:GetClientInfo("manual") == "1" then tbl = Reagents end
 
-			self:SpawnNewIngredient(trace, Reagents, nil)
+			local newEnt = self:SpawnNewIngredient(trace, tbl, nil)
 			undo.Create("#tool.ingredient_spawner.undo_message")
 				undo.AddEntity(newEnt)
 				undo.SetPlayer(self:GetOwner())
@@ -96,18 +102,20 @@ end
  
 function TOOL.BuildCPanel( panel )
 
+	panel:AddControl("Header", { Text = "rerollHeader", Description = "#tool.ingredient_spawner.rerollHeader" })
+	panel:AddControl("Checkbox", {Label = "#tool.ingredient_spawner.reroll", Command = "ingredient_spawner_reroll", help = true})
+
 	panel:AddControl("Header", { Text = "randomizeHeader", Description = "#tool.ingredient_spawner.randomizeHeader" })
-	panel:AddControl("Checkbox", {Label = "#tool.ingredient_spawner.randomize", Command = "ingredient_spawner_randomize"})
+	panel:AddControl("Checkbox", {Label = "#tool.ingredient_spawner.randomize", Command = "ingredient_spawner_randomize", help = true})
 	panel:AddControl("Slider", { Label = "#tool.ingredient_spawner.randomize_min", Min = "0", Max = "99", Command = "ingredient_spawner_randomize_min" })
 	panel:AddControl("Slider", { Label = "#tool.ingredient_spawner.randomize_max", Min = "1", Max = "100", Command = "ingredient_spawner_randomize_max" })
-
-	panel:AddControl("Checkbox", {Label = "#tool.ingredient_spawner.reroll", Command = "ingredient_spawner_reroll"})
  
 	panel:AddControl("Header", { Text = "reagentHeader", Description = "#tool.ingredient_spawner.reagentHeader" })
-	panel:AddControl("Slider", { Label = "#tool.ingredient_spawner.healing", Min = "0", Max = "100", Command = "ingredient_spawner_healing" })
-	panel:AddControl("Slider", { Label = "#tool.ingredient_spawner.leaping", Min = "0", Max = "100", Command = "ingredient_spawner_leaping" })
-	panel:AddControl("Slider", { Label = "#tool.ingredient_spawner.shield", Min = "0", Max = "100", Command = "ingredient_spawner_shield" })
-	panel:AddControl("Slider", { Label = "#tool.ingredient_spawner.speed", Min = "0", Max = "100", Command = "ingredient_spawner_speed" })
+	panel:AddControl("Checkbox", {Label = "#tool.ingredient_spawner.manual", Command = "ingredient_spawner_manual", help = true})
+	panel:AddControl("Slider", { Label = "#tool.ingredient_spawner.healing", Min = "1", Max = "100", Command = "ingredient_spawner_healing" })
+	panel:AddControl("Slider", { Label = "#tool.ingredient_spawner.leaping", Min = "1", Max = "100", Command = "ingredient_spawner_leaping" })
+	panel:AddControl("Slider", { Label = "#tool.ingredient_spawner.shield", Min = "1", Max = "100", Command = "ingredient_spawner_shield" })
+	panel:AddControl("Slider", { Label = "#tool.ingredient_spawner.speed", Min = "1", Max = "100", Command = "ingredient_spawner_speed" })
 end
 
 
@@ -123,6 +131,11 @@ function TOOL:SpawnNewIngredient(trace, tbl, oldEnt)
 	newEnt:SetPos(pos)
 	if tbl ~= nil then newEnt.Reagents = tbl end
 	newEnt:Spawn()
+	
+	DebugPrint("Entity " .. tostring(newEnt) .. "\nModel: " .. tostring(newEnt:GetModel()) .. "\nReagents: ")
+	DebugPrintTable(newEnt.Reagents)
+
+	return newEnt
 
 end
 
@@ -138,19 +151,24 @@ if CLIENT then
 	language.Add("tool.ingredient_spawner.left", "Spawn/Update ingredient with selected settings")
 	language.Add("tool.ingredient_spawner.right", "Spawn/Make targeted ingredient persistant")
 	language.Add("tool.ingredient_spawner.reload", "Remove ingredient from map and remove persistance")
+
+	language.Add("tool.ingredient_spawner.rerollHeader", "Re-rolling re-rolls all the reagents in the targeted entity")
+	language.Add("tool.ingredient_spawner.reroll", "Enable re-roll")
+	language.Add("tool.ingredient_spawner.reroll.help", "Does nothing while spawning a new entity.\nTakes priority over all options")
 	
-	language.Add("tool.ingredient_spawner.randomizeHeader", "Reagent Randomizer Options")
-	language.Add("tool.ingredient_spawner.randomize", "Randomize ingredients?")
+	language.Add("tool.ingredient_spawner.randomizeHeader", "The randomizer will randomly set all values between the min and max values set below")
+	language.Add("tool.ingredient_spawner.randomize", "Enable Randomize Options")
 	language.Add("tool.ingredient_spawner.randomize_min", "Minimum value for randomizer")
 	language.Add("tool.ingredient_spawner.randomize_max", "Max value for randomizer")
+	language.Add("tool.ingredient_spawner.randomize.help", "Takes priority over manual options")
 
-	language.Add("tool.ingredient_spawner.reroll", "Re-roll ingredients?")
-
-	language.Add("tool.ingredient_spawner.reagentHeader", "Manual Options")
+	language.Add("tool.ingredient_spawner.reagentHeader", "Manual settings will spawn or update an ingredient with the reagents set below")
 	language.Add("tool.ingredient_spawner.healing", "Healing Reagent")
 	language.Add("tool.ingredient_spawner.leaping", "Leaping Reagent")
 	language.Add("tool.ingredient_spawner.shield", "Shield Reagent")
 	language.Add("tool.ingredient_spawner.speed", "Speed Reagent")
+	language.Add("tool.ingredient_spawner.manual.help", "Both above settings have priority over this")
+	language.Add("tool.ingredient_spawner.manual", "Enable manual Options")
 
 	
 	language.Add("tool.ingredient_spawner.undo_message", "spawned ingredient")
