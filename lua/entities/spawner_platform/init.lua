@@ -9,11 +9,11 @@ ENT.SpawnedEntity = nil
 ENT.ShouldSpawn = true
 
 ENT.LastSpawn = nil
-ENT.Cooldown = 30
+ENT.Cooldown = Brew_Config.Spawner_Spawn_Cooldown or 30
 ENT.NextSpawn = CurTime()
-ENT.SpawnDistance = 500
+ENT.SpawnDistance = Brew_Config.Spawner_Spawn_Distance or 500
 
-ENT.ThinkInterval = 5
+ENT.ThinkInterval = Brew_Config.Spawner_Think_Interval or 5
 
 ENT.Reagents = 
 {
