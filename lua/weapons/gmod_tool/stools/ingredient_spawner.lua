@@ -1,5 +1,5 @@
 TOOL.Category = "Brewing Mod"
-TOOL.Name = "#tool.ingredient_spawner.name"
+TOOL.Name = "#ingredient_spawner"
 TOOL.Command = nil
 TOOL.ConfigName = ""
 
