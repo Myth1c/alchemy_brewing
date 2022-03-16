@@ -76,7 +76,7 @@ function TOOL:Reload( trace )
 	if SERVER then
 		local ent = trace.Entity
 
-		if ent:GetClass() == "inert_ingredient" then 
+		if ent:GetClass() == "inert_ingredient" or ent:GetClass() == "spawner_platform" then 
 			ent:Remove()
 			
 		elseif trace.HitWorld then
