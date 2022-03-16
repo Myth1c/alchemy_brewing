@@ -34,7 +34,7 @@ function TOOL:RightClick( trace )
 	if ent:GetClass() == "inert_ingredient" then
 		DebugPrint("Add to persistance file")
 	else
-		DebugPrint("Spawn AND add to persistance file")
+		DebugPrint("Click on an ingredient to add it to persistance.")
 	end
 
 end
@@ -152,7 +152,7 @@ if CLIENT then
 	language.Add("tool.ingredient_spawner.name", "Ingredient Modifier")
 	language.Add("tool.ingredient_spawner.desc", "Spawn, Update, or make ingredients persistant!")
 	language.Add("tool.ingredient_spawner.left", "Spawn/Update ingredient with selected settings")
-	language.Add("tool.ingredient_spawner.right", "Spawn/Make targeted ingredient persistant")
+	language.Add("tool.ingredient_spawner.right", "Make targeted ingredient persistant")
 	language.Add("tool.ingredient_spawner.reload", "Remove ingredient from map and remove persistance")
 
 	language.Add("tool.ingredient_spawner.rerollHeader", "Re-rolls all the reagents in the targeted ingredient with their default parameters")
