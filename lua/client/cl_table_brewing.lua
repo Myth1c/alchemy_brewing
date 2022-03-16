@@ -4,6 +4,8 @@ local brew_gui = {
     brewArrow = {},
     reagentInfo = {},
     ingredientCount = 0,
+    ocFlash = nil,
+    overchargeLabel = {},
 
 }
 local brew_ents = {}
@@ -217,6 +219,33 @@ function DrawBrewing()
 
     end
 
+    brew_gui.overchargeLabel = vgui.Create("DLabel", brewFrame)
+    brew_gui.overchargeLabel:SetFont(FontType)
+    brew_gui.overchargeLabel:SetText("!!   OVERCHARGE WARNING   !!")
+    brew_gui.overchargeLabel:SetSize( ScrW() * 400/1920, ScrH() * 40/1080 )
+    brew_gui.overchargeLabel:SetPos(ScrW() * 110/1920, ScrH() * 455/1080)
+    brew_gui.overchargeLabel:SetParent(brewFrame)
+    brew_gui.overchargeLabel:SetTextColor(FontColour)
+    brew_gui.overchargeLabel:SetVisible(false)
+
+    
+    brew_gui.ocFlash = Derma_Anim("FadeIn", brew_gui.overchargeLabel, function(pnl, anim, delta, data)
+
+        if math.floor((delta * 100) % 10) == 0 then
+            pnl:SetTextColor(Color(255, 255, 0, 255))
+        else
+            pnl:SetTextColor(Color(255, 0, 0, 255))
+        end    
+    end)
+
+    brew_gui.overchargeLabel.Think = function(self)
+        if brew_gui.ocFlash:Active() then
+            brew_gui.ocFlash:Run()
+            if brew_gui.overchargeLabel:IsVisible() == false then brew_gui.overchargeLabel:ToggleVisible() end
+        else
+            brew_gui.overchargeLabel:SetVisible(false)
+        end
+    end
 
     DrawReagentInfo()
     UpdateTierLabels()
@@ -644,7 +673,9 @@ function AddReagents(ent)
     DebugPrint(tostring(totalTiers > (Brew_Config.Global_Max_Tier or 5)))
 
     if totalTiers > (Brew_Config.Global_Max_Tier or 5) then
-        DebugPrint("Cannot insert. This would overload the potion.")
+        
+        brew_gui.overchargeLabel:SetVisible(true)
+        brew_gui.ocFlash:Start(2)
         return false
     end
 
