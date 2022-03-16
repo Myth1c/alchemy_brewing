@@ -22,21 +22,52 @@ TOOL.ClientConVar[ "manual" ] = 0
  
 function TOOL:LeftClick( trace )
 	if SERVER then
-		self:DetermineSpawnParameters(trace)
+		local ent = trace.Entity
+
+		local Reagents = self:DetermineSpawnParameters(trace)
+
+		if ent:GetClass() == "inert_ingredient" then 
+			if self:GetClientInfo("reroll") == "1" then
+				self:SpawnNewIngredient(trace, nil, ent)
+			elseif self:GetClientInfo("manual") == "1" or self:GetClientInfo("randomize") == "1" then
+				self:SpawnNewIngredient(trace, Reagents, ent)
+			end
+			
+		elseif trace.HitWorld then
+			local tbl = nil
+			if self:GetClientInfo("manual") == "1" or self:GetClientInfo("randomize") == "1" then tbl = Reagents end
+
+			local newEnt = self:SpawnNewIngredient(trace, tbl, nil)
+			undo.Create("#tool.ingredient_spawner.undo_message")
+				undo.AddEntity(newEnt)
+				undo.SetPlayer(self:GetOwner())
+			undo.Finish()
+		end
 	end	
 
 end
  
 function TOOL:RightClick( trace )
+	if SERVER then
+		local ent = trace.Entity
 
-	local ent = trace.Entity
+		local Reagents = self:DetermineSpawnParameters(trace)
 
-	if ent:GetClass() == "inert_ingredient" then
-		DebugPrint("Add to persistance file")
-	else
-		DebugPrint("Click on an ingredient to add it to persistance.")
+		if ent:GetClass() == "spawner_platform" then
+			DebugPrint("Add to persistance file")
+		elseif trace.HitWorld then
+
+			local spawner = ents.Create("spawner_platform")
+			spawner:SetPos(trace.HitPos)
+			spawner.Reagents = Reagents
+			spawner:Spawn()
+			undo.Create("#tool.ingredient_spawner.undo_message_platform")
+				undo.AddEntity(spawner)
+				undo.SetPlayer(self:GetOwner())
+			undo.Finish()
+
+		end
 	end
-
 end
 
 function TOOL:Reload( trace )
@@ -103,14 +134,20 @@ function TOOL:SpawnNewIngredient(trace, tbl, oldEnt)
 end
 
 function TOOL:DetermineSpawnParameters(trace)
-	local ent = trace.Entity
 	
 	local Reagents = {
-		["healing"] = tonumber(self:GetClientInfo("healing")),
-		["leaping"] = tonumber(self:GetClientInfo("leaping")),
-		["shield"] = tonumber(self:GetClientInfo("shield")),
-		["speed"] = tonumber(self:GetClientInfo("speed"))
+		["healing"] = 0,
+		["leaping"] = 0,
+		["shield"] = 0,
+		["speed"] = 0
 	}
+
+	if self:GetClientInfo("manual") == "1" then
+		for k, v in pairs(Reagents) do
+			Reagents[k] = tonumber(self:GetClientInfo(k))
+		end
+	end
+
 	
 	if self:GetClientInfo("randomize") == "1" then
 		DebugPrint("Randomizing ingredients...")
@@ -124,23 +161,7 @@ function TOOL:DetermineSpawnParameters(trace)
 		DebugPrintTable(Reagents)
 	end
 
-	if ent:GetClass() == "inert_ingredient" then 
-		if self:GetClientInfo("reroll") == "1" then
-			self:SpawnNewIngredient(trace, nil, ent)
-		elseif self:GetClientInfo("manual") == "1" or self:GetClientInfo("randomize") == "1" then
-			self:SpawnNewIngredient(trace, Reagents, ent)
-		end
-		
-	elseif trace.HitWorld then
-		local tbl = nil
-		if self:GetClientInfo("manual") == "1" then tbl = Reagents end
-
-		local newEnt = self:SpawnNewIngredient(trace, tbl, nil)
-		undo.Create("#tool.ingredient_spawner.undo_message")
-			undo.AddEntity(newEnt)
-			undo.SetPlayer(self:GetOwner())
-		undo.Finish()
-	end
+	return Reagents
 end
 
 
@@ -152,7 +173,7 @@ if CLIENT then
 	language.Add("tool.ingredient_spawner.name", "Ingredient Modifier")
 	language.Add("tool.ingredient_spawner.desc", "Spawn, Update, or make ingredients persistant!")
 	language.Add("tool.ingredient_spawner.left", "Spawn/Update ingredient with selected settings")
-	language.Add("tool.ingredient_spawner.right", "Make targeted ingredient persistant")
+	language.Add("tool.ingredient_spawner.right", "Create spawner platform. Right click a platform to make it persistant.")
 	language.Add("tool.ingredient_spawner.reload", "Remove ingredient from map and remove persistance")
 
 	language.Add("tool.ingredient_spawner.rerollHeader", "Re-rolls all the reagents in the targeted ingredient with their default parameters")
@@ -173,6 +194,6 @@ if CLIENT then
 	language.Add("tool.ingredient_spawner.manual.help", "Both above settings have priority over this")
 	language.Add("tool.ingredient_spawner.manual", "Enable manual Options")
 
-	
 	language.Add("tool.ingredient_spawner.undo_message", "spawned ingredient")
+	language.Add("tool.ingredient_spawner.undo_message_platform", "spawner platform")
 end
