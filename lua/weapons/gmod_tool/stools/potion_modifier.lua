@@ -65,15 +65,15 @@ function TOOL.BuildCPanel( panel )
 
 	panel:AddControl("Header", { Text = "randomizeHeader", Description = "#tool.potion_modifier.randomizeHeader" })
 	panel:AddControl("Checkbox", {Label = "#tool.potion_modifier.randomize", Command = "potion_modifier_randomize", help = true})
-	panel:AddControl("Slider", { Label = "#tool.potion_modifier.randomize_min", Min = "0", Max = "99", Command = "potion_modifier_randomize_min" })
-	panel:AddControl("Slider", { Label = "#tool.potion_modifier.randomize_max", Min = "1", Max = "100", Command = "potion_modifier_randomize_max" })
+	panel:AddControl("Slider", { Label = "#tool.potion_modifier.randomize_min", Min = "0", Max = "499", Command = "potion_modifier_randomize_min" })
+	panel:AddControl("Slider", { Label = "#tool.potion_modifier.randomize_max", Min = "1", Max = "500", Command = "potion_modifier_randomize_max" })
  
 	panel:AddControl("Header", { Text = "reagentHeader", Description = "#tool.potion_modifier.reagentHeader" })
 	panel:AddControl("Checkbox", {Label = "#tool.potion_modifier.manual", Command = "potion_modifier_manual", help = true})
-	panel:AddControl("Slider", { Label = "#tool.potion_modifier.healing", Min = "0", Max = "100", Command = "potion_modifier_healing" })
-	panel:AddControl("Slider", { Label = "#tool.potion_modifier.leaping", Min = "0", Max = "100", Command = "potion_modifier_leaping" })
-	panel:AddControl("Slider", { Label = "#tool.potion_modifier.shield", Min = "0", Max = "100", Command = "potion_modifier_shield" })
-	panel:AddControl("Slider", { Label = "#tool.potion_modifier.speed", Min = "0", Max = "100", Command = "potion_modifier_speed" })
+	panel:AddControl("Slider", { Label = "#tool.potion_modifier.healing", Min = "0", Max = "500", Command = "potion_modifier_healing" })
+	panel:AddControl("Slider", { Label = "#tool.potion_modifier.leaping", Min = "0", Max = "500", Command = "potion_modifier_leaping" })
+	panel:AddControl("Slider", { Label = "#tool.potion_modifier.shield", Min = "0", Max = "500", Command = "potion_modifier_shield" })
+	panel:AddControl("Slider", { Label = "#tool.potion_modifier.speed", Min = "0", Max = "500", Command = "potion_modifier_speed" })
 end
 
 
