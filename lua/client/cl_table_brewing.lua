@@ -512,6 +512,11 @@ function Brew_DestroyItem(ent)
         table.RemoveByValue(brew_ents, ent)
         brew_gui.ingredientCount = brew_gui.ingredientCount - 1
 
+        if brewedPot["ent"] == ent then 
+            brew_gui.brewArrow:SetColor(BrewSlotBackground) 
+            brewedPot["ent"] = nil
+        end
+
         RemoveReagents(ent)
     end
 
