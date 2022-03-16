@@ -76,9 +76,11 @@ function TOOL:Reload( trace )
 	if SERVER then
 		local ent = trace.Entity
 
-		if ent:GetClass() == "inert_ingredient" or ent:GetClass() == "spawner_platform" then 
+		if ent:GetClass() == "inert_ingredient" then 
 			ent:Remove()
-			
+		elseif ent:GetClass() == "spawner_platform" then
+			ent:Remove()
+			self:RemovePersistance(ent)
 		elseif trace.HitWorld then
 			DebugPrint("Printing Debug info for client settings")
 			DebugPrint("Randomize is set to: " .. self:GetClientInfo("randomize"))
@@ -210,10 +212,78 @@ function TOOL:SaveToFile(ent)
 
 		file.Write(filePath, json)
 
-		json = file.Read(filePath, "DATA")
-		tab = util.JSONToTable(json)
-
 	end
+end
+
+function TOOL:RemovePersistance(ent)
+
+	DebugPrint("Removing " .. tostring(ent) .. " from persistance." )
+
+	local mapName = game.GetMap()
+    local fileName = mapName .. ".json"
+    local filePath = "brewingmod/" .. fileName
+
+	local entTable = {
+		["class"] = ent:GetClass(),
+		["pos"] = ent:GetPos(),
+		["reagents"] = ent.Reagents,
+	}
+
+    if file.Exists(filePath, "DATA") then
+
+        local json = file.Read(filePath, "DATA")
+        local tab = util.JSONToTable(json)
+
+        for k, v in pairs(tab) do
+
+            local class = nil
+            local pos = nil
+            local reagents = nil
+
+            if k ~= "count" then
+
+                for h, j in pairs(v) do
+
+                    if h == "class" then class = j
+                    elseif h == "pos" then pos = j
+                    elseif h == "reagents" then reagents = j 
+                    end
+                end
+
+
+				if entTable["class"] == class and entTable["pos"] == pos then
+
+
+					local equal = true
+					for x, y in pairs(reagents) do
+
+						if y ~= entTable["reagents"][x] then
+							equal = false
+						end
+
+					end
+					if equal then
+
+						tab[k] = nil
+
+						tab["count"] = tab["count"] - 1
+					end
+					break
+
+				end
+
+            end
+
+
+        end
+
+		json = util.TableToJSON(tab, true)
+
+		file.Write(filePath, json)
+
+
+    end
+
 end
 
 
@@ -225,8 +295,8 @@ if CLIENT then
 	language.Add("tool.ingredient_spawner.name", "Ingredient Modifier")
 	language.Add("tool.ingredient_spawner.desc", "Spawn, Update, or make ingredients persistant!")
 	language.Add("tool.ingredient_spawner.left", "Spawn/Update ingredient with selected settings")
-	language.Add("tool.ingredient_spawner.right", "Create spawner platform. Right click a platform to make it persistant.")
-	language.Add("tool.ingredient_spawner.reload", "Remove ingredient from map and remove persistance")
+	language.Add("tool.ingredient_spawner.right", "Create spawner platform. Right click a platform to make it persistant")
+	language.Add("tool.ingredient_spawner.reload", "Remove Ingredient/Spawner from map and remove from persistance from targeted spawenr")
 
 	language.Add("tool.ingredient_spawner.rerollHeader", "Re-rolls all the reagents in the targeted ingredient with their default parameters")
 	language.Add("tool.ingredient_spawner.reroll", "Enable re-roll")
