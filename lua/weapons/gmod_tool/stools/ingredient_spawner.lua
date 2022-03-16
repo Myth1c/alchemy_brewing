@@ -1,6 +1,6 @@
 TOOL.Category = "Brewing Mod"
 TOOL.Name = "#tool.ingredient_spawner.name"
-TOOL.Command = "gmod_toolmode ingredient_spawner"
+TOOL.Command = nil
 TOOL.ConfigName = ""
 
 TOOL.Information = {
