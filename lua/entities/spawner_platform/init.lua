@@ -10,6 +10,8 @@ ENT.ShouldSpawn = true
 
 ENT.LastSpawn = nil
 ENT.Cooldown = 30
+ENT.NextSpawn = CurTime()
+ENT.SpawnDistance = 500
 
 ENT.ThinkInterval = 5
 
@@ -50,18 +52,24 @@ function ENT:Think()
 
     if !self.ShouldSpawn then return end
 
+    if self.NextSpawn < CurTime() then
 
-    if self.SpawnedEntity == nil then
-        
-        local ent = ents.Create("inert_ingredient")
-        ent:SetPos(self:GetPos() + Vector(0, 0, 15))
-        ent.Reagents = self.Reagents
-        ent:Spawn()
+        if self.SpawnedEntity == nil then
+            
+            local ent = ents.Create("inert_ingredient")
+            ent:SetPos(self:GetPos() + Vector(0, 0, 15))
+            ent.Reagents = self.Reagents
+            ent:Spawn()
 
-        self.SpawnedEntity = ent
+            self.SpawnedEntity = ent
+            self.NextSpawn = CurTime() + self.Cooldown
 
-    elseif !IsValid(self.SpawnedEntity) then
-        self.SpawnedEntity = nil
+        elseif !IsValid(self.SpawnedEntity) or self:GetPos():DistToSqr(self.SpawnedEntity:GetPos()) >= self.SpawnDistance^2 then
+            self.SpawnedEntity = nil
+        end
+
+
+
     end
     self:NextThink(CurTime() + self.ThinkInterval)
     return true
