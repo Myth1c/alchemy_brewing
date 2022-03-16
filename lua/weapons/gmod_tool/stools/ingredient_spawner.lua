@@ -22,44 +22,7 @@ TOOL.ClientConVar[ "manual" ] = 0
  
 function TOOL:LeftClick( trace )
 	if SERVER then
-		local ent = trace.Entity
-	
-		local Reagents = {
-			["healing"] = tonumber(self:GetClientInfo("healing")),
-			["leaping"] = tonumber(self:GetClientInfo("leaping")),
-			["shield"] = tonumber(self:GetClientInfo("shield")),
-			["speed"] = tonumber(self:GetClientInfo("speed"))
-		}
-		
-		if self:GetClientInfo("randomize") == "1" then
-			DebugPrint("Randomizing ingredients...")
-			for k, v in pairs(Reagents) do
-				
-				Reagents[k] = math.random(tonumber(self:GetClientInfo("randomize_min")), tonumber(self:GetClientInfo("randomize_max")))
-
-			end
-
-			DebugPrint("New reagents are: ")
-			DebugPrintTable(Reagents)
-		end
-
-		if ent:GetClass() == "inert_ingredient" then 
-			if self:GetClientInfo("reroll") == "1" then
-				self:SpawnNewIngredient(trace, nil, ent)
-			elseif self:GetClientInfo("manual") == "1" or self:GetClientInfo("randomize") == "1" then
-				self:SpawnNewIngredient(trace, Reagents, ent)
-			end
-			
-		elseif trace.HitWorld then
-			local tbl = nil
-			if self:GetClientInfo("manual") == "1" then tbl = Reagents end
-
-			local newEnt = self:SpawnNewIngredient(trace, tbl, nil)
-			undo.Create("#tool.ingredient_spawner.undo_message")
-				undo.AddEntity(newEnt)
-				undo.SetPlayer(self:GetOwner())
-			undo.Finish()
-		end
+		self:DetermineSpawnParameters(trace)
 	end	
 
 end
@@ -139,6 +102,46 @@ function TOOL:SpawnNewIngredient(trace, tbl, oldEnt)
 
 end
 
+function TOOL:DetermineSpawnParameters(trace)
+	local ent = trace.Entity
+	
+	local Reagents = {
+		["healing"] = tonumber(self:GetClientInfo("healing")),
+		["leaping"] = tonumber(self:GetClientInfo("leaping")),
+		["shield"] = tonumber(self:GetClientInfo("shield")),
+		["speed"] = tonumber(self:GetClientInfo("speed"))
+	}
+	
+	if self:GetClientInfo("randomize") == "1" then
+		DebugPrint("Randomizing ingredients...")
+		for k, v in pairs(Reagents) do
+			
+			Reagents[k] = math.random(tonumber(self:GetClientInfo("randomize_min")), tonumber(self:GetClientInfo("randomize_max")))
+
+		end
+
+		DebugPrint("New reagents are: ")
+		DebugPrintTable(Reagents)
+	end
+
+	if ent:GetClass() == "inert_ingredient" then 
+		if self:GetClientInfo("reroll") == "1" then
+			self:SpawnNewIngredient(trace, nil, ent)
+		elseif self:GetClientInfo("manual") == "1" or self:GetClientInfo("randomize") == "1" then
+			self:SpawnNewIngredient(trace, Reagents, ent)
+		end
+		
+	elseif trace.HitWorld then
+		local tbl = nil
+		if self:GetClientInfo("manual") == "1" then tbl = Reagents end
+
+		local newEnt = self:SpawnNewIngredient(trace, tbl, nil)
+		undo.Create("#tool.ingredient_spawner.undo_message")
+			undo.AddEntity(newEnt)
+			undo.SetPlayer(self:GetOwner())
+		undo.Finish()
+	end
+end
 
 
 
