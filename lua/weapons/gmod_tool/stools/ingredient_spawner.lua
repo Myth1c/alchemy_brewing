@@ -75,10 +75,10 @@ function TOOL.BuildCPanel( panel )
  
 	panel:AddControl("Header", { Text = "reagentHeader", Description = "#tool.ingredient_spawner.reagentHeader" })
 	panel:AddControl("Checkbox", {Label = "#tool.ingredient_spawner.manual", Command = "ingredient_spawner_manual", help = true})
-	panel:AddControl("Slider", { Label = "#tool.ingredient_spawner.healing", Min = "1", Max = "100", Command = "ingredient_spawner_healing" })
-	panel:AddControl("Slider", { Label = "#tool.ingredient_spawner.leaping", Min = "1", Max = "100", Command = "ingredient_spawner_leaping" })
-	panel:AddControl("Slider", { Label = "#tool.ingredient_spawner.shield", Min = "1", Max = "100", Command = "ingredient_spawner_shield" })
-	panel:AddControl("Slider", { Label = "#tool.ingredient_spawner.speed", Min = "1", Max = "100", Command = "ingredient_spawner_speed" })
+	panel:AddControl("Slider", { Label = "#tool.ingredient_spawner.healing", Min = "0", Max = "100", Command = "ingredient_spawner_healing" })
+	panel:AddControl("Slider", { Label = "#tool.ingredient_spawner.leaping", Min = "0", Max = "100", Command = "ingredient_spawner_leaping" })
+	panel:AddControl("Slider", { Label = "#tool.ingredient_spawner.shield", Min = "0", Max = "100", Command = "ingredient_spawner_shield" })
+	panel:AddControl("Slider", { Label = "#tool.ingredient_spawner.speed", Min = "0", Max = "100", Command = "ingredient_spawner_speed" })
 end
 
 
