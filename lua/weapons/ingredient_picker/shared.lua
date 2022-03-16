@@ -118,7 +118,10 @@ function SWEP:SecondaryAttack()
 
 	if self.Owner:GetPos():Distance(ent:GetPos()) < 100 and self.Analyzing == false then
 		local sound = table.Random(pickupSounds)
-		self:EmitSound(sound)
+
+		if ent:GetClass() == "inert_ingredient" or ent:GetClass() == "inert_potion" then
+			self:EmitSound(sound)
+		end
 
 		if SERVER then
 			if ent:GetClass() == "inert_ingredient" then
