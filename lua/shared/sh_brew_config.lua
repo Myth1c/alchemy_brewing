@@ -12,6 +12,15 @@ Brew_Config = {
     -- Global max for potions. Potions can not have more than this many tiers of ANY type. IE Speed 3 + Leaping 2 = 5 so no more
     -- Default: 5
     Global_Max_Tier = 5,
+    -- How often the spawner should check to spawn an ingredient.
+    -- Default: 5
+    Spawner_Think_Interval = 5,
+    -- How quickly the spawner can spawn ingredients once its previous ingredient is too far or was picked up in seconds
+    -- Default: 30
+    Spawner_Spawn_Cooldown = 30,
+    -- How far away an ingredient has to be before it will allow the spawner to spawn a new ingredient in Hammer Units
+    -- Default: 500
+    Spawner_Spawn_Distance = 500,
 
     -- Change the max tiers for each individual effect. Potions set down here will never go beyond the given maxes.
     -- Speed potion's max tier.
