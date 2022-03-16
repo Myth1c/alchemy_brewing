@@ -55,6 +55,7 @@ function TOOL:RightClick( trace )
 
 		if ent:GetClass() == "spawner_platform" then
 			DebugPrint("Add to persistance file")
+			self:SaveToFile(ent)
 		elseif trace.HitWorld then
 
 			local spawner = ents.Create("spawner_platform")
@@ -162,6 +163,57 @@ function TOOL:DetermineSpawnParameters(trace)
 	end
 
 	return Reagents
+end
+
+function TOOL:SaveToFile(ent)
+	if SERVER then
+		local mapName = game.GetMap()
+		local fileName = mapName .. ".json"
+		local filePath = "brewingmod/" .. fileName
+		if !file.Exists(filePath, "DATA") then
+			DebugPrint("No persistance file found. Creating one.")
+			local StoredEnts = {["count"] = 0}
+
+			file.CreateDir("BrewingMod")
+			file.Write(filePath, util.TableToJSON(StoredEnts, true))
+		end
+
+		local json = file.Read(filePath, "DATA")
+		local tab = util.JSONToTable(json)
+
+		for k, v in pairs(tab) do
+			DebugPrint(k)
+			if k ~= "count" then
+				for h, j in pairs(v) do
+					if h == "pos" then
+
+						if j:DistToSqr(ent:GetPos()) < 2500 then DebugPrint("Entity is already in table!") return end
+					end
+				end
+			end
+
+		end
+
+
+		local entTable = {
+			["class"] = ent:GetClass(),
+			["pos"] = ent:GetPos(),
+			["reagents"] = ent.Reagents,
+		}
+
+		local index = tab["count"] + 1
+		tab[ent:GetClass() .. " " .. index] = entTable
+
+		tab["count"] = tab["count"] + 1
+
+		json = util.TableToJSON(tab, true)
+
+		file.Write(filePath, json)
+
+		json = file.Read(filePath, "DATA")
+		tab = util.JSONToTable(json)
+
+	end
 end
 
 
