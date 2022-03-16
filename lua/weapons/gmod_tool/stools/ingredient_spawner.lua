@@ -292,6 +292,7 @@ end
 	Language Adds
 ]]-- 
 if CLIENT then
+	language.Add("ingredient_spawner", "Ingredient Spawner")
 	language.Add("tool.ingredient_spawner.name", "Ingredient Modifier")
 	language.Add("tool.ingredient_spawner.desc", "Spawn, Update, or make ingredients persistant!")
 	language.Add("tool.ingredient_spawner.left", "Spawn/Update ingredient with selected settings")
