@@ -293,7 +293,7 @@ end
 ]]-- 
 if CLIENT then
 	language.Add("ingredient_spawner", "Ingredient Spawner")
-	language.Add("tool.ingredient_spawner.name", "Ingredient Modifier")
+	language.Add("tool.ingredient_spawner.name", "Ingredient Spawner")
 	language.Add("tool.ingredient_spawner.desc", "Spawn, Update, or make ingredients persistant!")
 	language.Add("tool.ingredient_spawner.left", "Spawn/Update ingredient with selected settings")
 	language.Add("tool.ingredient_spawner.right", "Create spawner platform. Right click a platform to make it persistant")
