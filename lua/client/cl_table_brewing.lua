@@ -95,12 +95,12 @@ function DrawBrewing()
     end
 
     local brewArrow = vgui.Create("DSprite")
-    brewArrow:SetMaterial(Material("gui/arrow"))
+    --brewArrow:SetMaterial(Material("gui/arrow"))
     brewArrow:SetSize(ScrW() * 96/1920, ScrH() * 96/1080)
     brewArrow:SetParent(brewFrame)
     brewArrow:SetPos(ScrW() * 300/1920, ScrH() * 210/1080)
-    brewArrow:SetRotation(180)
-    brewArrow:SetColor(BrewSlotBackground)
+    --brewArrow:SetRotation(180)
+    --brewArrow:SetColor(BrewSlotBackground)
     brewArrow.Paint = function(s, w, h)
         -- Background
         surface.SetMaterial(Material("gui/arrow"))
