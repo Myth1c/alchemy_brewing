@@ -67,7 +67,7 @@ surface.CreateFont( "Brew_UIFont_Small", {
 	rotary = false,
 	shadow = false,
 	additive = false,
-	outline = false,
+	outline = true,
 } )
 
 end
