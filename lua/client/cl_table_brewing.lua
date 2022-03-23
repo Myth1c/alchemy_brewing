@@ -101,6 +101,18 @@ function DrawBrewing()
     brewArrow:SetPos(ScrW() * 300/1920, ScrH() * 210/1080)
     brewArrow:SetRotation(180)
     brewArrow:SetColor(BrewSlotBackground)
+    brewArrow.Paint = function(s, w, h)
+        -- Background
+        surface.SetMaterial(Material("gui/arrow"))
+        surface.SetDrawColor(Color(0, 0, 0, 255))
+        surface.DrawTexturedRectRotated(0, 0, w+10, h+4, 180)
+        -- Foreground
+        surface.SetMaterial(Material("gui/arrow"))
+        surface.SetDrawColor(BrewSlotBackground)
+        surface.DrawTexturedRectRotated(0, 0, w, h, 180)
+        
+
+    end
 
     brew_gui.brewArrow = brewArrow
 
@@ -113,8 +125,18 @@ function DrawBrewing()
         
         local progress = Vector(timeDelta + 0.24, timeDelta + 0.24, timeDelta + 0.24)
 
-        pnl:SetColor(progress:ToColor())
-
+        pnl.Paint = function(s, w, h)
+            -- Background
+            surface.SetMaterial(Material("gui/arrow"))
+            surface.SetDrawColor(Color(0, 0, 0, 255))
+            surface.DrawTexturedRectRotated(0, 0, w+10, h+4, 180)
+            -- Foreground
+            surface.SetMaterial(Material("gui/arrow"))
+            surface.SetDrawColor(progress:ToColor())
+            surface.DrawTexturedRectRotated(0, 0, w, h, 180)
+            
+    
+        end
 
     
     end)
