@@ -98,7 +98,7 @@ function DrawBrewing()
     --brewArrow:SetMaterial(Material("gui/arrow"))
     brewArrow:SetSize(ScrW() * 96/1920, ScrH() * 96/1080)
     brewArrow:SetParent(brewFrame)
-    brewArrow:SetPos(ScrW() * 300/1920, ScrH() * 210/1080)
+    brewArrow:SetPos(ScrW() * 300/1920, ScrH() * 200/1080)
     --brewArrow:SetRotation(180)
     --brewArrow:SetColor(BrewSlotBackground)
     brewArrow.Paint = function(s, w, h)
@@ -135,6 +135,15 @@ function DrawBrewing()
             surface.SetDrawColor(progress:ToColor())
             surface.DrawTexturedRectRotated(0, 0, w, h, 180)
             
+            timeRemaining = {}
+            timeRemaining["pos"] = {0, 45}
+            timeRemaining["color"] = FontColour
+            timeRemaining["text"] = "Time Remaining: " .. tostring(data - timeElapsed) .. " seconds"
+            timeRemaining["font"] = "Brew_UIFont_Small"
+            timeRemaining["xalign"] = TEXT_ALIGN_CENTER
+            timeRemaining["yalign"] = TEXT_ALIGN_TOP
+
+            draw.Text(timeRemaining)
     
         end
 
@@ -154,6 +163,17 @@ function DrawBrewing()
             anim:Run()
         elseif anim:Active() and !isBrewing then
             anim:Stop()
+            brewArrow.Paint = function(s, w, h)
+                -- Background
+                surface.SetMaterial(Material("gui/arrow"))
+                surface.SetDrawColor(Color(0, 0, 0, 255))
+                surface.DrawTexturedRectRotated(0, 0, w+10, h+4, 180)
+                -- Foreground
+                surface.SetMaterial(Material("gui/arrow"))
+                surface.SetDrawColor(BrewSlotBackground)
+                surface.DrawTexturedRectRotated(0, 0, w, h, 180)
+        
+            end
         end
 
     end
