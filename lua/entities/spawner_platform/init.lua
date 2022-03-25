@@ -30,15 +30,17 @@ function ENT:Initialize()
 	self:PhysicsInit( SOLID_VPHYSICS )     
 	self:SetMoveType( MOVETYPE_NONE )   
 	self:SetSolid( SOLID_VPHYSICS )
-	self:SetCollisionGroup(COLLISION_GROUP_DEBRIS) 
 
 	local phys = self:GetPhysicsObject()
 	if phys:IsValid() then phys:Wake() end
 	self:SetUseType(SIMPLE_USE)
 
-    self:SetColor(Color(0, 255, 0, 255))
-    
-    self:DrawShadow(false)
+    if !self:GetCustomModel() then
+        self:SetColor(Color(0, 255, 0, 255))
+        self:SetCollisionGroup(COLLISION_GROUP_DEBRIS) 
+        
+        self:DrawShadow(false)
+    end
 
     local ang = Angle(self:GetAngles().p + 0, self:GetAngles().y + 0, self:GetAngles().r + 90)
     self:SetAngles(ang)
