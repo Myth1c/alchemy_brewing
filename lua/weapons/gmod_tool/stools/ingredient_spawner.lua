@@ -313,7 +313,7 @@ if CLIENT then
 	language.Add("tool.ingredient_spawner.name", "Ingredient Spawner")
 	language.Add("tool.ingredient_spawner.desc", "Spawn, Update, or make ingredients persistant!")
 	language.Add("tool.ingredient_spawner.right", "Spawn/Update ingredient with selected settings")
-	language.Add("tool.ingredient_spawner.left", "Create spawner platform. Left click a platform to make it persistant")
+	language.Add("tool.ingredient_spawner.left", "Create spawner platform. Left click a platform to make it persistant. Left click a prop to convert it into a spawner.")
 	language.Add("tool.ingredient_spawner.reload", "Remove Ingredient/Spawner from map and remove from persistance from targeted spawenr")
 
 	language.Add("tool.ingredient_spawner.rerollHeader", "Re-rolls all the reagents in the targeted ingredient with their default parameters")
