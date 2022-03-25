@@ -60,7 +60,7 @@ function ENT:Think()
             
             local ent = ents.Create("inert_ingredient")
 
-            local offset = self:RandomPointInCircle(50, Brew_Config.Spawner_Spawn_Distance)
+            local offset = self:RandomPointInCircle(100, 125)
 
 
             ent:SetPos(offset )
