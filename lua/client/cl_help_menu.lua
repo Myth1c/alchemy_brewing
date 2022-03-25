@@ -83,7 +83,7 @@ function DrawHelpMenu()
         Tips1 = {}
         Tips1["pos"] = {265, 145}
         Tips1["color"] = FontColour
-        Tips1["text"] = "Potions require powers of 3 for the next tier!"
+        Tips1["text"] = "Potions require powers of 3 for the next tier! Tier 2 = 3 reagents, Tier 3 = 9, so on."
         Tips1["font"] = BodyFont
         Tips1["xalign"] = TEXT_ALIGN_CENTER
         Tips1["yalign"] = TEXT_ALIGN_TOP
