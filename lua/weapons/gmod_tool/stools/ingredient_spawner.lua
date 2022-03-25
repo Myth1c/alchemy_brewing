@@ -20,7 +20,7 @@ TOOL.ClientConVar[ "randomize_max" ] = 0
 TOOL.ClientConVar[ "reroll" ] = 0
 TOOL.ClientConVar[ "manual" ] = 0
  
-function TOOL:LeftClick( trace )
+function TOOL:RightClick( trace )
 	if SERVER then
 		local ent = trace.Entity
 
@@ -47,7 +47,7 @@ function TOOL:LeftClick( trace )
 
 end
  
-function TOOL:RightClick( trace )
+function TOOL:LeftClick( trace )
 	if SERVER then
 		local ent = trace.Entity
 
@@ -295,8 +295,8 @@ if CLIENT then
 	language.Add("ingredient_spawner", "Ingredient Spawner")
 	language.Add("tool.ingredient_spawner.name", "Ingredient Spawner")
 	language.Add("tool.ingredient_spawner.desc", "Spawn, Update, or make ingredients persistant!")
-	language.Add("tool.ingredient_spawner.left", "Spawn/Update ingredient with selected settings")
-	language.Add("tool.ingredient_spawner.right", "Create spawner platform. Right click a platform to make it persistant")
+	language.Add("tool.ingredient_spawner.right", "Spawn/Update ingredient with selected settings")
+	language.Add("tool.ingredient_spawner.left", "Create spawner platform. Right click a platform to make it persistant")
 	language.Add("tool.ingredient_spawner.reload", "Remove Ingredient/Spawner from map and remove from persistance from targeted spawenr")
 
 	language.Add("tool.ingredient_spawner.rerollHeader", "Re-rolls all the reagents in the targeted ingredient with their default parameters")
