@@ -32,7 +32,7 @@ end
 function Brew_DrawStatus(effect, tier, timelimit)
 
     status_active_effects["active"] = status_active_effects["active"] + 1
-    local height = 80 * (status_active_effects["active"])
+    local height = (-80 * (status_active_effects["active"])) + 925
     
     if !timer.Exists("Brew_UpdatedStatuses") then CreatePlayerTimer()
     elseif timer.TimeLeft("Brew_UpdateStatuses") < 0 then timer.Start("Brew_UpdateStatuses") end
@@ -42,7 +42,7 @@ function Brew_DrawStatus(effect, tier, timelimit)
     statusFrame:SetTitle("")
     statusFrame:SetSize(ScrW() * 180/1920, ScrH() * 80/1080)
     statusFrame:ShowCloseButton(false)
-    statusFrame:SetPos(ScrW() * 1740/1920, ScrH() * height/1080)
+    statusFrame:SetPos(ScrW() * 35/1920, ScrH() * height/1080)
     statusFrame.Paint = function(s, w, h)
         draw.RoundedBox(FrameCurve, 0, 0, w, h, BorderColour)
         draw.RoundedBox(FrameCurve, 2, 2, w-4, h-4, PrimaryColour)
@@ -191,9 +191,9 @@ function UpdatePositions()
         if k ~= "active" and v ~= nil then
             count = count + 1
 
-            local height = 80 * count
+            local height = (-80 * count) + 925
 
-            v:SetPos(ScrW() * 1740/1920, ScrH() * height/1080) 
+            v:SetPos(ScrW() * 35/1920, ScrH() * height/1080) 
             
         end
 
