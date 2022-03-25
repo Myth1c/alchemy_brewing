@@ -57,7 +57,11 @@ function ENT:Think()
         if self.SpawnedEntity == nil then
             
             local ent = ents.Create("inert_ingredient")
-            ent:SetPos(self:GetPos() + Vector(0, 0, 15))
+
+            local offset = self:RandomPointInCircle(50, Brew_Config.Spawner_Spawn_Distance)
+
+
+            ent:SetPos(offset )
             ent.Reagents = self.Reagents
             ent:Spawn()
 
@@ -74,4 +78,20 @@ function ENT:Think()
     self:NextThink(CurTime() + self.ThinkInterval)
     return true
 
+end
+
+function ENT:RandomPointInCircle(minRad, maxRad)
+
+    local randomAngle = math.random(1000)
+    local circleRadius = math.random(minRad, maxRad)
+
+    local x = math.cos(randomAngle)*circleRadius
+    local y = math.sin(randomAngle)*circleRadius
+    local z = 15
+
+    local pos = self:GetPos() + Vector(x, y, z)
+
+    DebugPrint(pos.x .. " " .. pos.y .. " " .. pos.z)
+
+    return pos
 end
