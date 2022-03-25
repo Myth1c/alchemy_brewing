@@ -91,7 +91,5 @@ function ENT:RandomPointInCircle(minRad, maxRad)
 
     local pos = self:GetPos() + Vector(x, y, z)
 
-    DebugPrint(pos.x .. " " .. pos.y .. " " .. pos.z)
-
     return pos
 end
