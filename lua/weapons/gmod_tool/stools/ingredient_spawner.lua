@@ -71,12 +71,10 @@ function TOOL:LeftClick( trace )
 			local spawner = ents.Create("spawner_platform")
 			spawner:SetPos(ent:GetPos())
 			spawner.Reagents = Reagents
+			spawner:SetCustomModel(true)
 			spawner:Spawn()
 			spawner:SetModel(ent:GetModel())
 			spawner:SetAngles(ent:GetAngles())
-			spawner:SetCustomModel(true)
-			spawner:SetCollisionGroup(ent:GetCollisionGroup())
-			spawner:SetColor(ent:GetColor())
 			ent:Remove()
 			undo.Create("#tool.ingredient_spawner.undo_message_platform")
 				undo.AddEntity(spawner)
@@ -216,6 +214,8 @@ function TOOL:SaveToFile(ent)
 			["class"] = ent:GetClass(),
 			["pos"] = ent:GetPos(),
 			["reagents"] = ent.Reagents,
+			["model"] = ent:GetModel(),
+			["angles"] = ent:GetAngles(),
 		}
 
 		local index = tab["count"] + 1
@@ -242,6 +242,8 @@ function TOOL:RemovePersistance(ent)
 		["class"] = ent:GetClass(),
 		["pos"] = ent:GetPos(),
 		["reagents"] = ent.Reagents,
+		["model"] = ent:GetModel(),
+		["angles"] = ent:GetAngles(),
 	}
 
     if file.Exists(filePath, "DATA") then

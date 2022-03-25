@@ -19,6 +19,8 @@ function LoadPersistance()
             local class = nil
             local pos = nil
             local reagents = nil
+            local model = nil
+            local angles = nil
 
             if k ~= "count" then
 
@@ -27,6 +29,8 @@ function LoadPersistance()
                     if h == "class" then class = j
                     elseif h == "pos" then pos = j
                     elseif h == "reagents" then reagents = j 
+                    elseif h == "model" then model = j
+                    elseif h == "angles" then angles = j
                     end
 
                 end
@@ -37,7 +41,12 @@ function LoadPersistance()
                 local ent = ents.Create(tostring(class))
                 ent:SetPos(pos)
                 ent.Reagents = reagents
+                if model ~= "models/props_c17/streetsign004e.mdl" then
+                    ent:SetCustomModel(true)
+                end
                 ent:Spawn()
+                ent:SetModel(model)
+                ent:SetAngles(angles)
 
             end
 
