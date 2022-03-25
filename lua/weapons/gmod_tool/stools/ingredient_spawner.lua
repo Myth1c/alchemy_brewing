@@ -68,7 +68,6 @@ function TOOL:LeftClick( trace )
 			undo.Finish()
 
 		elseif ent:GetClass() == "prop_physics" then
-			DebugPrint("Hit Prop!")
 			local spawner = ents.Create("spawner_platform")
 			spawner:SetPos(ent:GetPos())
 			spawner.Reagents = Reagents
@@ -76,6 +75,7 @@ function TOOL:LeftClick( trace )
 			spawner:SetModel(ent:GetModel())
 			spawner:SetAngles(ent:GetAngles())
 			spawner:SetCustomModel(true)
+			spawner:SetCollisionGroup(ent:GetCollisionGroup())
 			ent:Remove()
 			undo.Create("#tool.ingredient_spawner.undo_message_platform")
 				undo.AddEntity(spawner)
