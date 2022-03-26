@@ -6,7 +6,7 @@ include("sh_init.lua")
 
 ENT.SpawnedEntity = {}
 
-ENT.MaxSpawns = 5
+ENT.MaxSpawns = Brew_Config.Spawner_Max_Spawns or 3
 
 ENT.ShouldSpawn = true
 

@@ -21,6 +21,9 @@ Brew_Config = {
     -- How far away an ingredient has to be before it will allow the spawner to spawn a new ingredient in Hammer Units
     -- Default: 500
     Spawner_Spawn_Distance = 500,
+    -- How many ingredients will spawn around a spawner
+    -- Default: 3
+    Spawner_Max_Spawns = 3,
 
     -- Change the max tiers for each individual effect. Potions set down here will never go beyond the given maxes.
     -- Speed potion's max tier.
