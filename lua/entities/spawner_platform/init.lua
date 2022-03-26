@@ -60,7 +60,7 @@ function ENT:Think()
             
             local ent = ents.Create("inert_ingredient")
 
-            local offset = self:RandomPointInCircle(100, 125)
+            local offset = self:RandomPointInCircle(105, 125)
 
 
             ent:SetPos(offset )
