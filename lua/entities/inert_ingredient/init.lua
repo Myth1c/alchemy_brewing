@@ -36,7 +36,8 @@ function ENT:Initialize()
 
 	self:PhysicsInit(SOLID_VPHYSICS)
 	self:SetMoveType(MOVETYPE_VPHYSICS)
-	self:SetSolid(SOLID_VPHYSICS)
+	self:SetSolid(SOLID_BBOX)
+	self:SetCollisionGroup(COLLISION_GROUP_WORLD)
 	local phys = self:GetPhysicsObject()
 	if phys:IsValid() then phys:EnableMotion(false) end
 	self:SetUseType(SIMPLE_USE)
@@ -47,8 +48,6 @@ function ENT:Initialize()
 	self:SetColors()
 
 	self:SetModelScale(2.5)
-	--timer.Simple(0.5, function() self:Activate() end) 
-	
 
 end
 
