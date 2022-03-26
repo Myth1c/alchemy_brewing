@@ -4,7 +4,9 @@ AddCSLuaFile("cl_init.lua")
 AddCSLuaFile("sh_init.lua")
 include("sh_init.lua")
 
-ENT.SpawnedEntity = nil
+ENT.SpawnedEntity = {}
+
+ENT.MaxSpawns = 5
 
 ENT.ShouldSpawn = true
 
@@ -54,9 +56,9 @@ function ENT:Think()
 
     if !self.ShouldSpawn then return end
 
-    if self.NextSpawn < CurTime() then
+    if self.NextSpawn < CurTime() then 
 
-        if self.SpawnedEntity == nil then
+        if #self.SpawnedEntity < self.MaxSpawns then
             
             local ent = ents.Create("inert_ingredient")
 
@@ -67,11 +69,17 @@ function ENT:Think()
             ent.Reagents = self.Reagents
             ent:Spawn()
 
-            self.SpawnedEntity = ent
+            table.insert(self.SpawnedEntity, ent)
             self.NextSpawn = CurTime() + self.Cooldown
 
-        elseif !IsValid(self.SpawnedEntity) or self:GetPos():DistToSqr(self.SpawnedEntity:GetPos()) >= self.SpawnDistance^2 then
-            self.SpawnedEntity = nil
+        elseif #self.SpawnedEntity <= self.MaxSpawns then
+            for k, v in pairs(self.SpawnedEntity) do
+                if !IsValid(v) then self.SpawnedEntity[k] = nil
+                elseif self:GetPos():DistToSqr(v:GetPos()) >= self.SpawnDistance^2 then
+                    self.SpawnedEntity[k] = nil
+                end
+
+            end
         end
 
 
