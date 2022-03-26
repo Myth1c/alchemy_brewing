@@ -44,6 +44,8 @@ function ENT:Initialize()
 	self:SetPos(self:GetPos() + Vector(0, 0, 50))
 	self:DropToFloor()
 	
+	self:SetColors()
+
 end
 
 function ENT:Use( activator, caller )
@@ -93,5 +95,47 @@ function ENT:RollReagents()
 	distribution = math.Clamp(distribution - self.Reagents[randReagent], 0, distribution)
 
 	self:DetermineGreatestReagent()
+
+end
+
+function ENT:SetColors()
+
+	local colorTable = {
+		
+		["speed"] = Color(255, 255, 155, 255),
+		["leaping"] = Color(255, 175, 195, 255),
+		["healing"] = Color(195, 255, 175, 255),
+		["shield"] = Color(175, 195, 255, 255),
+	}
+
+	local multTable = {
+		
+		["speed"] = 0,
+		["leaping"] = 0,
+		["healing"] = 0,
+		["shield"] = 0,
+	}
+
+	local finalColor = Vector(0, 0, 0)
+
+	for k, v in pairs(self.Reagents) do
+		if self:GetModel() ~= self.ModelTable[k] then
+			multTable[k] = v / 100
+		end
+	end
+
+	for k, v in pairs(multTable) do
+
+		local vector = colorTable[k]:ToVector()
+		vector:Mul(multTable[k])
+
+		finalColor = finalColor + vector
+
+	end
+
+	if finalColor == Vector(0, 0, 0) then finalColor = Vector(1, 1, 1) end
+
+	self:SetColor(finalColor:ToColor())
+
 
 end
