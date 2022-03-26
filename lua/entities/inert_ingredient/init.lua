@@ -15,10 +15,10 @@ ENT.Reagents = {
 
 ENT.ModelTable = {
 	
-	["speed"] = "models/noesis/donut.mdl",
-	["leaping"] = "models/maxofs2d/balloon_classic.mdl",
-    ["healing"] = "models/props_junk/watermelon01.mdl",
-    ["shield"] = "models/props_moonbase/moon_rock_small001.mdl",
+	["speed"] = "models/tsbb/fungus/hochstetteri.mdl",
+	["leaping"] = "models/tsbb/fungus/shiitake.mdl",
+    ["healing"] = "models/tsbb/fungus/wrinkled_peach.mdl",
+    ["shield"] = "models/tsbb/fungus/indigo_milkcap.mdl",
 
 }
 
@@ -45,6 +45,10 @@ function ENT:Initialize()
 	self:DropToFloor()
 	
 	self:SetColors()
+
+	self:SetModelScale(2.5)
+	--timer.Simple(0.5, function() self:Activate() end) 
+	
 
 end
 
