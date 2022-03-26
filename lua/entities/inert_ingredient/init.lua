@@ -38,7 +38,7 @@ function ENT:Initialize()
 	self:SetMoveType(MOVETYPE_VPHYSICS)
 	self:SetSolid(SOLID_VPHYSICS)
 	local phys = self:GetPhysicsObject()
-	if phys:IsValid() then phys:Wake() end
+	if phys:IsValid() then phys:EnableMotion(false) end
 	self:SetUseType(SIMPLE_USE)
 	
 	self:SetPos(self:GetPos() + Vector(0, 0, 50))
